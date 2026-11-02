@@ -1,6 +1,5 @@
 package com.databankimx.training.runner;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -128,10 +127,13 @@ final class Runner {
 
     private Thread pipe(java.io.InputStream stream, String name) {
         Thread thread = new Thread(() -> {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    output(line + "\n", name);
+            // Output is sent as soon as any text arrives, not only at the end of a line. A prompt such as "Enter a number: "
+            // has no newline, and it must show before the program waits for input.
+            try (InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
+                char[] buffer = new char[256];
+                int count;
+                while ((count = reader.read(buffer)) != -1) {
+                    output(new String(buffer, 0, count), name);
                 }
             } catch (IOException ignored) {
                 // The program has ended, so there is nothing more to read.

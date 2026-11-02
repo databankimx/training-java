@@ -56,11 +56,27 @@ let originalMain = "";
 let mainDraft = null;
 let fileCount = 0;
 
-// Quick picks: whole commands from the step's commands.txt. Choosing one fills the argument box.
-const commandPick = document.createElement("select");
+// Quick picks: whole commands from the step's commands.txt. The menu is drawn in the page, not as a browser drop-down,
+// because the off-screen browser places drop-downs in the wrong part of the window.
+const commandPick = document.createElement("div");
 commandPick.className = "command-pick hidden";
 commandPick.title = "Quick picks for this step";
+commandPick.style.position = "relative";
+commandPick.style.display = "inline-block";
+commandPick.style.marginRight = "8px";
+const pickButton = document.createElement("button");
+pickButton.type = "button";
+pickButton.textContent = "Quick picks \u25BE";
+const pickMenu = document.createElement("div");
+pickMenu.className = "hidden";
+pickMenu.style.cssText = "position:absolute;bottom:100%;left:0;min-width:160px;z-index:20;padding:4px 0;background:var(--panel);border:1px solid var(--border);box-shadow:0 4px 12px rgba(0,0,0,0.4);";
+commandPick.append(pickButton, pickMenu);
 input.before(commandPick);
+pickButton.addEventListener("click", (event) => {
+  event.stopPropagation();
+  pickMenu.classList.toggle("hidden");
+});
+document.addEventListener("click", () => pickMenu.classList.add("hidden"));
 
 // The drop-down is shown only on the Source tab, for steps with more than one source file.
 function updateFileSelect() {
@@ -555,30 +571,29 @@ async function loadCommandPicks(step) {
 }
 
 function renderCommandPick() {
-  commandPick.replaceChildren();
-  const placeholder = document.createElement("option");
-  placeholder.textContent = "Quick picks";
-  placeholder.value = "";
-  commandPick.appendChild(placeholder);
+  pickMenu.replaceChildren();
   for (const command of stepCommands) {
     // A pick may start with NAME=value settings, such as IGNORE_CASE=1. They stay in the box, and the run or test word gives the kind.
     const match = command.match(/^((?:\w+=\S+\s+)*)(run|test)\s*(.*)$/);
-    const option = document.createElement("option");
-    option.textContent = command;
-    option.value = match ? match[1] + match[3] : command;
-    option.dataset.kind = match && match[2] === "test" ? "test" : "run";
-    commandPick.appendChild(option);
+    const value = match ? match[1] + match[3] : command;
+    const kind = match && match[2] === "test" ? "test" : "run";
+    const item = document.createElement("button");
+    item.type = "button";
+    item.textContent = command;
+    item.style.cssText = "display:block;width:100%;text-align:left;background:none;border:none;color:inherit;padding:4px 12px;font-family:inherit;cursor:pointer;white-space:pre;";
+    item.addEventListener("click", (event) => {
+      event.stopPropagation();
+      pickMenu.classList.add("hidden");
+      pickKind = kind;
+      input.value = value;
+      input.focus();
+    });
+    pickMenu.appendChild(item);
   }
   updateButtons();
 }
 
-commandPick.addEventListener("change", () => {
-  // Choosing a pick sets the kind of run as well as the arguments. Choosing "test" (no arguments) clears the box.
-  const option = commandPick.selectedOptions[0];
-  if (option && option.dataset.kind) pickKind = option.dataset.kind;
-  input.value = commandPick.value;
-  input.focus();
-});
+
 
 // Running
 
@@ -761,6 +776,27 @@ for (const pane of [chaptersEl, stepsEl, editor, lessonEl, output]) {
 stopButton.addEventListener("click", stop);
 clearButton.addEventListener("click", () => output.replaceChildren());
 inputForm.addEventListener("submit", sendInput);
+
+// Enter sends the line. In the off-screen browser, Enter can arrive as a key press rather than a form submit, so both are
+// handled. The guard stops one press from sending twice, when both events arrive.
+let lastEnterAt = 0;
+function enterSends(event) {
+  if (event.key !== "Enter" || event.isComposing) return;
+  event.preventDefault();
+  const now = Date.now();
+  if (now - lastEnterAt < 150) return;
+  lastEnterAt = now;
+  sendInput(event);
+}
+input.addEventListener("keydown", enterSends);
+input.addEventListener("keypress", enterSends);
+
+// Types a character into the input box, when the input has focus. The runner calls this for numpad keys while Num Lock
+// is on, because the browser receives those keys as navigation keys and cannot type them.
+window.typeCharacter = (character) => {
+  if (document.activeElement !== input) return;
+  input.setRangeText(character, input.selectionStart, input.selectionEnd, "end");
+};
 themeToggle.addEventListener("change", () => {
   document.body.classList.toggle("light", themeToggle.checked);
   setHighlightTheme(themeToggle.checked);
