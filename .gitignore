@@ -22,3 +22,26 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Maven build output, the bundled runner, and the JCEF natives fetched by the runner (see docs/PLAN.md)
+lesson-runner/target/
+lesson-runner/dist/
+resources/vendor/jcef/natives/**
+!resources/vendor/jcef/natives/natives.sha256
+
+# The approved JUnit jars are vendored, so they're kept even though *.jar is ignored above
+!resources/vendor/junit/*.jar
+
+# Each step's build folder: compiled classes and copied sources, made by the runner when a step runs
+**/build/
+
+# The runner's error log, written when an error occurs in the window
+lesson-runner/runner.log
+
+# Runtime files that must never be committed: the Chromium runtime the JCEF sample app downloads (about 100 MB or more),
+# exception and debug logs from troubleshooting, and the packaged runner
+lesson-runner/jcef-bundle/
+lesson-runner/exceptions*.txt
+lesson-runner/debug.log
+lesson-runner/dist/
+
