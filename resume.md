@@ -114,7 +114,9 @@ Follow the C course's conventions, translated to Java.
 
 - **Chapter 1.** Complete, and tested by the user: all lessons and both homework exercises work correctly.
 - **Chapter 2.** Complete, and tested by the user: all lessons and both homework exercises run correctly, and it is committed to `dev`. Chapter 2 covers variables, arithmetic, strings, user input (`Scanner`), and command-line arguments.
-- **Chapter 3 onward.** Not started. Chapter 3 is decisions (booleans, logical operators, if, switch), following `ch03-decisions` in the C++ course. Check `parts.json` for the chapter name before creating folders.
+- **Chapter 3.** Complete, and tested by the user: all lessons and homework work properly. Covers booleans, logical operators, `if`, and `switch`.
+- **Chapter 4.** Written, awaiting the user's testing: arrays (declaring, initializing, multidimensional), with a temperature log and a tic-tac-toe board as homework. Not yet committed.
+- **Chapter 5 onward.** Not started. Check `parts.json` for the chapter names before creating folders.
 - **Runner fixes since the first version of this file.** Output is sent as soon as any text arrives, so prompts show before the program waits for input. Enter sends the input line. Quick picks use an in-page menu, because the browser's drop-down opens in the wrong place. Ctrl + wheel zoom follows the Trackpad setting. The pop-out window has the same icon as the main window. Numpad digits type with Num Lock on: the window catches the navigation keys that the numpad sends, and types the digit into the page (see `Window.java`, the key dispatcher).
 - **Testing rhythm.** The plan is to test chapters in pairs, as in the C course. The user now prefers the pop-out window for testing, which is working.
 - **Runner work done.** Run, stop, input, pop-out, theme, lesson state, trackpad and mouse scrolling, highlighting, the window icon, and error logging.
@@ -131,6 +133,7 @@ Follow the C course's conventions, translated to Java.
 4. **Test button.** Raises "Tests need JUnit", until JUnit is vendored and the runner runs the JUnit console launcher.
 5. **Visualizer.** Not built. `open_visualizer` raises "Not built yet". The C course's visualizer is the reference (`resources\visualizer\visualize.html`, copied into the step's build folder). Needed for the sorting chapter and any step that writes `trace.js`.
 6. **Pop-out and the main window's error noise.** The same exception noise appears in both windows.
+7. **Closing the main window can leave the pop-out open.** Occasionally, with the pop-out open, closing the main window doesn't close the pop-out, and it has to be ended in Task Manager. Not reproduced consistently yet. The close path is in `Window.exit` and `LessonWindow.dock`, and the main window's exit uses `System.exit` on a background thread with a three-second watchdog. Check whether the pop-out's close (which docks the lesson) is still running when the main window exits.
 
 ## 9. Things to check before continuing
 
