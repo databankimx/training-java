@@ -119,7 +119,11 @@ Follow the C course's conventions, translated to Java.
 - **Chapter 5.** Complete, and tested by the user. Covers references, `null`, and `==` versus `equals`.
 - **Chapter 6.** Complete, and tested by the user. Covers loops, `break` and `continue`, and a Battleship game.
 - **Chapter 7.** Complete, and tested by the user. Covers methods, parameters, overloading, arrays and references as parameters, and recursion.
-- **Chapter 8 onward.** Not started. Check `parts.json` for the chapter names before creating folders.
+- **Chapter 8.** Complete, and tested by the user. Covers writing, reading, overwriting, and appending files.
+- **Chapter 9.** Complete, and tested by the user. Covers exceptions, checked and unchecked, `finally`, and try-with-resources.
+- **Chapter 10.** Complete, and tested by the user. Covers records, immutability, compact constructors, and `equals`.
+- **Chapter 11.** Complete, and tested by the user. Covers classes, objects, constructors, and encapsulation.
+- **Chapter 12 onward.** Not started. Check `parts.json` for the chapter names before creating folders.
 - **Runner fixes since the first version of this file.** Output is sent as soon as any text arrives, so prompts show before the program waits for input. Enter sends the input line. Quick picks use an in-page menu, because the browser's drop-down opens in the wrong place. Ctrl + wheel zoom follows the Trackpad setting. The pop-out window has the same icon as the main window. Numpad digits type with Num Lock on: the window catches the navigation keys that the numpad sends, and types the digit into the page (see `Window.java`, the key dispatcher).
 - **Testing rhythm.** The plan is to test chapters in pairs, as in the C course. The user now prefers the pop-out window for testing, which is working.
 - **Runner work done.** Run, stop, input, pop-out, theme, lesson state, trackpad and mouse scrolling, highlighting, the window icon, and error logging.
