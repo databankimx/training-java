@@ -12,4 +12,4 @@ The steps are:
 
 ---
 
-*The examples and explanations are new. They follow the C++ course's first chapter, with Java in place of C++.*
+*The examples and explanations are new.*

@@ -37,7 +37,7 @@ a % b = 1
 
 Five of the operators are here. `+`, `-`, and `*` do what you'd expect. `/` is division, and `%` is the remainder operator, which gives what's left over after dividing. Seven divided by two is three with one left over, so `a % b` is 1.
 
-Notice the brackets around each calculation. The `+` is also used to join text in Java, so `"a + b = " + a + b` would join the pieces in order, and print `a + b = 72`. The brackets make the addition happen first.
+Notice the parentheses around each calculation. The `+` is also used to join text in Java, so `"a + b = " + a + b` would join the pieces in order, and print `a + b = 72`. The parentheses make the addition happen first.
 
 ### The division trap
 
@@ -70,7 +70,7 @@ Sometimes both values are `int`, and you still want a decimal answer. Then you c
 double average = (double) a / b;
 ```
 
-`(double) a` turns `a` into a decimal for this calculation, and the division happens in decimals. The variable `a` itself stays an `int`. The conversion lasts only for the expression. The brackets around the type are called a cast. Java uses casts for every conversion that might lose information, and the cast tells the reader exactly what you intended.
+`(double) a` turns `a` into a decimal for this calculation, and the division happens in decimals. The variable `a` itself stays an `int`. The conversion lasts only for the expression. The parentheses around the type are called a cast. Java uses casts for every conversion that might lose information, and the cast tells the reader exactly what you intended.
 
 ### Order of operations
 

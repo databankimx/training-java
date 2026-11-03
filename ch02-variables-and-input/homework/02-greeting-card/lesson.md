@@ -19,7 +19,7 @@ Use `System.out.flush()` after both prompts. Give the age variable a name that s
 
 ### Where to change the code
 
-The example prints the greeting in two `System.out.println` lines near the end of `main`. To use your own name and age, you'd change the text and the arithmetic in those lines. The `(age + 1)` is the one calculation, and the brackets make sure the addition happens before it's joined to the text.
+The example prints the greeting in two `System.out.println` lines near the end of `main`. To use your own name and age, you'd change the text and the arithmetic in those lines. The `(age + 1)` is the one calculation, and the parentheses make sure the addition happens before it's joined to the text.
 
 ### What to check
 

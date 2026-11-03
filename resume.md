@@ -113,7 +113,9 @@ Follow the C course's conventions, translated to Java.
 ## 7. Current state
 
 - **Chapter 1.** Complete, and tested by the user: all lessons and both homework exercises work correctly.
-- **Chapter 2 onward.** Not started. Chapter 2 would be variables, arithmetic, strings, and input, following `ch02-variables-and-input` in the C++ course. The Java `parts.json` lists the chapter names. Those names are my proposal, and the user hasn't confirmed them yet.
+- **Chapter 2.** Complete, and tested by the user: all lessons and both homework exercises run correctly, and it is committed to `dev`. Chapter 2 covers variables, arithmetic, strings, user input (`Scanner`), and command-line arguments.
+- **Chapter 3 onward.** Not started. Chapter 3 is decisions (booleans, logical operators, if, switch), following `ch03-decisions` in the C++ course. Check `parts.json` for the chapter name before creating folders.
+- **Runner fixes since the first version of this file.** Output is sent as soon as any text arrives, so prompts show before the program waits for input. Enter sends the input line. Quick picks use an in-page menu, because the browser's drop-down opens in the wrong place. Ctrl + wheel zoom follows the Trackpad setting. The pop-out window has the same icon as the main window. Numpad digits type with Num Lock on: the window catches the navigation keys that the numpad sends, and types the digit into the page (see `Window.java`, the key dispatcher).
 - **Testing rhythm.** The plan is to test chapters in pairs, as in the C course. The user now prefers the pop-out window for testing, which is working.
 - **Runner work done.** Run, stop, input, pop-out, theme, lesson state, trackpad and mouse scrolling, highlighting, the window icon, and error logging.
 
@@ -134,7 +136,7 @@ Follow the C course's conventions, translated to Java.
 
 - **Git status.** Check that the work is committed. Recent additions include `lesson-runner/web/vendor/highlight/` (with its hash list), `lesson-runner/scripts/`, `ch01-getting-started/`, `parts.json`, `docs/PLAN.md`, `resume.md`, and `prompt.md`. `.gitignore` excludes `lesson-runner/dist`, `resources/vendor/jcef/natives`, `**/build/`, `lesson-runner/runner.log`, and `lesson-runner/target`.
 - **Probe.java.** The user said it has been deleted. Confirm it's gone from `lesson-runner\src\main\java\com\databankimx\training\runner`. It shouldn't be there.
-- **Chapter names in `parts.json`.** Unconfirmed. Ask the user before writing Chapter 2 folders.
+- **Chapter names in `parts.json`.** Confirmed by the user. Chapter names follow the C++ course's names, with Java terms only where the Java idiom genuinely differs. A different name needs a genuinely different ideological path, not a translation preference.
 - **The `dist` folder.** Rebuilt by `mvn -q package`. Only needed for distribution. `run.bat` runs from `target\classes` and `dist\lib`, so `dist\lib` must exist (run `mvn -q package` once if it doesn't).
 
 ## 10. Lessons learned in this session (do not repeat these)
