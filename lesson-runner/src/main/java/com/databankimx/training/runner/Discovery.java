@@ -106,8 +106,9 @@ final class Discovery {
         out.addProperty("has_main", Files.isRegularFile(src.resolve("Main.java")));
         Path tests = dir.resolve("tests");
         out.addProperty("has_tests", Files.isDirectory(tests) && hasJavaFile(tests));
-        // The visualizer and the step options are added with the runner's run commands.
-        out.addProperty("has_visualizer", false);
+        // The visualizer page is part of a step when the step's folder holds visualize.html.
+        out.addProperty("has_visualizer", Files.isRegularFile(dir.resolve("visualize.html")));
+        // The step options are added with the runner's run commands.
         out.add("options", new JsonArray());
         return out;
     }

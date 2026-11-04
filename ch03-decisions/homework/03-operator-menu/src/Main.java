@@ -6,7 +6,7 @@ public class Main {
 
         System.out.print("Enter an operator (+, -, *, /): ");
         System.out.flush();
-        char operator = input.next().charAt(0);
+        char op = input.next().charAt(0);
 
         System.out.print("Enter the first number: ");
         System.out.flush();
@@ -16,18 +16,26 @@ public class Main {
         System.out.flush();
         double second = input.nextDouble();
 
-        switch (operator) {
-            case '+' -> System.out.println(first + second);
-            case '-' -> System.out.println(first - second);
-            case '*' -> System.out.println(first * second);
-            case '/' -> {
+        switch (op) {
+            case '+':
+                System.out.println(first + second);
+                break;
+            case '-':
+                System.out.println(first - second);
+                break;
+            case '*':
+                System.out.println(first * second);
+                break;
+            case '/':
                 if (second == 0) {
                     System.out.println("Cannot divide by zero.");
                 } else {
                     System.out.println(first / second);
                 }
-            }
-            default -> System.out.println("Unknown operator.");
+                break;
+            default:
+                System.out.println("Unknown operator.");
+                break;
         }
     }
 }

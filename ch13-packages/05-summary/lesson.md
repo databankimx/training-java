@@ -7,7 +7,7 @@ This chapter covered how a program is split across files, so that each class is 
 * **Each public type has a file with its name.** `Car` is in `Car.java`, and the compiler finds it from its name.
 * **The runner compiles every file in `src`.** Classes in the same package are found without an import, and classes in subfolders are compiled too.
 * **`import` names a class.** It tells the compiler what a name refers to, and it's compiled once.
-* **Java needs no include guards.** Each class is compiled once, and no text is copied between files.
+* **Each class is compiled once.** No text is copied between files, so a class is never defined twice.
 * **Inheritance uses the base's constructor.** `super(...)` passes arguments to the base before the derived class's own statements run.
 * **Packages organize classes.** A file in a package names it with `package`, and other packages use it through `import`.
 

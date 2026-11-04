@@ -1,4 +1,4 @@
-## Temperature log
+## Homework: Temperature log
 
 A weather station records five temperature readings. Store them in an array, and print the first and last readings, and their average.
 

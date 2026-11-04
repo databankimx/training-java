@@ -22,7 +22,7 @@ class Car {
 
 Inside `name`, the fields `brand` and `model` appear by name, with no object in front of them. The method works on whichever object it was called on, so `myCar.name()` uses `myCar.brand`, and another object's `name()` uses its own.
 
-All of a Java method is written inside the class body, between the braces of the class. Java doesn't have a way to define a method outside its class, so the method's declaration and its body always appear together. Larger classes are easier to read when their methods are grouped together, which is the same reason the class's fields come first.
+All of a Java method is written inside the class body, between the braces of the class, so the method's declaration and its body always appear together. Larger classes are easier to read when their methods are grouped together, which is the same reason the class's fields come first.
 
 Press **Run**. The output is:
 

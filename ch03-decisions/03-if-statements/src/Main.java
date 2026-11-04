@@ -46,6 +46,7 @@ public class Main {
         } else if (items > 5) {
             System.out.println("Chained: free shipping");
         }
+
         if (items > 10) {
             System.out.println("Independent: bulk discount");
         }
@@ -54,6 +55,6 @@ public class Main {
         }
 
         String size = (x > y) ? "large" : "small";
-        System.out.println("size: " + size);
+        System.out.println("Size: " + size);
     }
 }

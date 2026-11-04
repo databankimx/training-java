@@ -61,7 +61,7 @@ The two calls create cars, and each is held by a `CarDescription` variable. `mai
 
 ### Where the build finds the files
 
-Java has no separate build script for this. The runner compiles every `.java` file in `src` together, so `Main` can see both `CarDescription` and `Car` without any setup. Each public type must be in a file with its name, which is why the three files are named as they are.
+The runner compiles every `.java` file in `src` together, so `Main` can see both `CarDescription` and `Car` without any setup. Each public type must be in a file with its name, which is why the three files are named as they are.
 
 ### Why separate the two
 

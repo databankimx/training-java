@@ -25,7 +25,7 @@ The variable `first` refers to the same array as `numbers`. Each element is reac
 
 ### Indexes, not addresses
 
-Java doesn't let you add a number to a reference to move it along an array. You can't write `first + 2`. Instead, every element is reached with a square-bracket index, and the index is checked against the array's length. An index past the end throws an `ArrayIndexOutOfBoundsException` rather than reading unrelated memory.
+Java reads the array elements by index. Elements are reached with a square-bracket index, and the index is checked against the array's length. An index past the end throws an `ArrayIndexOutOfBoundsException` rather than reading unrelated memory.
 
 That's why the program reads each element by its index, and never by moving a reference. It's also why the check is built into the language, and the programmer doesn't have to make sure an index is in range by hand.
 

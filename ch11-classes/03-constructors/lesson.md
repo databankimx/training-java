@@ -96,7 +96,7 @@ When does a constructor run?
 ◉ When an object of the class is created with new.
 → Yes. Creating the object calls its constructor, once.
 ○ When the program ends.
-→ Not quite. Constructors run at creation. Java has no matching end-of-life constructor.
+→ Not quite. Constructors run at creation, and an object is freed later by the collector.
 ````
 
 ---

@@ -18,8 +18,10 @@ public class Main {
 
         boolean p = true;
         boolean q = false;
+
         boolean myXor = (p || q) && !(p && q);
         System.out.println("(p || q) && !(p && q): " + myXor);
+
         myXor = p != q;
         System.out.println("p != q: " + myXor);
         System.out.println("p ^ q: " + (p ^ q));

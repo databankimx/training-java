@@ -4,7 +4,7 @@ This chapter covered how a program is divided into named pieces, and how those p
 
 * **A method is a named block of code.** Its definition gives the return type, the name, the parameters, and the body.
 * **No declaration is needed in Java.** The compiler reads the whole class before it checks the calls, so a method can be called from anywhere in the class.
-* **Parameters receive arguments.** Arguments must match the parameters in number and type. Java has no default values, so an optional argument is written as an overload that calls the full method.
+* **Parameters receive arguments.** Arguments must match the parameters in number and type. An optional argument is written as an overload that calls the full method.
 * **`return` sends a value back, and ends the method.** A `void` method returns nothing.
 * **Overloads share a name.** They must differ in their parameters, not just their return type. The compiler chooses between them by the arguments.
 * **An array parameter receives a reference to the array.** The array carries its own length, and changes to its elements reach the caller.
@@ -26,9 +26,9 @@ What must be true before `main` can call a method defined below it?
 ````
 
 ````quiz
-Java has no default parameter values. Which is the usual way to let a caller leave out a value?
+Which is the usual way to let a caller leave out a value?
 ○ Declare the parameter with a default, such as int count = 1.
-→ Not quite. Java doesn't accept a default in a parameter declaration.
+→ Not quite. A parameter declaration can't include a default value.
 ◉ Write an overload with fewer parameters that calls the full method.
 → Yes. The overload supplies the value and calls the method that does the work.
 ○ Pass null for the missing int.

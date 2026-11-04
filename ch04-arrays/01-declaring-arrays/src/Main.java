@@ -1,14 +1,15 @@
 public class Main {
     public static void main(String[] args) {
-        int[] scores = new int[5];
-        scores[0] = 90;
-        scores[1] = 85;
-        scores[2] = 77;
-        scores[3] = 64;
-        scores[4] = 92;
+        String[] cars = {"Volvo", "BMW", "Ford", "Mazda"};
+        int[] nums = {10, 20, 30};
 
-        System.out.println("First score: " + scores[0]);
-        System.out.println("Third score: " + scores[2]);
-        System.out.println("Length: " + scores.length);
+        System.out.println(cars[0]);
+        System.out.println(nums[2]);
+
+        cars[0] = "Opel";
+        nums[2] += 5;
+
+        System.out.println(cars[0]);
+        System.out.println(nums[2]);
     }
 }

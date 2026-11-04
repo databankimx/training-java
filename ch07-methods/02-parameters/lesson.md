@@ -28,7 +28,7 @@ The arguments must match the parameters in number and type. Passing the argument
 
 ### Overloads instead of default values
 
-Java has no default parameter values. The same result comes from writing two methods with the same name, one of which calls the other:
+The same result comes from writing two methods with the same name, one of which calls the other:
 
 ```java
 static void welcome() {
@@ -73,9 +73,9 @@ In `static void introduce(String fname, int age)`, what is `fname`?
 ````
 
 ````quiz
-Java has no default parameter values. Which is the usual way to let a caller leave out an argument?
+Which is the usual way to let a caller leave out an argument?
 ○ Give the parameter a default in its declaration, such as int a = 1.
-→ Not quite. Java doesn't accept a default in a parameter declaration.
+→ Not quite. A parameter declaration can't include a default value.
 ◉ Write an overload with fewer parameters that calls the full method.
 → Yes. The overload supplies the default value and calls the method that does the work.
 ○ Pass null for the missing argument.

@@ -1,48 +1,46 @@
 ## Summary: Arrays
 
-This chapter covered storing a list of values of one type under one name.
+This chapter covered how a program stores a list of values of one type under a single name.
 
-* **An array holds a fixed number of values of one type.** `int[] scores = new int[5];` creates room for five `int` values.
-* **Indexes start at 0.** The first element is at 0, and the last is at `length - 1`.
-* **`length` is a field.** `scores.length` has no parentheses. A `String` uses `length()`, which is a method.
-* **Java checks every index.** An index outside the array throws an `ArrayIndexOutOfBoundsException` when the program runs, rather than reading unrelated memory.
-* **Curly braces fill an array as it's created.** `{2, 3, 5}` sets the values and the size together.
-* **Defaults fill every new element.** Numbers start at 0, `boolean` values at `false`, and object references at `null`.
-* **`null` means no object.** Calling a method on a `null` element throws a `NullPointerException`.
-* **A two-dimensional array is an array of rows.** `table[row][column]` reads one element, counting from 0 in both.
-* **Each dimension has its own length.** `table.length` is the number of rows, and `table[0].length` is the number of columns in that row.
-* **Rows can differ in length.** Java allows ragged arrays, but most tables keep every row the same length.
+* **An array holds many values of one type.** It's declared with a type, empty brackets, and a name, such as `int[] nums = {10, 20, 30};`, or with `new` and a size, such as `new int[3]`.
+* **Indexes start at zero.** `nums[0]` is the first element, and `nums[2]` is the third. Each index must be within the array.
+* **Elements can be read and changed.** `nums[2] += 5` works just like a variable.
+* **Going past the end throws an exception.** Java checks every index, and a bad one throws `ArrayIndexOutOfBoundsException`.
+* **New arrays are filled with defaults.** Every element starts at zero for numbers, `false` for booleans, and `null` for objects such as strings.
+* **Leave out the size when you list the values.** `String[] cars = {...}` counts the values for you.
+* **`length` gives the number of elements.** It's a field, with no parentheses, and `length()` doesn't compile.
+* **Multidimensional arrays use one index per dimension.** `grid[1][2]` is row 1, column 2. Both indexes start at zero, and each must stay within its own length.
 
 ### Check your understanding
 
 *These questions are written for this course.*
 
 ````quiz
-Which index is past the end of `int[] values = new int[4];`?
-○ 3
-→ Not quite. The last index of a four-element array is 3.
-◉ 4
-→ Yes. The valid indexes are 0 to 3, so 4 is past the end.
-○ 0
-→ Not quite. The first index is 0, and it's valid.
+Which index refers to the last element of `int[] nums = new int[4];`?
+○ 4
+→ Not quite. That's one past the end of a four-element array.
+◉ 3
+→ Yes. Indexes run from 0 to 3, so the last element is at index 3.
+○ 2
+→ Not quite. That's the third element.
 ````
 
 ````quiz
-What does an unset `String` element of an array hold?
-○ An empty string.
-→ Not quite. Its default is null, not an empty string.
-◉ null
-→ Yes. Object elements start as null.
-○ The character 0.
-→ Not quite. That's the default for a char, not a String.
+What is `cars.length` for `String[] cars = {"Volvo", "BMW"};`?
+○ 1
+→ Not quite. That would be the index of the last element.
+◉ 2
+→ Yes. The array has two elements, so its length is 2.
+○ The number of characters in the strings.
+→ Not quite. length counts the elements, not the characters.
 ````
 
 ````quiz
-For `int[][] grid = new int[3][5];`, what does `grid[0].length` give?
+What is the value of `values[3]` after `int[] values = new int[5];` with only the first three set?
 ○ 3
-→ Not quite. That's the number of rows, which is grid.length.
-◉ 5
-→ Yes. grid[0] is the first row, and it has 5 columns.
-○ 15
-→ Not quite. That's the total number of elements, not the length of one row.
+→ Not quite. The third value is at index 2, and index 3 was never set.
+◉ 0
+→ Yes. Every element of a new int array starts at zero, so an unset element is 0.
+○ An exception, because it was never set.
+→ Not quite. Reading an unset element gives its default, not an exception.
 ````

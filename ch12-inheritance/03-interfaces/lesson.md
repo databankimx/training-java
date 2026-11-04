@@ -98,7 +98,7 @@ How many interfaces can one class implement?
 ○ One.
 → Not quite. A class can implement several interfaces.
 ◉ As many as it needs, listed after implements.
-→ Yes. Java allows any number of interfaces, unlike its single base class.
+→ Yes. A class can implement any number of interfaces, listed after implements.
 ○ None, since interfaces are only for other interfaces.
 → Not quite. A class is the normal thing that implements an interface.
 ````

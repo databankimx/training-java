@@ -2,50 +2,47 @@
 
 This chapter covered how a program chooses what to do, based on the values it has.
 
-* **A `boolean` holds true or false.** Java prints it as the word, with no setting needed.
-* **Comparisons ask questions.** `==`, `!=`, `<`, `<=`, `>`, and `>=` each give a `boolean`.
-* **`==` is a comparison, and `=` is assignment.** Java refuses `if (x = 10)`, because an assignment is an `int`, not a `boolean`.
-* **Logical operators combine conditions.** `&&` needs both sides true, `||` needs one, and `!` reverses its value. `^` is XOR, true when exactly one side is true.
-* **Short-circuiting skips work.** `&&` and `||` stop as soon as the answer is known, so a check placed first can protect the code after it.
-* **Precedence sets the order.** `!` is first, then comparisons, then `&&`, then `||`. Add parentheses when you combine `&&` and `||`, to make the intent clear.
-* **`if` runs a block when a condition is true.** The condition goes in parentheses, the code goes in braces, and the braces go on every block.
-* **`else` and `else if` choose one path.** A chain runs only its first true block, so order the tests from most specific to least.
-* **Separate `if` blocks run independently.** Use them when more than one of the conditions should apply.
-* **The conditional operator chooses a value.** `condition ? first : second` gives one of two values.
-* **`switch` compares one value with constants.** It works on `int`, `char`, and `String`.
-* **Classic `switch` falls through unless each case ends with `break`.** Comment any deliberate fall-through, because javac doesn't warn about it.
-* **The arrow form has no fall-through.** `case 1 ->` runs only its own line, and a switch expression produces a value.
+* **`boolean` holds true or false.** It prints as the word `true` or `false`.
+* **Comparisons ask questions.** `==`, `!=`, `<`, `>`, `<=`, and `>=` each give a boolean. Equality is `==`, and a single `=` assigns a value instead. An `if` condition must be a boolean, so `if (x = 10)` doesn't compile.
+* **Logical operators combine booleans.** `&&` needs both sides to be true, `||` needs one, and `!` flips a value. XOR is true when exactly one side is true, and Java can express it with `^`, with `p != q`, or with `(p || q) && !(p && q)`.
+* **Precedence sets the reading order.** `!` binds most tightly, then the comparisons, then `&&`, then `||`. Add parentheses when mixing `&&` and `||`, since the rules give the answer but the reader may not see it.
+* **Short-circuit evaluation stops early.** `&&` and `||` skip the right side when the left side already decides the answer. Put the safe check first. `&` and `|` always evaluate both sides.
+* **`if` runs a block on a condition.** `else` runs when the condition is false, and `else if` tests further conditions in order. The first true branch wins. The final `else` is optional.
+* **Chain or separate `if` blocks.** A chain runs only one block, so use it when the conditions exclude each other. When several conditions can apply, and each should run, use separate `if` blocks.
+* **The conditional operator chooses a value.** `condition ? a : b` gives `a` when the condition is true, and `b` otherwise.
+* **`switch` picks a case by value.** Use it when one value is compared with several constants. Each case ends with `break`, unless a comment marks a deliberate fall-through. A classic `switch` works on integers, `char`, and `String`. The arrow form, with `->`, never falls through.
+* **Always use braces.** They stop a later edit from putting a line outside the `if` by accident.
 
 ### Check your understanding
 
 *These questions are written for this course.*
 
 ````quiz
-What is the result of `false && (10 / count > 1)` when `count` is 0?
-○ An ArithmeticException, because the division is attempted.
-→ Not quite. && stops at the false left side, so the division is never attempted.
-◉ false, with the right side skipped.
-→ Yes. The left side is already false, so && can't be true, and the right side isn't evaluated.
-○ true, because the division by zero is ignored.
-→ Not quite. The result of && can't be true when its left side is false.
+What does a boolean print as when it's added to a string?
+○ 1 or 0, as in older languages.
+→ Not quite. Java prints a boolean as the word true or false.
+◉ true or false.
+→ Yes. The value is printed as the word, with no setting needed.
+○ The variable's name.
+→ Not quite. The value is printed, not the name.
 ````
 
 ````quiz
-Which statement about `else if` chains is correct?
-○ Every block whose condition is true runs.
-→ Not quite. That's the behaviour of separate if blocks, not of a chain.
-◉ Only the first block whose condition is true runs.
-→ Yes. Once one block runs, the rest of the chain is skipped.
-○ The blocks run in the order they are written, whatever their conditions.
-→ Not quite. The conditions are tested in order, and only the true one's block runs.
+Which expression is true when `age` is 15 and `hasPermission` is true?
+○ age >= 18 && hasPermission
+→ Not quite. 15 is not 18 or over, so the left side is false.
+◉ age < 18 || hasPermission
+→ Yes. Either side being true is enough for ||, and hasPermission is true.
+○ age == 15 && !hasPermission
+→ Not quite. That needs hasPermission to be false, and it's true here.
 ````
 
 ````quiz
-What does a switch expression such as `String name = switch (day) { case 1 -> "Mon"; default -> "Other"; };` do?
-○ It prints the name, and gives no value.
-→ Not quite. The expression produces a value, which the assignment stores.
-◉ It produces a value, from the branch that matches, and stores it in name.
-→ Yes. The arrow branch's value is the result of the switch.
-○ It only works with int values.
-→ Not quite. A switch expression also works with String values, as the arrow form shows.
+What is the value of `result` after `int result = (5 > 3) ? 10 : 20;`?
+○ 20
+→ Not quite. 20 is the value used when the condition is false, and 5 is greater than 3.
+◉ 10
+→ Yes. The condition is true, so the first value, 10, is used.
+○ true
+→ Not quite. The conditional operator gives one of its two values, not the condition itself.
 ````

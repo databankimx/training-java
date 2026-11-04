@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -42,9 +43,7 @@ final class Runner {
         if (process != null && process.isAlive()) {
             throw new IllegalStateException("A program is already running.");
         }
-        if (args.has("test") && args.get("test").getAsBoolean()) {
-            throw new IllegalArgumentException("Tests need JUnit, which the runner does not have yet.");
-        }
+        boolean test = args.has("test") && args.get("test").getAsBoolean();
         String source = args.has("source") && !args.get("source").isJsonNull() ? args.get("source").getAsString() : null;
         List<String> programArgs = new ArrayList<>();
         if (args.has("args") && args.get("args").isJsonArray()) {
@@ -53,7 +52,7 @@ final class Runner {
 
         Thread worker = new Thread(() -> {
             try {
-                compileAndRun(step, source, programArgs);
+                compileAndRun(step, source, programArgs, test);
             } catch (Exception error) {
                 output(error.getMessage() == null ? error.toString() : error.getMessage() + "\n", "stderr");
                 finished(null);
@@ -64,18 +63,26 @@ final class Runner {
         return JsonNull.INSTANCE;
     }
 
-    private void compileAndRun(Path step, String source, List<String> programArgs) throws Exception {
+    private void compileAndRun(Path step, String source, List<String> programArgs, boolean test) throws Exception {
         Path build = step.resolve("build");
         deleteTree(build);
         Path sources = Files.createDirectories(build.resolve("src"));
         Path classes = Files.createDirectories(build.resolve("classes"));
         copyTree(step.resolve("src"), sources);
+        // A test is a class named Tests in the step's tests folder. It is compiled with the step's source.
+        copyTree(step.resolve("tests"), build.resolve("tests"));
+        // The visualizer page is copied beside the program, so the trace the program writes is found next to it.
+        Path page = step.resolve("visualize.html");
+        if (Files.isRegularFile(page)) {
+            Files.copy(page, build.resolve("visualize.html"), StandardCopyOption.REPLACE_EXISTING);
+        }
         if (source != null) {
             Files.writeString(sources.resolve("Main.java"), source, StandardCharsets.UTF_8);
         }
 
         status("Compiling " + step.getFileName() + "...");
-        List<String> files = javaFiles(sources);
+        List<String> files = new ArrayList<>(javaFiles(sources));
+        files.addAll(javaFiles(build.resolve("tests")));
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         if (compiler == null) {
             throw new IllegalStateException("No Java compiler is available. The runner needs a full JDK, not a JRE.");
@@ -93,9 +100,10 @@ final class Runner {
             return;
         }
 
-        status("Running Main");
+        status(test ? "Running tests" : "Running Main");
         String java = Paths.get(System.getProperty("java.home"), "bin", "java.exe").toString();
-        List<String> command = new ArrayList<>(List.of(java, "-cp", classes.toString(), "Main"));
+        String mainClass = test ? "Tests" : "Main";
+        List<String> command = new ArrayList<>(List.of(java, "-cp", classes.toString(), mainClass));
         command.addAll(programArgs);
         process = new ProcessBuilder(command).directory(build.toFile()).start();
         input = process.getOutputStream();
@@ -170,6 +178,9 @@ final class Runner {
     }
 
     private static List<String> javaFiles(Path dir) throws IOException {
+        if (!Files.isDirectory(dir)) {
+            return new ArrayList<>();
+        }
         try (Stream<Path> files = Files.walk(dir)) {
             return files.filter(Files::isRegularFile)
                     .filter(p -> p.getFileName().toString().endsWith(".java"))

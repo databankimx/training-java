@@ -86,7 +86,7 @@ Constants make a program easier to read, because `pi` says what the number means
 ````quiz
 Which line correctly declares an integer called count, starting at 0?
 ○ integer count = 0;
-→ Not quite. Java doesn't have an integer type. Its whole-number type is int.
+→ Not quite. The whole-number type is int, not integer.
 ◉ int count = 0;
 → Yes. The type comes first, then the name, then the starting value.
 ○ count int = 0;

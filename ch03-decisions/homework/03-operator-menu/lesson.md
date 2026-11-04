@@ -1,4 +1,4 @@
-## Operator menu
+## Homework: Operator menu
 
 Write a calculator that asks for an operator and two numbers, and prints the result. This exercise uses a `switch`, and it also needs an `if` inside one of its cases.
 
@@ -12,23 +12,7 @@ The program should:
 * print `Cannot divide by zero.` when the operator is `/` and the second number is 0, rather than dividing
 * print `Unknown operator.` for any other character
 
-Use `System.out.flush()` on each prompt, and use the arrow form of `switch`, so no `break` is needed.
-
-### Where to change the code
-
-The `switch` has one case with a block in it, and that block holds the `if`. The division case is the one that checks for zero:
-
-```java
-case '/' -> {
-    if (second == 0) {
-        System.out.println("Cannot divide by zero.");
-    } else {
-        System.out.println(first / second);
-    }
-}
-```
-
-Each of the other cases is a single line, with the calculation in it. To add a new operator, add a new case line before the `default`.
+Use `System.out.flush()` on each prompt, and a `break` at the end of every case.
 
 ### What to check
 
@@ -40,14 +24,12 @@ Try these inputs, and compare the output with the answers:
 * `/`, `7`, `0` should print `Cannot divide by zero.`
 * `%`, `1`, `2` should print `Unknown operator.`
 
-Java prints every `double` with a decimal point, so the answers show `5.0` rather than `5`. That's the same behaviour you saw in the arithmetic lesson, and it isn't a mistake in the program.
-
-The division by zero case matters most. A `double` divided by zero doesn't cause an error, but it gives infinity, which isn't a useful answer for this program. The `if` stops that before the division happens.
+The numbers are `double` values, so Java prints each result with a decimal point. The division by zero case matters most. Dividing a `double` by zero doesn't cause an error in Java, but it gives infinity, which isn't a useful answer for this program. That's why the check is written as an `if`.
 
 ### Extensions
 
-* Add a `%` case that gives the remainder. Java's `%` works on `double` values as well as integers, so check what a remainder of two decimals gives.
-* Print the result to two decimal places, using `printf` with `%.2f`, as the arithmetic lesson showed. Check whether a whole-number answer now prints as `5.00`.
+* Add a `%` case that gives the remainder. Think about whether `double` values support `%`. Java allows `%` on `double` values, but the result may not mean what you expect for decimals.
+* Print the result to two decimal places, using `printf` with `%.2f`. Check how whole-number answers, such as 5, now print.
 
 ---
 

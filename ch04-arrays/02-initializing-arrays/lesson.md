@@ -1,86 +1,71 @@
 ## Initializing arrays
 
-The last step created an array and then filled it one element at a time. Java also lets you give the values when you create the array, and it sets every element that you don't give a value for.
+The last step set each array element in its braces, which is one way to start an array. Java offers several more, and you'll use each of them in different situations. This step covers the common ones, and the ways to find out how many elements an array holds.
 
-Here's the program for this step, in `src/Main.java`:
+Here's the start of this step's program, in `src/Main.java`. It begins with an array that's only partly filled in:
 
 ```java
-int[] primes = {2, 3, 5, 7, 11};
-System.out.println("Primes: " + primes.length + " values, last is " + primes[4]);
+int[] partial = new int[5];
+partial[0] = 7;
+partial[1] = 8;
+System.out.println(partial[0] + " " + partial[1] + " " + partial[2] + " " + partial[4]);
 ```
 
-Press **Run**. The output begins:
+The output is:
 
 ```text
-Primes: 5 values, last is 11
+7 8 0 0
 ```
 
-The list in curly braces creates the array and fills it in one step. Java works out the size from the number of values, so you don't write the 5 yourself. The same form can be written with `new`, as `new int[]{2, 3, 5, 7, 11}`, but when you create and fill an array in one line, the shorter form is the usual choice.
+The array has five elements, and only the first two are set. An array created with `new` gives every element a default value: zero for a number, `false` for a `boolean`, and `null` for an object such as a `String`. The elements that weren't set are therefore zero, and the program can read them safely.
 
-### Default values
+A brace list must give a value for every element, so `new int[5]` followed by assignments is the way to fill only part of an array.
 
-An array you create with `new` and a size is filled with default values, before you've put anything in it. The default depends on the type:
+### Leaving out the size
 
-| Element type | Default value |
-|---|---|
-| `int`, `long` | 0 |
-| `double` | 0.0 |
-| `boolean` | `false` |
-| `char` | the character with code 0, which prints as nothing visible |
-| Any object, such as `String` | `null`, which means no object |
-
-The program shows this. It creates `squares` with four elements, sets three of them, and reads the fourth:
+If you give the values in the braces, Java counts them for you:
 
 ```java
-int[] squares = new int[4];
+String[] cars = {"Volvo", "BMW", "Ford", "Mazda", "Tesla"};
+```
+
+The square brackets are empty, and the array has five elements because five values are listed. Leaving out the size is the usual choice when you initialize the array right away. It's a good habit when the list is fixed and you don't want to count it yourself.
+
+### Finding the length
+
+The next lines of the program ask for the number of elements:
+
+```java
+System.out.println("Cars: " + cars.length);
+System.out.println("Last: " + cars[cars.length - 1]);
+```
+
+The output is:
+
+```text
+Cars: 5
+Last: Tesla
+```
+
+`length` is a field of the array, not a method, so it has no parentheses. Writing `cars.length()` is a compile error, which is a common mistake when moving between `String` and arrays. Use `length` rather than counting by hand, because the count stays correct if you change the list.
+
+The last element is at index `cars.length - 1`, which is 4 here, the position after the four steps from index 0. Writing the index this way means that the code still finds the last element if the list changes.
+
+### Filling an array later
+
+You can also declare an array with a size and leave the values until afterwards:
+
+```java
+int[] squares = new int[3];
 squares[0] = 1;
 squares[1] = 4;
 squares[2] = 9;
-System.out.println("Fourth square (not set yet): " + squares[3]);
+System.out.println(squares[2]);
 ```
 
-The output is:
+The output is `9`. Here the array exists before it has any values, and every element starts at zero, so the program can set them one at a time. Reading an element before you set it gives its default, not a leftover value from memory.
 
-```text
-Fourth square (not set yet): 0
-```
-
-Java never leaves an element with a random value. The fourth square holds the default for `int`, which is 0.
-
-### Object arrays and null
-
-An array of `String` values starts with every element set to `null`. That's the Java word for "no object here", and reading it gives `null` rather than an empty string:
-
-```java
-String[] names = new String[3];
-names[0] = "Ada";
-System.out.println("Name 1: " + names[0]);
-System.out.println("Name 2: " + names[1]);
-```
-
-The output is:
-
-```text
-Name 1: Ada
-Name 2: null
-```
-
-The second name was never set, so it's `null`. If you call a method on a `null` value, such as `names[1].length()`, the program stops with a `NullPointerException`. The chapter on objects covers `null` in depth, and the rule to remember for now is that a `null` element has no value to work with.
-
-### Decimal values
-
-The last part of the program has an array of `double` values:
-
-```java
-double[] prices = {4.99, 12.50};
-System.out.println("Price: " + prices[1]);
-```
-
-The output is `Price: 12.5`. Java prints a `double` with the fewest digits that identify it, so `12.50` shows as `12.5`. The value is the same. Use `printf` with `%.2f` when you need the two places printed.
-
-### The length, again
-
-`squares.length` gives 4, the size you asked for, whether or not every element has been set. The length counts the slots in the array, not the values you've put in it. That's why the length is useful for knowing where the array ends, even when it's only partly filled.
+Setting each element by hand works for a few values, but it doesn't scale. The loops chapter covers a loop that fills an array in one go.
 
 ---
 
@@ -89,33 +74,33 @@ The output is `Price: 12.5`. Java prints a `double` with the fewest digits that 
 *These questions are written for this course.*
 
 ````quiz
-What is the default value of an `int` element in a new array that has not been set?
-○ Whatever value was in memory before.
-→ Not quite. Java sets every element to a known default, so the value is never left to chance.
+What does `int[] nums = new int[5];` hold in `nums[4]` before any value is set?
+○ 4
+→ Not quite. The index is 4, but the value stored there is not the index.
 ◉ 0
-→ Yes. Numeric arrays start with 0 in every element.
-○ null
-→ Not quite. null is the default for objects, such as String, not for an int.
+→ Yes. Every element of a new int array starts at zero.
+○ An unpredictable value left in memory.
+→ Not quite. Java sets every element to its default, so nothing is left over.
 ````
 
 ````quiz
-What does a `String` array element hold if it has not been set?
-○ An empty string, "".
-→ Not quite. Its default is null, which means no object, not an empty string.
-◉ null
-→ Yes. An unset object element is null.
-○ 0
-→ Not quite. A String element can't be 0.
+Which expression gives the number of elements in `String[] cars = {"a", "b", "c"};`?
+○ cars.length()
+→ Not quite. length is a field of an array, so it has no parentheses.
+◉ cars.length
+→ Yes. Arrays have a length field, which is 3 here.
+○ cars.size()
+→ Not quite. size() is a method of collections, not of arrays.
 ````
 
 ---
 
 ### Try it in the runner
 
-Add `System.out.println("Name 3: " + names[2].length());` after the last name line, and press **Run**. Predict the result before you press Run. `names[2]` is `null`, so calling `length()` on it throws a `NullPointerException`. The output stops at that line. Remove the line before you continue.
+Change `partial` to `int[] partial = {7, 8, 9, 10, 11};`, and predict the first line of output. Every element has a value now, so the line should read `7 8 9 11`, since `partial[2]` is 9 and `partial[4]` is 11. Change the declaration back before you continue.
 
-Then change `primes` to `{2, 3, 5, 7}`, and predict the value printed by `primes[4]`. The index is past the end of the new array, so the program throws an `ArrayIndexOutOfBoundsException`, as in the last step.
+Then delete the line that sets `squares[2]`, so `squares[2]` is never assigned, and press **Run**. The value printed is 0, because that's the default for a new `int` array. It isn't a leftover value, which is why Java arrays are safe to read before every element is set.
 
 ---
 
-Initializing an array with values is shorter, and defaults keep every element predictable. The next step extends arrays to two dimensions, with a row and a column index.
+Arrays can be created in several ways, and `length` tells you how many elements they hold. The loops chapter is what makes arrays useful, because it lets you visit every element without writing out each index.

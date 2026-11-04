@@ -111,8 +111,15 @@ final class Commands {
                 SwingUtilities.invokeLater(() -> requireLessonWindow().dock());
                 yield new JsonObject();
             }
-            // Not built yet: the visualizer.
-            case "open_visualizer" -> throw new IllegalArgumentException("Not built yet: " + command);
+            case "open_visualizer" -> {
+                // The page sits beside the trace in the step's build folder, which the last run wrote.
+                Path page = inside(str(args, "path")).resolve("build").resolve("visualize.html");
+                if (!Files.isRegularFile(page)) {
+                    throw new IllegalStateException("Run this step once, so its trace is written, then press Visualize.");
+                }
+                Desktop.getDesktop().open(page.toFile());
+                yield new JsonObject();
+            }
             default -> throw new IllegalArgumentException("Not built yet: " + command);
         };
     }

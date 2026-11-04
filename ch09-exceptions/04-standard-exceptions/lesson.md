@@ -51,7 +51,7 @@ Choose the class that describes the problem, and give it a message that helps th
 
 ### Why not catch everything
 
-Java has no single "catch anything" form for exceptions in normal code. Catching `Throwable` would also catch errors such as `StackOverflowError`, which a program usually can't recover from. Catch `Exception`, or a narrower class, for the problems a program can handle. Catch `Throwable` only at the outermost level of a program, where the choice is to report the failure and stop.
+Catching `Throwable` would also catch errors such as `StackOverflowError`, which a program usually can't recover from. Catch `Exception`, or a narrower class, for the problems a program can handle. Catch `Throwable` only at the outermost level of a program, where the choice is to report the failure and stop.
 
 ---
 

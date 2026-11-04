@@ -11,7 +11,7 @@ The program should:
 * in `main`, ask for a width, a height, and a radius, each with its own prompt, and read them as `double` values
 * print the rectangle's area and the circle's area, each with a label, using two decimal places
 
-Use `System.out.flush()` on each prompt. Java doesn't need a declaration before a call, so the methods can be placed below `main` as well as above it.
+Use `System.out.flush()` on each prompt. The compiler reads the whole class first, so the methods can be placed below `main` as well as above it.
 
 ### What to check
 

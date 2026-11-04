@@ -1,4 +1,4 @@
-## Tic-tac-toe board
+## Homework: Tic-tac-toe board
 
 A tic-tac-toe board is a grid of three rows and three columns, where each cell is empty, `X`, or `O`. Store the board in a two-dimensional `char` array, and print it.
 

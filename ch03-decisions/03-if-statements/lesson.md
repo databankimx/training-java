@@ -2,7 +2,7 @@
 
 So far, every program has run from top to bottom, with each line happening once. An `if` statement lets the program choose between paths. It checks a condition, and runs one block of code when the condition is true, and another when it's false. That's the step where your programs start to respond to the values they're given.
 
-Here's the start of this step's program, in `src/Main.java`:
+Here's the start of this step's program, in `src/Main.java`. It begins with a plain `if`:
 
 ```java
 int x = 20;
@@ -13,7 +13,7 @@ if (x > y) {
 }
 ```
 
-The condition goes in parentheses, and the code to run goes in curly braces. The condition must be a `boolean`. If it's true, the block runs. If it's false, the block is skipped, and the program carries on after the closing brace.
+The condition goes in parentheses, and the code to run goes in curly braces. If the condition is true, the block runs. If it's false, the block is skipped, and the program carries on after the closing brace.
 
 The program has three of these in a row: one for `x == y`, one for `x > y`, and one for `x < y`. Each one stands alone, so the program tests all three, whatever the others found. With `x` at 20 and `y` at 10, only the middle one is true, so that's the only message that appears:
 
@@ -78,6 +78,8 @@ if (score >= 90) {
 
 With a score of 75, the output is `Good`. With a score of 50, neither condition is true, there's no `else` to catch it, and the program prints nothing. That's correct here, because the program has no message to give a low score. Add an `else` only when there's something to do in that case.
 
+A chain can also have any number of `else if` blocks with no `else` at all. The rule is the same: the first true condition runs, and if none is true, nothing runs.
+
 ### Chained or independent?
 
 The chain has one important property: only one of its blocks ever runs. The next example shows why that matters, because it's easy to pick the wrong structure. A store gives a bulk discount for more than 10 items, and free shipping for more than 5:
@@ -117,24 +119,18 @@ Independent: free shipping
 
 Each `if` is checked on its own, whatever the others found. That's the right choice when the conditions don't exclude each other, and more than one should apply.
 
-The question to ask is simple: can two of these conditions be true at once, and should both blocks run when they are? If the answer is no, use a chain, because the chain makes that rule explicit. If the answer is yes, use separate `if` blocks. The first group of `if` blocks in this step's program, with its three checks on `x` and `y`, is a different case. Those conditions exclude each other, since only one can be true, so a chain would work just as well there. The separate `if` blocks are a style choice, and the chain is the more explicit of the two.
+The question to ask is simple: can two of these conditions be true at once, and should both blocks run when they are? If the answer is no, use a chain, because the chain makes that rule explicit. If the answer is yes, use separate `if` blocks. The first `if` in this step's program, with its three checks on `x` and `y`, is a different case. Those conditions exclude each other, since only one can be true, so a chain would work just as well there. The separate `if` blocks are a style choice, and the chain is the more explicit of the two.
 
 ### The conditional operator
 
-For a simple choice between two values, the conditional operator is shorter. The last lines of the program use it:
+For a simple choice between two values, the conditional operator is shorter:
 
 ```java
 String size = (x > y) ? "large" : "small";
-System.out.println("size: " + size);
+System.out.println("Size: " + size);
 ```
 
-The question mark sits between the condition and the first value, and the colon separates the two values. If the condition is true, the first value is used. Otherwise, the second is. It's the same as an `if` with an `else`, written as one expression, so it works well for choosing a value rather than running several lines of code.
-
-The output is:
-
-```text
-size: large
-```
+The question mark sits between the condition and the first value, and the colon separates the two values. If the condition is true, the first value is used. Otherwise, the second is. The output is `Size: large`. It's the same as an `if` with an `else`, written as one expression, so it works well for choosing a value rather than running several lines of code.
 
 ### Use braces every time
 
@@ -182,10 +178,8 @@ An order has 12 items, and both a bulk discount and free shipping should apply. 
 
 Change `driverAge` to `17`, and press **Run**. Before you do, work out which message prints. Seventeen is not 21 or over, and not 18 or over, but it is 16 or over, so the third message prints: `You can drive, but you can't vote or rent a car.`
 
-Then change `x` to `10`, so `x` and `y` are equal, and predict which of the first three messages print. Only the first one checks for equality, so `x is equal to y` prints, and the other two are skipped.
-
-Last, add a line that tries `if (x = 10)` in place of `if (x == 10)`, and press **Run**. The build fails with `incompatible types: int cannot be converted to boolean`. Remove the line before you continue.
+Then change `x` to `10`, so `x` and `y` are equal, and predict which of the first three messages print. Only the first one checks for equality, and the other two compare with `>` and `<`, so only the first prints, and the other two are skipped.
 
 ---
 
-With `if`, a program can respond to its data. The switch lesson covers the other way to choose, when one value is compared with several constants.
+With `if`, a program can respond to its data. The summary and the homework put these decisions together, so you can write small programs that make choices for themselves.

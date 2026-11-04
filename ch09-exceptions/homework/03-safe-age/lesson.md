@@ -17,7 +17,7 @@ Use a `while (true)` loop, with `break` once a valid age is read. Use `System.ou
 
 ### Why IndexOutOfBoundsException
 
-Java has no class that means "a value out of its valid range". `IndexOutOfBoundsException` is the closest standard class, and it's used here because the check is on a range of values. A common alternative is `IllegalArgumentException`, which is also reasonable. Whichever you choose, use the same class in the throw and the catch.
+`IndexOutOfBoundsException` is the closest standard class for a value out of its valid range, and it's used here because the check is on a range of values. A common alternative is `IllegalArgumentException`, which is also reasonable. Whichever you choose, use the same class in the throw and the catch.
 
 ### What to check
 

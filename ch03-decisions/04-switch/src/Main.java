@@ -34,26 +34,17 @@ public class Main {
         switch (level) {
             case 1:
                 System.out.println("Level 1 tasks");
-                // falls through
+                // no break here: the code falls through on purpose
             case 2:
                 System.out.println("Level 2 tasks");
                 break;
         }
 
-        String command = "start";
-        switch (command) {
-            case "start" -> System.out.println("Starting");
-            case "stop" -> System.out.println("Stopping");
-            default -> System.out.println("Unknown command");
+        String season = "winter";
+        switch (season) {
+            case "winter" -> System.out.println("Cold");
+            case "summer" -> System.out.println("Warm");
+            default -> System.out.println("In between");
         }
-
-        int dayNumber = 6;
-        String dayName = switch (dayNumber) {
-            case 1 -> "Monday";
-            case 2 -> "Tuesday";
-            case 6, 7 -> "Weekend";
-            default -> "Weekday";
-        };
-        System.out.println("Day " + dayNumber + " is " + dayName);
     }
 }

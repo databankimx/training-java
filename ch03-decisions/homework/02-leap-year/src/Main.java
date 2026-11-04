@@ -1,9 +1,6 @@
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-
+        java.util.Scanner input = new java.util.Scanner(System.in);
         System.out.print("Enter a year: ");
         System.out.flush();
         int year = input.nextInt();

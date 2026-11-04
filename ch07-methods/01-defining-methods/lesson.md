@@ -34,7 +34,7 @@ The method runs twice, because it's called twice. Each call jumps to the body, r
 
 ### No declarations are needed
 
-Java doesn't need a declaration before a call. The compiler reads the whole class before it checks the calls, so a method can be called before the line where it's defined. The program places `greet` above `main` for readability, but it would work below `main` too.
+The compiler reads the whole class before it checks the calls, so a method can be called before the line where it's defined. The program places `greet` above `main` for readability, but it would work below `main` too.
 
 Many programmers put `main` at the top and the methods after it, and others define each method before it's used. Either is fine. The rule that matters in Java is that the method must exist in a class the call can reach, and that its parameters and return type match the call.
 
@@ -59,7 +59,7 @@ Why can `greet();` appear in `main` even when `greet` is defined below `main`?
 ○ Because Java runs methods in the order they are written.
 → Not quite. The order of definitions doesn't decide what can be called.
 ◉ Because the compiler reads the whole class before it checks the calls.
-→ Yes. Java doesn't need a separate declaration for a method.
+→ Yes. The compiler reads the whole class, so a method can be called from anywhere in it.
 ○ Because greet is declared static.
 → Not quite. static lets the method be called from main, but it isn't why the call works before the definition.
 ````
@@ -68,7 +68,7 @@ Why can `greet();` appear in `main` even when `greet` is defined below `main`?
 
 ### Try it in the runner
 
-Move the definition of `greet` below `main`, and press **Run**. The program still builds and prints the same output, because Java doesn't need a declaration before a call.
+Move the definition of `greet` below `main`, and press **Run**. The program still builds and prints the same output, because the compiler reads the whole class before it checks the calls.
 
 Then change the call `greet();` to `greet(5);`, and predict the result before you press **Run**. The build fails, because `greet` takes no parameters, and the call passes one. Restore the call before you continue.
 
