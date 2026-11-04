@@ -1,61 +1,42 @@
 ## Defining methods
 
-A method is a named block of code that does one job. You've already written one: `main` is a method, and the runner calls it first. Writing your own methods lets you name each job, and call it from as many places as you need.
+So far, each program has been one long `main`. That works while the program is short, but a larger program repeats the same steps in several places, and the same code in several places is hard to change. A method gives a block of code a name, so you write it once and call it wherever you need it.
 
 Here's the program for this step, in `src/Main.java`:
 
 ```java
-public class Main {
-    public static void main(String[] args) {
-        greet();
-        printSquare(4);
-        System.out.println("Sum: " + add(2, 3));
-    }
-
-    static void greet() {
-        System.out.println("Hello from a method.");
-    }
-
-    static void printSquare(int n) {
-        System.out.println(n + " squared is " + (n * n));
-    }
-
-    static int add(int a, int b) {
-        return a + b;
-    }
+static void greet() {
+    System.out.println("I just got executed!");
 }
+```
+
+The definition has four parts. `static` lets the method be called from `main` without an object, which the classes chapter explains. `void` is the return type, which says the method gives back nothing. `greet` is the name, followed by parentheses, which are empty here. The braces hold the body, which is the code that runs when the method is called.
+
+Calling the method is one line, the method's name followed by parentheses:
+
+```java
+System.out.println("Before the calls");
+greet();
+greet();
+System.out.println("After the calls");
 ```
 
 Press **Run**. The output is:
 
 ```text
-Hello from a method.
-4 squared is 16
-Sum: 5
+Before the calls
+I just got executed!
+I just got executed!
+After the calls
 ```
 
-The `main` method calls three others. Each call names the method and gives it its inputs in parentheses, and the method runs its own block and then returns to the line that called it.
+The method runs twice, because it's called twice. Each call jumps to the body, runs it, and comes back to the line after the call.
 
-### The shape of a method
+### No declarations are needed
 
-Each method declaration has four parts, in this order:
+Java doesn't need a declaration before a call. The compiler reads the whole class before it checks the calls, so a method can be called before the line where it's defined. The program places `greet` above `main` for readability, but it would work below `main` too.
 
-* `static`, which lets the method be called from `main`, as this step needs. You'll see what it means for instance methods in the classes chapter.
-* A return type, such as `void` for a method that returns nothing, or `int` for one that returns an integer.
-* A name, written in camel case, such as `printSquare`.
-* A list of parameters in parentheses, with a type for each one. A method with no inputs has empty parentheses, as `greet()` does.
-
-The body goes in curly braces, like the bodies of `if` and loops.
-
-### Where methods go
-
-Java doesn't need a method to be declared before it's used. The `main` method calls `add` before `add` appears in the file, and the compiler finds it anyway. C++ requires a declaration before the first call, which is why that course has a separate step for it, and Java doesn't.
-
-The methods here are placed below `main` by convention, and the program reads top to bottom: the main steps come first, and the details follow.
-
-### void and return
-
-`greet` and `printSquare` have the return type `void`, which means they do their work and return nothing. `add` has the return type `int`, and its `return a + b;` sends the sum back to the caller. A method with a return type must return a value of that type on every path, and the compiler checks it.
+Many programmers put `main` at the top and the methods after it, and others define each method before it's used. Either is fine. The rule that matters in Java is that the method must exist in a class the call can reach, and that its parameters and return type match the call.
 
 ---
 
@@ -64,33 +45,33 @@ The methods here are placed below `main` by convention, and the program reads to
 *These questions are written for this course.*
 
 ````quiz
-Which return type means a method returns nothing?
-○ null
-→ Not quite. null is a value a method can return for an object type, not a return type that means nothing.
-◉ void
-→ Yes. A void method does its work and returns no value.
-○ empty
-→ Not quite. Java has no empty return type. The word is void.
+What does the `void` before a method's name mean?
+○ The method takes no parameters.
+→ Not quite. The empty parentheses after the name mean that.
+◉ The method returns no value.
+→ Yes. void means there's no return value.
+○ The method does nothing when called.
+→ Not quite. A void method can do a great deal. It just doesn't return a value.
 ````
 
 ````quiz
-Why can `main` call `add` even though `add` is written after `main`?
-○ Because add is declared static.
-→ Not quite. static lets it be called from main, but the reason it works is different.
-◉ Because Java finds methods anywhere in the class, so no forward declaration is needed.
-→ Yes. The compiler looks at the whole class before it checks the calls.
-○ Because the program runs the methods in alphabetical order.
-→ Not quite. Methods are called in the order the code asks for them.
+Why can `greet();` appear in `main` even when `greet` is defined below `main`?
+○ Because Java runs methods in the order they are written.
+→ Not quite. The order of definitions doesn't decide what can be called.
+◉ Because the compiler reads the whole class before it checks the calls.
+→ Yes. Java doesn't need a separate declaration for a method.
+○ Because greet is declared static.
+→ Not quite. static lets the method be called from main, but it isn't why the call works before the definition.
 ````
 
 ---
 
 ### Try it in the runner
 
-Change `add` to return `a * b`, and predict the `Sum` line. The method now multiplies, so `add(2, 3)` gives 6, and the line still reads `Sum: 6`. The name no longer matches what the method does, which is a reminder to name methods for their job. Restore the addition before you continue.
+Move the definition of `greet` below `main`, and press **Run**. The program still builds and prints the same output, because Java doesn't need a declaration before a call.
 
-Then change `greet` to return `int`, leaving its body as it is, and press **Run**. The build fails, because a method with a return type must return a value. Restore `void` before you continue.
+Then change the call `greet();` to `greet(5);`, and predict the result before you press **Run**. The build fails, because `greet` takes no parameters, and the call passes one. Restore the call before you continue.
 
 ---
 
-A method names a job, and a call runs it from anywhere in the class. The next step covers parameters, the inputs a method receives from its caller.
+A method is a named block of code. The next step gives methods inputs, so the same method can do different work each time it's called.

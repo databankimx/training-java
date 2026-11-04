@@ -14,16 +14,11 @@ public class Main {
         System.out.println("a / 2.0 = " + (a / 2.0));
 
         double average = (double) a / b;
-        System.out.printf("average = %.2f%n", average);
+        System.out.printf("average to two places = %.2f%n", average);
 
         System.out.println("2 + 3 * 4 = " + (2 + 3 * 4));
         System.out.println("(2 + 3) * 4 = " + ((2 + 3) * 4));
         System.out.println("10 - 4 - 3 = " + (10 - 4 - 3));
-
-        int count = 0;
-        count++;
-        count += 5;
-        System.out.println("count = " + count);
 
         int total = 10;
         total -= 3;
@@ -35,7 +30,7 @@ public class Main {
         System.out.println("max(a, b) = " + Math.max(a, b));
         System.out.println("min(a, b) = " + Math.min(a, b));
         System.out.printf("sqrt(16) = %.2f%n", Math.sqrt(16));
-        System.out.printf("round(2.6) = %d%n", Math.round(2.6));
+        System.out.println("round(2.6) = " + Math.round(2.6));
         System.out.printf("pow(2, 10) = %.2f%n", Math.pow(2, 10));
     }
 }

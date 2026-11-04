@@ -1,20 +1,19 @@
 public class Main {
+    static void introduce(String fname, int age) {
+        System.out.println(fname + " is " + age + " years old.");
+    }
+
+    static void welcome() {
+        welcome("United States");
+    }
+
+    static void welcome(String country) {
+        System.out.println("The country is: " + country);
+    }
+
     public static void main(String[] args) {
-        int count = 5;
-        increment(count);
-        System.out.println("count after increment: " + count);
-
-        int doubled = doubleValue(count);
-        System.out.println("doubled: " + doubled);
-        System.out.println("count still: " + count);
-    }
-
-    static void increment(int value) {
-        value = value + 1;
-        System.out.println("inside increment: " + value);
-    }
-
-    static int doubleValue(int value) {
-        return value * 2;
+        introduce("Scott", 53);
+        welcome();
+        welcome("Mexico");
     }
 }

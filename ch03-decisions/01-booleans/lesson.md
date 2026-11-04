@@ -19,15 +19,13 @@ isCodingFun: true
 isFishTasty: false
 ```
 
-Java prints a `boolean` as the word `true` or `false`. There's no setting to change that, and no need for one. In C++ the same values print as `1` and `0` by default, which is why C++ has a `boolalpha` setting. You won't meet that in Java.
-
-Notice that the names are written in camel case, such as `isCodingFun`, the usual style in Java. The keyword `boolean` is spelled out in full, unlike the `bool` of C++.
+Java prints a `boolean` as the word `true` or `false`. There's no setting to change that, and no need for one. Notice that the names are written in camel case, such as `isCodingFun`, the usual style in Java.
 
 ### Comparisons
 
 A comparison asks a question about two values, and the answer is a `boolean`. The operators are:
 
-| Operator | Meaning | Example | Result when `x` is 10 and `y` is 9 |
+| Operator | Meaning | Example | Result |
 |---|---|---|---|
 | `==` | Equal to | `x == 10` | `true` |
 | `!=` | Not equal to | `x != y` | `true` |
@@ -36,7 +34,20 @@ A comparison asks a question about two values, and the answer is a `boolean`. Th
 | `>=` | Greater than or equal to | `x >= 10` | `true` |
 | `<=` | Less than or equal to | `y <= 8` | `false` |
 
-The rest of the program prints these results, in the same order as the table:
+With `x` as 10 and `y` as 9, the results in the table are what the rest of the program prints:
+
+```java
+int x = 10;
+int y = 9;
+System.out.println("x == 10: " + (x == 10));
+System.out.println("x != y: " + (x != y));
+System.out.println("x > y: " + (x > y));
+System.out.println("x < y: " + (x < y));
+System.out.println("x >= 10: " + (x >= 10));
+System.out.println("y <= 8: " + (y <= 8));
+```
+
+The output is:
 
 ```text
 x == 10: true
@@ -47,13 +58,13 @@ x >= 10: true
 y <= 8: false
 ```
 
-The parentheses around each comparison are needed in the program. Without them, `"x == 10: " + x == 10` would be read as a comparison between the text and 10, and that doesn't compile. The parentheses make the comparison happen first, and then join its `true` or `false` to the text.
+The brackets around each comparison are needed in the program. Without them, `"x == 10: " + x == 10` would be read as a comparison between the text and 10, and that doesn't compile. The brackets make the comparison happen first, and then join its `true` or `false` to the text.
 
 Notice that equality is `==`, with two equals signs, and not `=`. A single `=` is assignment, which you've been using since the variables lesson.
 
 ### The assignment mistake
 
-Writing `if (x = 10)` in place of `if (x == 10)` is one of the most common mistakes in C-family languages. Java catches it for you. The condition of an `if` must be a `boolean`, and `x = 10` is an `int`, so the compiler refuses the code and reports `incompatible types: int cannot be converted to boolean`.
+Writing `if (x = 10)` in place of `if (x == 10)` is one of the most common mistakes in languages of this family. Java catches it for you. The condition of an `if` must be a `boolean`, and `x = 10` is an `int`, so the compiler refuses the code and reports `incompatible types: int cannot be converted to boolean`.
 
 That protection is one of the reasons Java is strict about types. It turns a silent bug into a compile error you see straight away.
 
@@ -95,7 +106,7 @@ Which expression is true when `x` is 10?
 
 Change `y` to `10`, and press **Run**. Before you do, predict the values of `x == y` and `x < y`. Both `x` and `y` will be 10, so `x == y` becomes `true` and `x < y` becomes `false`.
 
-Then add a line to the output that reads `System.out.println("x = 3: " + (x = 3));`, and press **Run**. The program still builds, because `x = 3` is a valid assignment that gives the value 3. It changes `x` to 3, so any line that uses `x` after it sees the new value. This is a valid Java expression, unlike `if (x = 10)`, which the compiler rejects. Remove the line before you continue.
+Then add a line that reads `System.out.println("x = 3: " + (x = 3));`, and press **Run**. The program still builds, because `x = 3` is a valid assignment that gives the value 3. It changes `x` to 3, so any line that uses `x` after it sees the new value. This is a valid Java expression, unlike `if (x = 10)`, which the compiler rejects. Remove the line before you continue.
 
 ---
 

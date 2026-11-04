@@ -12,7 +12,7 @@ number = 15;
 System.out.println(number);
 ```
 
-Press **Run**. The output begins:
+Press **Run**. The output is:
 
 ```text
 10
@@ -30,20 +30,20 @@ Java is strict about types, and each one describes a different kind of data:
 * `int` holds whole numbers, such as 10 or -3.
 * `double` holds numbers with a decimal part, such as 5.99. It's the usual choice for decimals.
 * `char` holds a single character, written in single quotes, such as `'a'`.
-* `boolean` holds `true` or `false`.
-* `String` holds text, written in double quotes. Its name starts with a capital letter, and it's in `java.lang`, so no import is needed.
+* `boolean` holds `true` or `false`. When it's printed, it shows as the word `true` or `false`.
+* `String` holds text, written in double quotes. It's in `java.lang`, so no import is needed.
 
-The program uses each of these. Run it, and look at the output line for each one. Notice that `boolean` prints as `true`, not as a number.
+The program uses each of these. Run it, and look at the output line for each one.
 
 ### More numeric types and characters
 
-The program has a few more types, and they behave differently from the ones above.
+The program ends with a few more types, and they behave differently from the ones above.
 
 `float` and `double` both hold numbers with a decimal part. The difference is precision: a `float` keeps about six or seven significant digits, and a `double` keeps about fifteen. That's why most code uses `double` unless memory is tight. A `float` literal needs an `f` at the end, as in `5.75f`, because a plain decimal literal is a `double`.
 
-A number can also be written in scientific notation, with an `e` standing for "times ten to the power of". The program's `35e3` is 35 times 1000, and it prints as `35000.0`. Java always prints a `double` with a decimal point, even when the value is whole.
+A number can also be written in scientific notation, with an `e` standing for "times ten to the power of". The program's `35e3` is 35 times 1000. Java always prints a `double` with a decimal point, so it shows as `35000.0`, even though the value is whole.
 
-A `char` is a small whole number underneath. The letter `'a'` is stored as the number 97, using the Unicode code, which matches ASCII for these letters. So `char code = 97;` gives the same value as `char code = 'a';`, and printing it shows the letter. That's why `'a' + 1` gives 98: the character is treated as a number in arithmetic. You'll rarely write codes like this, but it explains why characters and numbers can be mixed.
+A `char` is a small whole number underneath. The letter `'a'` is stored as the number 97, using the Unicode code, which matches ASCII for these letters. So `char code = 97;` gives the same value as `char code = 'a';`, and printing it shows the letter. That's why `'a' + 1` gives 98: the character is treated as a number in arithmetic.
 
 ### Naming variables
 
@@ -59,7 +59,7 @@ Within those rules, pick names that say what the value means. `count` or `totalP
 
 ### Several variables at once
 
-You can declare more than one variable on a line, separated by commas. The program does this with `int x = 5, y = 6, z = 50;`. It also declares three variables first, second, and third, and gives them all the same value in one line:
+You can declare more than one variable on a line, separated by commas. The program does this with `int x = 5, y = 6, z = 50;`, and it also declares three variables first, second, and third, and gives them all the same value in one line:
 
 ```java
 first = second = third = 50;
@@ -92,7 +92,7 @@ Which line correctly declares an integer called count, starting at 0?
 ○ count int = 0;
 → Not quite. The type has to come before the name.
 ○ let count = 0;
-→ Not quite. let is a keyword from other languages. Java needs the type written out.
+→ Not quite. Java needs the type written out.
 ````
 
 ---
@@ -101,7 +101,7 @@ Which line correctly declares an integer called count, starting at 0?
 
 Change `pi` to a new value, such as `3.0`, and press **Run**. The program still works, and prints the new value.
 
-Now add `final` to `number` in the first line, so it reads `final int number = 10;`, and press **Run** again. The build fails, because `number = 15;` tries to change a final variable. The error reads `cannot assign a value to final variable number`. That's the protection `final` is for, and the compiler catches it before the program ever runs. Remove the `final` before you continue.
+Now add `final` to `number` in the first line, so it reads `final int number = 10;`, and press **Run** again. The build fails, because `number = 15;` tries to change a constant. The error reads `cannot assign a value to final variable number`. That's the protection `final` is for, and the compiler catches it before the program ever runs. Remove the `final` before you continue.
 
 ---
 

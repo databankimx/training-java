@@ -1,4 +1,4 @@
-## Safe sum
+## Homework: Safe sum
 
 The program has five text values, some of which aren't numbers. Add up the ones that are, skip the ones that aren't, and report both the total and the number skipped.
 

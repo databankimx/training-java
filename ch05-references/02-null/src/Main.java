@@ -1,16 +1,17 @@
 public class Main {
     public static void main(String[] args) {
-        String name = null;
-        System.out.println("name is null: " + (name == null));
+        int[] food = {1, 2, 3};
+        int[] ref = food;
+        int[] empty = null;
 
-        if (name != null) {
-            System.out.println("name length: " + name.length());
-        } else {
-            System.out.println("No name yet");
+        System.out.println("food[0]: " + food[0]);
+        System.out.println("ref[0]: " + ref[0]);
+
+        if (empty == null) {
+            System.out.println("The reference is null.");
         }
 
-        name = "Ada";
-        System.out.println("name is null: " + (name == null));
-        System.out.println("name length: " + name.length());
+        empty = food;
+        System.out.println("empty[0] after it is set: " + empty[0]);
     }
 }

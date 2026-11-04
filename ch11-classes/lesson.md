@@ -1,13 +1,14 @@
 ## Ch11 · Classes
 
-A record holds values that never change. A class is the more general tool: it holds data that can change over time, and it can also do work on that data. Most Java programs are built from classes, and this chapter covers how to write one, how to create objects from it, and how to keep its data under control.
+A record groups values, and it can't do anything else. A class groups values too, and it can also hold the methods that work on them. This chapter covers how to write a class, create objects from it, give it methods and constructors, and keep its data under control.
 
 The steps are:
 
-* [Classes and objects](#goto/01-classes-and-objects): declaring a class with fields and methods, and creating objects from it.
-* [Constructors](#goto/02-constructors): setting an object's fields when it's created, and overloading constructors.
-* [Encapsulation](#goto/03-encapsulation): keeping fields private, and controlling how they're read and changed.
-* [Summary](#goto/04-summary): a recap of the chapter and a short quiz. The homework is listed under the chapter.
+* [Classes and objects](#goto/01-classes-and-objects): declaring a class with fields, and creating objects from it.
+* [Methods](#goto/02-methods): functions that belong to a class, and the methods that only read.
+* [Constructors](#goto/03-constructors): setting an object's fields when it's created, and passing arguments to a base class.
+* [Access control and encapsulation](#goto/04-encapsulation): keeping fields private, and controlling how they're read and changed.
+* [Summary](#goto/05-summary): a recap of the chapter and a short quiz. The homework is listed under the chapter.
 
 ---
 

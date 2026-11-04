@@ -1,4 +1,4 @@
-## Rectangle
+## Homework: Rectangle
 
 Write a `Rectangle` record that holds a width and a height. A rectangle with a zero or negative size makes no sense, so the record must refuse to be created with one. Add an `area` method, and check both the valid and the invalid cases.
 

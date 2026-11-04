@@ -1,43 +1,48 @@
 ## Arrays as parameters
 
-A method can take an array, and it's common to do so: a method that adds up a list, finds its largest value, or prints its contents. Arrays are passed in a way that's different from `int` values, and the difference is one of the most useful things about Java methods.
+Passing a single `int` to a method is straightforward, and the method gets its own copy. An array is different. Copying every element into the method would be slow for a large array, so Java passes a reference to the array instead, and that changes what the method can do with it.
 
-Here's the program for this step, in `src/Main.java`:
+Here's the program for this step, in `src/Main.java`. The method's parameter is written like an array:
 
 ```java
-int[] scores = {90, 85, 77};
-System.out.println("total: " + total(scores));
-
-System.out.println("first before: " + scores[0]);
-doubleFirst(scores);
-System.out.println("first after: " + scores[0]);
+static void printNumbers(int[] numbers, int count) {
+    for (int i = 0; i < count; i++) {
+        System.out.println(numbers[i]);
+    }
+}
 ```
 
-Press **Run**. The output is:
+Press **Run**. The main method calls it twice, once for all five values and once for the first three:
+
+```java
+printNumbers(myNumbers, 5);
+System.out.println("First three:");
+printNumbers(myNumbers, 3);
+```
+
+The output is:
 
 ```text
-total: 252
-first before: 90
-first after: 180
+10
+20
+30
+40
+50
+First three:
+10
+20
+30
 ```
 
-The `total` method adds up the array and returns the sum. The `doubleFirst` method changes the array's first element. After the call, the caller's `scores[0]` is 180, so the change was seen outside the method.
+### The array knows its length
 
-### Passing a reference
+In this program, `main` passes the size as a second argument, so the method can print only part of the array. Java has a better option for the full array: the method can ask the array for its length with `numbers.length`. The array carries its own length, so the method doesn't need a separate count to know where the array ends.
 
-Recall from the references chapter that an array variable holds a reference to the array. When an array is passed to a method, the method receives a copy of that reference, and both the caller and the method refer to the same array. So a change made through `values` in `doubleFirst` changes the array the caller has.
+The count in this program lets the method print only part of the array. Using `numbers.length` in the loop prints every element, and it can't go past the end, since the length is always right.
 
-This is the rule that matters: a method can change the elements of an array it receives, and the caller sees the change. It's the same behavior as the `int` values in the last step, except that the copy is of a reference, so the object is shared.
+### Changes reach the caller
 
-### The length comes with the array
-
-Notice that neither method receives a separate length. `total` uses `values.length`, which is part of the array itself, so it always matches the array it was given. C++ needs the size passed in as a second argument, because an array doesn't know its own length there. In Java, the method asks the array.
-
-That makes array methods shorter and harder to get wrong, because the length can't disagree with the array.
-
-### Reassigning inside the method
-
-A method can't replace the caller's array by assigning to its parameter. Inside `doubleFirst`, `values = new int[]{1, 2, 3};` would change only the method's copy of the reference, and the caller's `scores` would still refer to the original array. The next step covers this in more detail, with the same rule for any object.
+Because the method works on the array's own elements, a change made inside it stays changed afterwards. Assigning to `numbers[0]` in the method changes the element in `main`'s array. This is the opposite of the behavior for a single `int`, where the method changes only its own copy. Keep it in mind when you decide whether a method should modify its input, since the caller will see the result.
 
 ---
 
@@ -46,33 +51,33 @@ A method can't replace the caller's array by assigning to its parameter. Inside 
 *These questions are written for this course.*
 
 ````quiz
-After `doubleFirst(scores);`, what does `scores[0]` hold?
-○ The original value, because arrays are copied when passed.
-→ Not quite. The method receives a reference to the same array, so the change is seen by the caller.
-◉ The doubled value, because the method changed the shared array.
-→ Yes. Both names refer to the same array, so the change is visible outside the method.
-○ 0, because the array is cleared.
-→ Not quite. The method only changes the first element, and it doubles it.
+Why does `printNumbers` in this program take a `count` parameter?
+○ Because Java requires every method to have two parameters.
+→ Not quite. The method has two parameters because it needs both the array and how many values to print.
+◉ So it can print only part of the array, since the count limits the loop.
+→ Yes. The array alone would let the method print every element, and the count changes how many it prints.
+○ To make the method run faster.
+→ Not quite. The count is there so the loop knows where to stop.
 ````
 
 ````quiz
-How does `total` know how many values to add?
-○ It counts them by asking the user.
-→ Not quite. The method reads the array it was given.
-◉ It uses values.length, which is part of the array.
-→ Yes. An array knows its own length, so no separate size is needed.
-○ It always adds five values.
-→ Not quite. The method works for an array of any length.
+After `printNumbers` assigns `numbers[0] = 99;`, what does `main` see in `myNumbers[0]`?
+○ 10, because the method works on a copy.
+→ Not quite. The method works on the array's own elements, not a copy.
+◉ 99, because the change is made to the array itself.
+→ Yes. The array's elements are changed, and the caller sees the change.
+○ 0, because the array is cleared on each call.
+→ Not quite. Nothing clears the array.
 ````
 
 ---
 
 ### Try it in the runner
 
-Add `values = new int[]{1, 2, 3};` as the first line of `doubleFirst`, and then predict `scores[0]` after the call. It's still 90, because the method reassigned only its own copy of the reference. The caller's array was not touched. Remove the line before you continue.
+Add `numbers[0] = 99;` inside `printNumbers`, before the loop. Predict the output before you press **Run**. The first call changes `myNumbers[0]` to 99 and then prints it, so the first line is 99. The loop prints the rest unchanged. The second call sees the changed value, so its first line is 99 too.
 
-Then add `scores[1] = 0;` after the `doubleFirst` call, and predict the total that `total(scores)` prints. The array is now 180, 0, and 77, so the total is 257. Remove the added lines before you continue.
+Then replace `count` in the loop condition with `numbers.length`, and predict the output. Both calls now print every element, since the loop uses the length of the array. The second call still passes 3, but the method ignores it, so the output has five values after `First three:` as well. Restore the original condition before you continue.
 
 ---
 
-An array passed to a method is shared with the caller, so changing its elements is visible outside. Reassigning the parameter itself is not. The next step applies the same rule to the other object types and states it precisely.
+Passing an array to a method is how a method can work on a whole list. The last step in this chapter is recursion, which is a method that calls itself, and it needs the same care about when to stop.

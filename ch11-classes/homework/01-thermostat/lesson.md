@@ -1,4 +1,4 @@
-## Thermostat
+## Homework: Thermostat
 
 A thermostat keeps a target temperature. The target must stay between 10 and 30 degrees, so a setting outside that range is refused. Write the class, and check its behavior with valid and invalid settings.
 

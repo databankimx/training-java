@@ -1,4 +1,4 @@
-## Greeting card
+## Homework: Greeting card
 
 Write a program that asks for a person's name and age, and then prints a short greeting.
 
@@ -15,11 +15,7 @@ Hello, Ada.
 Next year you will be 37.
 ```
 
-Use `System.out.flush()` after both prompts. Give the age variable a name that says what it holds, such as `age`.
-
-### Where to change the code
-
-The example prints the greeting in two `System.out.println` lines near the end of `main`. To use your own name and age, you'd change the text and the arithmetic in those lines. The `(age + 1)` is the one calculation, and the parentheses make sure the addition happens before it's joined to the text.
+Use `System.out.flush()` on both prompts. Give the age variable a name that says what it holds, such as `age`.
 
 ### What to check
 
@@ -27,7 +23,7 @@ Try a name with a space in it, such as `Grace Hopper`. The whole name should app
 
 Also try an age of `36`, and check that the sentence says `37`.
 
-Remember the leftover newline from the lesson on user input. The name is read first, with `nextLine`, and the age is read after it, with `nextInt`, so the order here is safe. Reversing the two questions would make the name prompt come back empty.
+Remember the leftover newline from the user-input lesson. The name is read first, with `nextLine`, and the age is read after it, with `nextInt`, so the order here is safe. Reversing the two questions would make the name prompt come back empty.
 
 ### Extensions
 

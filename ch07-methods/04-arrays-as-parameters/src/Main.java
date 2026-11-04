@@ -1,22 +1,14 @@
 public class Main {
-    public static void main(String[] args) {
-        int[] scores = {90, 85, 77};
-        System.out.println("total: " + total(scores));
-
-        System.out.println("first before: " + scores[0]);
-        doubleFirst(scores);
-        System.out.println("first after: " + scores[0]);
-    }
-
-    static int total(int[] values) {
-        int sum = 0;
-        for (int value : values) {
-            sum += value;
+    static void printNumbers(int[] numbers, int count) {
+        for (int i = 0; i < count; i++) {
+            System.out.println(numbers[i]);
         }
-        return sum;
     }
 
-    static void doubleFirst(int[] values) {
-        values[0] = values[0] * 2;
+    public static void main(String[] args) {
+        int[] myNumbers = {10, 20, 30, 40, 50};
+        printNumbers(myNumbers, 5);
+        System.out.println("First three:");
+        printNumbers(myNumbers, 3);
     }
 }

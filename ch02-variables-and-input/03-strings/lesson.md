@@ -1,6 +1,6 @@
 ## Strings
 
-Numbers aren't the only thing programs work with. Names, messages, file paths, and the text a user types are all strings. In Java, a string is a `String`, and it's built into the language, so no import is needed. You've already used strings: every `System.out.println` in Chapter 1 was given one.
+Numbers aren't the only thing programs work with. Names, messages, file paths, and the text a user types are all strings. In Java, a string is a `String`, and it's built into the language, so no import is needed. You've already used one: the name in the input step was a `String`.
 
 This is an introduction, so we'll keep it to the basics you'll need in the next step and the homework. We come back to strings in much more depth later in the course, where we look at searching, splitting, and comparing text.
 
@@ -41,7 +41,7 @@ Length: 12
 First letter: H
 ```
 
-`greeting.length()` returns the number of characters, including spaces and punctuation. The name is followed by empty parentheses. That's a call to a method that belongs to the string, and you'll see that pattern a lot.
+`greeting.length()` returns the number of characters, including spaces and punctuation. Notice that the method name is followed by empty parentheses. That's a call to a method that belongs to the string, and you'll see that pattern a lot.
 
 `greeting.charAt(0)` gives the character at position 0. Positions in Java start at zero, not one, so the first character is at 0, the second at 1, and so on. This is the most common source of off-by-one mistakes, and you'll meet it again.
 
@@ -53,7 +53,7 @@ First letter: H
 greeting += " Welcome.";
 ```
 
-Now `greeting` holds `Hello, Java! Welcome.`. Like the number operators, `+=` changes the variable itself. A `String` can't be changed in place, so Java creates a new string with the added text and stores it in `greeting`. You don't need to think about that, but it's why repeated `+=` in a long loop can be slow, and a later chapter shows a better way.
+Now `greeting` holds `Hello, Java! Welcome.`. Like the number operators, `+=` changes the variable itself. A `String` can't be changed in place, so Java creates a new string with the added text and stores it in `greeting`. You don't need to think about that, but it's why repeated `+=` in a long loop can be slow, as the efficiency chapter shows.
 
 ### Special characters
 
@@ -99,7 +99,7 @@ Which expression gives the number of characters in `name`?
 
 ### Try it in the runner
 
-Change `greeting.charAt(0)` to `greeting.charAt(4)`, and predict the letter before you press **Run**. Position 4 is the fifth character, which is `o` in `Hello`. Then try a position past the end, such as `greeting.charAt(50)`. The program stops with a `StringIndexOutOfBoundsException`, and the runner shows it as an error with a stack trace. That's a sign you've read outside the string. A later chapter shows how to guard against it. Change the position back before you continue.
+Change `greeting.charAt(0)` to `greeting.charAt(4)`, and predict the letter before you press **Run**. Position 4 is the fifth character, which is `o` in `Hello`. Then try a position past the end, such as `greeting.charAt(50)`. The program stops with a `StringIndexOutOfBoundsException`, and the runner shows it with its stack trace. That's a sign you've read outside the string. Change the position back before you continue.
 
 ---
 

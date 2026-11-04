@@ -1,48 +1,48 @@
 ## Summary: Loops
 
-This chapter covered the loops that repeat work, and the statements that change how they run.
+This chapter covered how a program repeats work, and how to control a loop while it runs.
 
-* **`while` checks before each pass.** It may run zero times.
-* **`do-while` checks after each pass.** Its block always runs at least once.
-* **Every `while` needs a change.** Something in the body must eventually make the condition false.
-* **`for` puts the counter in one line.** It has a start, a condition, and a step, and the counter is local to the loop.
-* **Nested loops multiply.** The inner loop runs fully for each pass of the outer one.
-* **The enhanced `for` visits each element.** `for (int x : array)` needs no index, and it can't go past the end.
-* **The enhanced loop variable is a copy.** Changing it doesn't change an `int` element of the array.
-* **`break` ends the loop.** The program continues after the loop's closing brace.
-* **`continue` skips to the next pass.** The rest of the body is skipped, and a `for` loop still runs its step.
-* **Grids use nested loops.** The outer loop picks the row, and the inner loop picks the column.
+* **`while` checks first.** The condition is tested before each pass, so the block may never run.
+* **`do-while` checks last.** The block always runs once, and the condition is tested after it. Note the semicolon after its closing parenthesis.
+* **`for` keeps the counter together.** The start, the condition, and the step sit on one line at the top of the loop.
+* **The enhanced `for` visits each value.** `for (int n : list)` runs the body once for each value, with no counter to manage.
+* **`break` stops the loop.** The program continues after the loop's closing brace.
+* **`continue` skips to the next pass.** The step of a `for` loop still runs before the next check.
+* **`break` and `continue` apply to the innermost loop.** In nested loops, they don't affect the outer one.
+* **Make sure the loop can end.** A `while (true)` loop needs a `break`, and a `while` loop needs a change to its condition inside the body.
+* **A game is a loop around a state.** Battleship keeps its state in a two-dimensional array, and a `while` loop runs until the game is won.
 
 ### Check your understanding
 
 *These questions are written for this course.*
 
 ````quiz
-Which loop is the right choice when the block must run at least once, whatever the condition?
+Which loop should you use to run a block at least once, before the condition is checked?
 ○ while
-→ Not quite. A while loop may run zero times.
+→ Not quite. A while loop checks the condition first, so its block can be skipped.
 ◉ do-while
-→ Yes. Its condition is checked after the first pass.
-○ enhanced for
-→ Not quite. An enhanced for runs once for each element, and it may run zero times for an empty array.
+→ Yes. The block runs first, and then the condition is checked.
+○ for
+→ Not quite. A for loop checks its condition before each pass, like a while loop.
 ````
 
 ````quiz
-How many lines does this print? `for (int i = 1; i <= 5; i++) { if (i == 2) { continue; } System.out.println(i); }`
-○ 4
-→ Yes. The value 2 is skipped, and 1, 3, 4, and 5 are printed.
-○ 5
-→ Not quite. continue skips the println for i equal to 2.
-○ 3
-→ Not quite. Only the pass for 2 is skipped.
+What does this loop print?
+`for (int i = 1; i <= 6; ++i) { if (i % 2 == 0) { continue; } System.out.print(i + " "); }`
+○ 2 4 6
+→ Not quite. continue skips the even numbers, so they don't print.
+◉ 1 3 5
+→ Yes. The odd numbers are printed, and the even ones are skipped.
+○ 1 2 3 4 5 6
+→ Not quite. The continue skips the even numbers before the print line.
 ````
 
 ````quiz
-In a nested loop over a 3 by 4 grid, how many times does the innermost statement run?
-○ 7
-→ Not quite. That's the sum of the rows and columns, not the number of cells.
-◉ 12
-→ Yes. There are 3 rows, and 4 cells in each, so 3 times 4 is 12.
-○ 3
-→ Not quite. That's the number of rows, and the innermost statement runs once per cell.
+In nested loops, what does a `break` in the inner loop do?
+○ It ends the whole program.
+→ Not quite. A break ends a loop, not the program.
+◉ It ends only the inner loop, and the outer loop carries on.
+→ Yes. A break applies to the innermost loop it sits in.
+○ It ends the outer loop as well.
+→ Not quite. The outer loop carries on with its next pass.
 ````

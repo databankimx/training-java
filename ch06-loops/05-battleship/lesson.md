@@ -1,76 +1,74 @@
 ## Battleship
 
-This step puts the chapter to work in one program. A Battleship board is a grid, so it's a two-dimensional array. The ship is placed on the board, the shots are checked against it, and the board is printed. Each of those jobs is a loop.
+This step puts the chapter together in one program: a two-dimensional array holds the state of the game, a `while` loop keeps the game going, and `if` and `else` decide what each move does. It's also the first program in the course that plays against the person using it.
 
-Here's the complete program, in `src/Main.java`. Read it in parts, since each part uses a different loop.
+Here's the grid, from the top of `src/Main.java`:
 
 ```java
-char[][] board = new char[4][4];
-for (int row = 0; row < 4; row++) {
-    for (int col = 0; col < 4; col++) {
-        board[row][col] = '.';
-    }
+int[][] ships = {
+    {0, 1, 1, 0},
+    {0, 0, 0, 0},
+    {0, 0, 1, 0},
+    {0, 0, 1, 0}
+};
+```
+
+A `1` marks a square with a ship, and a `0` marks water. The grid has four ships in total: two in the first row, and two in the third column. The game ends when all four have been hit.
+
+Press **Run**. The Output pane asks for a row, then a column. Each answer is typed into the input box, and Enter sends it. The program then reports a hit or a miss, and asks again.
+
+### The game loop
+
+The game is a `while` loop, which runs while there are ships left:
+
+```java
+while (hits < 4) {
+    // ask for a row and column, then check the square
 }
 ```
 
-The first loops fill the board with `.` for empty water. The outer loop goes over the rows, and the inner loop goes over the columns in each row. Every cell is visited exactly once.
+Each pass asks for a move, checks the grid, and updates the count of hits. `hits` starts at 0, and the loop ends once it reaches 4. The `turns` counter goes up on every valid move, so it can report the score at the end.
+
+### Checking the square
+
+Once the program has a row and a column, it looks up that square with two indexes:
 
 ```java
-board[2][1] = 'S';
-board[2][2] = 'S';
-board[2][3] = 'S';
-```
-
-Three cells of row 2 hold the ship, written with `S`. The ship is fixed here, so the same game plays out every time.
-
-```java
-int[][] shots = {{0, 0}, {2, 2}, {1, 3}, {2, 3}};
-int hits = 0;
-for (int[] shot : shots) {
-    int row = shot[0];
-    int col = shot[1];
-    if (board[row][col] == 'S') {
-        System.out.println("Hit at " + row + "," + col);
-        board[row][col] = 'X';
-        hits++;
-    } else {
-        System.out.println("Miss at " + row + "," + col);
-    }
+if (ships[row][column] == 1) {
+    ships[row][column] = 0;
+    hits++;
+    System.out.println("Hit! " + (4 - hits) + " left.\n");
+} else {
+    System.out.println("Miss\n");
 }
 ```
 
-Each shot is a pair of numbers, the row and the column. The enhanced `for` goes through the shots in order. The `if` checks the cell: a `'S'` is a hit, and the cell is marked `'X'` so it can't be counted twice. Anything else is a miss.
+A hit sets the square to 0, so the same square can't count twice. Setting it to 0 is how the program remembers the hit. The message reports how many ships are left, which is `4 - hits`, since four ships start the game.
 
-Press **Run**. The output is:
+Notice that the grid is the only record of which squares have been hit. The program doesn't need a separate list of ships. The array's contents are the game state, and changing an element changes the game.
 
-```text
-Miss at 0,0
-Hit at 2,2
-Miss at 1,3
-Hit at 2,3
-Hits: 2
+### Checking the input
+
+The program checks the row and column before it uses them as indexes:
+
+```java
+if (row < 0 || row > 3 || column < 0 || column > 3) {
+    System.out.println("Please choose numbers from 0 to 3.\n");
+    continue;
+}
 ```
 
-The last four lines show the board after the shots. Each row is printed on one line, with a loop over its columns.
+Without this check, a row of 4 would read past the end of the grid, and Java would throw an `ArrayIndexOutOfBoundsException` and stop the game. The `continue` skips the rest of the pass, so the bad move doesn't count as a turn, and the loop asks again. The same use of `continue` as in the break and continue step, and the same reason for it, applies here.
 
-```text
-....
-....
-.SXX
-....
-```
+If the player types a word where a number is expected, `Scanner` can't turn it into an `int`. The program's `readNumber` method checks with `hasNextInt` before it reads, so a word never causes an exception. When the input isn't a number, the method reads the word with `next`, which removes it from the input, and then asks again. Checking before reading is the Java way to deal with bad input, and it avoids the need to reset a stream after a failed read.
 
-Row 2 shows the ship: the `S` at column 1 hasn't been hit yet, and the two `X` marks are the hits.
+The method is written with its own loop, `while (true)`, which keeps asking until it gets a number or a quit. The method returns the number, or `null` when the player quits.
 
-### What the nested loops do
+### Quitting
 
-The board is printed by two loops, one inside the other. The outer loop runs once for each row, and the inner loop prints the cells of that row. `System.out.print` keeps the cells on one line, and `System.out.println()` moves to the next row.
+The same check gives the player a way out. When the word typed at a prompt starts with `q`, the method returns `null`, and `main` leaves the loop with `break`. The game then ends with a message about the ships left. The check accepts `Q` too. The **Stop** button still works, but a player shouldn't need it to leave a game.
 
-The same pattern appears in the setup, where the outer loop picks the row and the inner loop picks the column. Whenever you work on every cell of a grid, the nested loop is the form to reach for.
-
-### Changing the game
-
-The ship and the shots are data, so you change the game by changing the data. Move the ship by changing the `S` cells, or add a shot to the `shots` array. The loops don't need to change at all, because they read the board and the shots as they are. That's the point of keeping the rules in loops rather than in one line for each cell.
+The quit check only looks at the first character, so `quit` also ends the game. Everything after the `q` is ignored, because the program leaves the loop and doesn't read again.
 
 ---
 
@@ -79,33 +77,33 @@ The ship and the shots are data, so you change the game by changing the data. Mo
 *These questions are written for this course.*
 
 ````quiz
-How many times does the inner loop in the board setup run, in total, for a 4 by 4 board?
-○ 4
-→ Not quite. The inner loop runs 4 times for each row, once per column.
-◉ 16
-→ Yes. There are 4 rows, and the inner loop runs 4 times for each one.
-○ 8
-→ Not quite. That would be 4 rows of 2 columns, which isn't the board.
+Why does the game set a hit square to 0?
+○ To hide the square from the player.
+→ Not quite. The player is never shown the grid, so hiding it isn't the issue.
+◉ So the same square can't count as a hit twice.
+→ Yes. The grid records which squares still have ships.
+○ Because 0 is the default value of an array.
+→ Not quite. That's true, but it isn't why the program sets the value.
 ````
 
 ````quiz
-Why does the program change a hit cell from `S` to `X`?
-○ So the board looks more colorful.
-→ Not quite. The change has a job in the rules, not in the appearance.
-◉ So the same cell can't be counted as a hit twice.
-→ Yes. Once the cell isn't `S`, a second shot at it is a miss.
-○ Because `X` is the only character the printer accepts.
-→ Not quite. The printer prints any character.
+A player enters row 4. What does the `continue` in the check do?
+○ It ends the game.
+→ Not quite. continue doesn't end the loop.
+◉ It skips the rest of this pass, so the move isn't counted and the loop asks again.
+→ Yes. The bad move doesn't reach the grid, and the loop goes around again.
+○ It counts the move as a miss.
+→ Not quite. A rejected move isn't checked against the grid at all.
 ````
 
 ---
 
 ### Try it in the runner
 
-Change the last shot from `{2, 3}` to `{2, 1}`, and predict the output. The cell at row 2, column 1 still holds the ship, so that shot is a hit. The shot at column 3 is no longer made, so the total is 2, not 3. The board shows the cell at column 1 as `X`.
+Type `x` at the row prompt, and check that the program says it needs a number and asks again, rather than stopping. Then type `q` at the column prompt, and check that the game ends with the quit message. Then play a game, and count the hits. Each square with a 1 is a hit, and the game ends after four. Then change a `1` in the grid to a `0`, and predict whether the game still ends after four hits. It doesn't: the loop needs four hits, and there are only three ships now, so the loop never finishes. Stop the game with the **Stop** button, and restore the grid before you continue.
 
-Then add a shot `{2, 3}` at the end of the `shots` array, and predict the output for that shot. It's a miss, because the cell is already `X`, not `S`. Remove the added shot before you continue.
+Then change `hits < 4` to `hits < 3`, and predict how the game ends. It stops after three hits, while the fourth ship is still on the grid, and the victory message is wrong. The loop's condition and the grid have to agree. Restore the condition before you continue.
 
 ---
 
-A nested loop works over a grid, one row at a time. The summary gathers the chapter together, and the homework uses loops on a board of your own.
+Battleship uses every idea in this chapter: the two-dimensional array holds the state, the loop keeps the game going, and the checks decide each move. The summary covers the chapter's loops together, and the homework practices them on their own.

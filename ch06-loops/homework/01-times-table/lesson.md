@@ -1,4 +1,4 @@
-## Times table
+## Homework: Product grid
 
 Write a program that prints a 3 by 3 multiplication table, with each product in its own column.
 

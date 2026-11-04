@@ -2,7 +2,7 @@
 
 So far, every value in our programs was decided before the program ran. That's fine for learning, but most real programs need to ask something of the person using them. Java handles that with a `Scanner`, an object that reads from the input. `System.in` is the standard input, which is what the runner's input box feeds.
 
-Here's the program for this step, in `src/Main.java`. Press **Run**, and type into the input box at the bottom of the Output pane when it asks you to. Press Enter after each answer.
+Here's the program for this step. Press **Run**, and type into the input box at the bottom of the Output pane when it asks you to. Press Enter after each answer.
 
 ```text
 Enter some text: I like Java
@@ -24,7 +24,7 @@ import java.util.Scanner;
 Scanner input = new Scanner(System.in);
 ```
 
-The `import` at the top brings in `Scanner`, which is in `java.util`. Without it, the compiler can't find the name. This is the first time the course uses an import for something other than printing.
+The `import` at the top brings in `Scanner`, which is in `java.util`. Without it, the compiler can't find the name.
 
 ### Reading a whole line
 
@@ -85,4 +85,4 @@ Then press **Run** again, and type `hello` at the second prompt, where a number 
 
 ---
 
-Being able to ask the user for something is the first step toward programs that respond to their input. The command-line arguments step comes next, which handles values given before the program starts.
+Being able to ask the user for something is the first step toward programs that respond to their input. The summary and the homework come next, and they'll put the whole chapter to work.

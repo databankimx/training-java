@@ -1,4 +1,4 @@
-## Visit log
+## Homework: Visit log
 
 Write a program that adds a line to a log file each time it runs, and then prints the whole log. Over several runs, the log should keep growing.
 

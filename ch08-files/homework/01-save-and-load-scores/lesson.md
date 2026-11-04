@@ -1,4 +1,4 @@
-## Save and load scores
+## Homework: Save and load scores
 
 Write four scores to a file, one per line, then read the file back and add the scores up. The file is the only link between the two halves of the program, so this exercise checks that the read matches what was written.
 

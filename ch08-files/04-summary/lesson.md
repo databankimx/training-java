@@ -1,46 +1,44 @@
 ## Summary: Files
 
-This chapter covered keeping data in a file, and reading it back.
+This chapter covered reading and writing files with the classes in `java.io` and `java.nio.file`.
 
-* **`Path` names a location.** A relative path is resolved against the folder the program starts in.
-* **`Files.writeString` writes text.** It creates the file when it's missing, and replaces its contents by default.
-* **`APPEND` adds to the end.** Name it with `CREATE` when the file might not exist yet.
-* **`Files.readString` reads the whole file.** The line breaks stay in the text.
-* **`Files.readAllLines` reads one item per line.** It returns a `List<String>`, and `get` and `size` work on it.
-* **`Files.exists` checks before you use a file.** It returns a `boolean` for an `if`.
-* **File operations are checked.** `IOException` must be handled or passed on with `throws`.
-* **The runner rebuilds the build folder.** A file the program writes is removed on the next run of that step.
+* **`java.io` provides the file reader and writer classes.** `PrintWriter` writes text, `BufferedReader` reads lines, and `Scanner` reads words.
+* **File classes work like `System.out` and `Scanner` on the keyboard.** The `print`, `println`, `readLine`, and `next` methods apply to a file the same way they apply to the console.
+* **Handle a failed open.** A missing file or a permission problem throws an `IOException`, which the program must catch or declare.
+* **A read loop stops at the end of the file.** `while ((line = in.readLine()) != null)` runs while lines remain.
+* **Closing flushes and releases the file.** A file closes at `close()`, or at the end of a `try` block that declares it as a resource.
+* **`RandomAccessFile` keeps existing contents.** Writing a shorter text over a longer file leaves the leftover text behind. Use `PrintWriter`, or call `setLength(0)`, to replace the whole file.
 
 ### Check your understanding
 
 *These questions are written for this course.*
 
 ````quiz
-Which call writes text to the end of an existing file, creating it if it's missing?
-○ Files.writeString(path, text)
-→ Not quite. With no options, the default replaces the file.
-◉ Files.writeString(path, text, StandardOpenOption.CREATE, StandardOpenOption.APPEND)
-→ Yes. CREATE makes the file if needed, and APPEND adds to its end.
-○ Files.readString(path)
-→ Not quite. That reads the file, and doesn't write to it.
+Which class should you use to replace the entire contents of a file?
+○ BufferedReader
+→ Not quite. BufferedReader reads a file, and can't write to it.
+◉ PrintWriter
+→ Yes. A PrintWriter empties the file when it opens, so the new text replaces everything.
+○ RandomAccessFile, opened with "rw", and no other calls
+→ Not quite. It keeps the old contents, so leftover text can remain.
 ````
 
 ````quiz
-What does `Files.readAllLines` return?
-○ One String with the whole file in it.
-→ Not quite. That's what readString returns.
-◉ A List of Strings, one for each line.
-→ Yes. Each item is one line, without its line break.
-○ The number of lines in the file.
-→ Not quite. That's the size of the list, which you get by calling size().
+A file read loop `while ((line = in.readLine()) != null)` stops when what happens?
+○ The first empty line is read.
+→ Not quite. An empty line is a line, and the loop continues past it.
+◉ There are no more lines to read, so readLine returns null.
+→ Yes. The loop condition is false once the end of the file is reached.
+○ The file is closed by the loop.
+→ Not quite. The loop reads, and the file stays open until it's closed.
 ````
 
 ````quiz
-Why does `main` declare `throws IOException` in a file program?
-○ Because file operations can fail, and Java requires the failure to be handled or passed on.
-→ Yes. IOException is a checked exception, so the method must deal with it or declare it.
-○ Because the file is written in a separate thread.
-→ Not quite. Threads have no part in this.
-○ Because it's optional, and makes the program run faster.
-→ Not quite. The declaration is required, and it doesn't affect speed.
+Why does the program catch an exception when opening a file for reading?
+○ Because reading always fails the first time.
+→ Not quite. Reading works when the file opens.
+◉ So that a missing file is reported, rather than the program stopping without a message.
+→ Yes. The catch block tells the reader what went wrong.
+○ To move the reading position to the start.
+→ Not quite. Catching an exception doesn't change where the file is read from.
 ````

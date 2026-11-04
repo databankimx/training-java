@@ -46,11 +46,44 @@ visualizeButton.addEventListener("click", () => {
 });
 
 // Source files: a step can have several .c and .h files. The drop-down above the editor picks one, and main.c is the default.
-const fileSelect = document.createElement("select");
+const fileSelect = document.createElement("div");
 fileSelect.id = "file-select";
 fileSelect.title = "Choose a source file in this step";
+fileSelect.style.position = "relative";
+fileSelect.style.display = "inline-block";
 fileSelect.style.margin = "4px 8px";
+const fileButton = document.createElement("button");
+fileButton.type = "button";
+const fileMenu = document.createElement("div");
+fileMenu.className = "hidden";
+fileMenu.style.cssText = "position:absolute;top:100%;left:0;min-width:160px;z-index:20;padding:4px 0;background:var(--panel);border:1px solid var(--border);box-shadow:0 4px 12px rgba(0,0,0,0.4);";
+fileSelect.append(fileButton, fileMenu);
 sourceView.before(fileSelect);
+fileButton.addEventListener("click", (event) => {
+  event.stopPropagation();
+  fileMenu.classList.toggle("hidden");
+});
+document.addEventListener("click", () => fileMenu.classList.add("hidden"));
+
+// The menu is drawn in the page, not as a browser drop-down, because the off-screen browser places drop-downs in the wrong part of the window.
+function setFileButton(file) {
+  fileButton.textContent = file ? `${file} \u25BE` : "";
+}
+function renderFileMenu(files) {
+  fileMenu.replaceChildren();
+  for (const file of files) {
+    const item = document.createElement("button");
+    item.type = "button";
+    item.textContent = file;
+    item.style.cssText = "display:block;width:100%;text-align:left;background:none;border:none;color:inherit;padding:4px 12px;font-family:inherit;cursor:pointer;white-space:pre;";
+    item.addEventListener("click", (event) => {
+      event.stopPropagation();
+      fileMenu.classList.add("hidden");
+      if (selectedStep) loadSourceFile(selectedStep, file);
+    });
+    fileMenu.appendChild(item);
+  }
+}
 let currentFile = null;
 let originalMain = "";
 let mainDraft = null;
@@ -454,7 +487,7 @@ async function loadSource(step) {
   originalMain = "";
   currentFile = null;
   if (!step.has_code) {
-    fileSelect.replaceChildren();
+    renderFileMenu([]);
     fileCount = 0;
     updateFileSelect();
     editor.value = "// This step has no code to run. See the Lesson tab.";
@@ -467,14 +500,7 @@ async function loadSource(step) {
     const files = await invoke("list_source_files", { path: step.path });
     fileCount = files.length;
     updateFileSelect();
-    fileSelect.replaceChildren(
-      ...files.map((file) => {
-        const option = document.createElement("option");
-        option.value = file;
-        option.textContent = file;
-        return option;
-      }),
-    );
+    renderFileMenu(files);
     await loadSourceFile(step, "Main.java");
   } catch (error) {
     original = "";
@@ -487,7 +513,7 @@ async function loadSource(step) {
 async function loadSourceFile(step, file) {
   if (currentFile === "Main.java" && !editor.readOnly) mainDraft = editor.value;
   currentFile = file;
-  fileSelect.value = file;
+  setFileButton(file);
   const text = await invoke("read_source", { path: step.path, file });
   if (file === "Main.java") {
     originalMain = text;
@@ -502,9 +528,7 @@ async function loadSourceFile(step, file) {
   renderEditor();
 }
 
-fileSelect.addEventListener("change", () => {
-  if (selectedStep) loadSourceFile(selectedStep, fileSelect.value);
-});
+
 
 function resetEditor() {
   editor.value = original;

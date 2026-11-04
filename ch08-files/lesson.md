@@ -1,12 +1,12 @@
 ## Ch08 · Files
 
-Every value so far has disappeared when the program ends. This chapter writes values to a file, so they outlive the program, and reads them back. You'll write a file, read it, and change one without losing what was there before.
+Every program so far has worked with values that disappear when it ends. This chapter covers files, which keep data after the program has finished. You'll write a file, read one back, and see the mistake that happens when a file is overwritten without being cleared.
 
 The steps are:
 
-* [Writing files](#goto/01-writing-files): creating a file with the text a program produces, and where the file is kept.
-* [Reading files](#goto/02-reading-files): reading a file back as text, and as a list of lines.
-* [Overwriting and appending](#goto/03-overwriting-and-appending): what happens to a file that already exists, and how to add to the end of it.
+* [Writing files](#goto/01-writing-files): creating a file with `PrintWriter`, and checking that it opened.
+* [Reading files](#goto/02-reading-files): reading a file line by line, and reading words.
+* [Overwriting files](#goto/03-overwriting-files): why `RandomAccessFile` leaves old text behind, and how to replace a file.
 * [Summary](#goto/04-summary): a recap of the chapter and a short quiz. The homework is listed under the chapter.
 
 ---

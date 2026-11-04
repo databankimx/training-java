@@ -1,4 +1,4 @@
-## Area calculator
+## Homework: Area calculator
 
 Write two overloaded `area` methods: one for a circle, given its radius, and one for a rectangle, given its width and height. Then print the areas of a circle and a rectangle.
 

@@ -12,7 +12,7 @@ Most programs spend a lot of their time doing sums, so Java gives you the usual 
 
 They work the way you'd expect from school, with one important exception that catches almost everyone at least once. This lesson covers the operators, that exception, and how to print decimal numbers neatly.
 
-Here's the start of this step's program, in `src/Main.java`:
+Here's the program for this step, in `src/Main.java`:
 
 ```java
 int a = 7;
@@ -37,7 +37,7 @@ a % b = 1
 
 Five of the operators are here. `+`, `-`, and `*` do what you'd expect. `/` is division, and `%` is the remainder operator, which gives what's left over after dividing. Seven divided by two is three with one left over, so `a % b` is 1.
 
-Notice the parentheses around each calculation. The `+` is also used to join text in Java, so `"a + b = " + a + b` would join the pieces in order, and print `a + b = 72`. The parentheses make the addition happen first.
+Notice the brackets around each calculation. The `+` is also used to join text, so `"a + b = " + a + b` would join the pieces in order, and print `a + b = 72`. The brackets make the addition happen first.
 
 ### The division trap
 
@@ -70,7 +70,7 @@ Sometimes both values are `int`, and you still want a decimal answer. Then you c
 double average = (double) a / b;
 ```
 
-`(double) a` turns `a` into a decimal for this calculation, and the division happens in decimals. The variable `a` itself stays an `int`. The conversion lasts only for the expression. The parentheses around the type are called a cast. Java uses casts for every conversion that might lose information, and the cast tells the reader exactly what you intended.
+`(double) a` turns `a` into a decimal for this calculation, and the division happens in decimals. The variable `a` itself stays an `int`. The conversion lasts only for the expression. The parentheses around the type are called a cast, and they tell the reader exactly what you intended.
 
 ### Order of operations
 
@@ -132,28 +132,24 @@ total /= 4;   // 3, because int division drops the fraction
 total %= 4;   // 3
 ```
 
-The `total /= 4` step is the division trap from earlier in this lesson. Because `total` is an `int`, the result is 3, not 3.5, and the rest of the sequence works from that 3.
+The `total /= 4` step is the division trap from earlier in this lesson. Because `total` is an `int`, the result is 3, not 3.5, and the rest of the sequence works from that 3. The program prints the result with `total = 3`.
 
 The right-hand side is always worked out first. So `total *= 2 + 3` means `total = total * (2 + 3)`, which multiplies by 5, not by 2 and then adds 3.
 
-The program also uses `count++` and `count += 5` on a variable that starts at 0, and `count` ends at 6.
-
 ### Printing decimals neatly
 
-A decimal can print with far more digits than you want. The program prints the average with two places after the point, using `printf`:
+A decimal can print with far more digits than you want. The program uses `printf` with `%.2f` to print two places after the point:
 
 ```java
 double average = (double) a / b;
-System.out.printf("average = %.2f%n", average);
+System.out.printf("average to two places = %.2f%n", average);
 ```
 
-The output is `average = 3.50`. The `%.2f` part means "a decimal with two places after the point", and `%n` ends the line. `printf` is a formatted print, and it takes the same kind of codes as the C family of languages, so you'll meet it in many programs.
-
-Each value in the list of arguments fills one of the codes, in order. `%d` is for whole numbers, and `%.2f` is for decimals.
+The output is `average to two places = 3.50`. The `%.2f` part means "a decimal with two places after the point", and `%n` ends the line. `printf` takes a format string, and each value in the list after it fills one of the codes, in order.
 
 ### Math methods
 
-The standard library has ready-made methods for the calculations you'd otherwise work out by hand. They all belong to the `Math` class, which is in `java.lang`, so no import is needed. The last lines of the program use some of them:
+The standard library has ready-made methods for the calculations you'd otherwise have to work out by hand. They belong to the `Math` class, which is in `java.lang`, so no import is needed. The last lines of the program use some of them:
 
 | Method | Returns | Example | Result |
 |---|---|---|---|
@@ -175,9 +171,9 @@ round(2.6) = 3
 pow(2, 10) = 1024.00
 ```
 
-Each method takes values and returns a result, which you can print or store, like any other expression. You'll write your own methods later, in the methods chapter, and they're called in exactly the same way.
+Each method takes values and returns a result, which you can print or store, like any other expression. The methods you write yourself will be called in exactly the same way.
 
-`Math.round` returns a `long`, a whole number type with a wider range than `int`, which is why it prints as `3` rather than `3.0`. `Math.floor` and `Math.ceil` return `double` values, so they print with a decimal point. If you need an `int` from a `double`, use a cast: `(int) Math.floor(2.6)`.
+`Math.round` returns a `long`, a whole-number type with a wider range than `int`, which is why it prints as `3` rather than `3.0`. `Math.floor` and `Math.ceil` return `double` values, so they print with a decimal point. If you need an `int` from a `double`, use a cast: `(int) Math.floor(2.6)`.
 
 ### A note on decimals
 

@@ -1,72 +1,48 @@
 ## Enhanced for loops
 
-Most of the time, a loop over an array only needs each element in turn. The enhanced `for` does that without a counter, and without any index to get wrong.
+Many loops don't count at all. They go through every value in an array, one after another, and the counter would only get in the way. Java has a loop for that: the enhanced `for`, which reads almost like English. It's the usual way to visit each element of an array.
 
-Here's the start of this step's program, in `src/Main.java`:
+Here's the program for this step, in `src/Main.java`. It starts with an array of integers:
 
 ```java
-int[] scores = {90, 85, 77};
+int[] scores = {10, 20, 30, 40, 50};
+System.out.println("Scores:");
 for (int score : scores) {
-    System.out.println("score: " + score);
+    System.out.println(score);
 }
 ```
 
 Press **Run**. The output is:
 
 ```text
-score: 90
-score: 85
-score: 77
+Scores:
+10
+20
+30
+40
+50
 ```
 
-The line reads as "for each `score` in `scores`". The loop variable `score` takes each element of the array in order, from the first to the last, and the block runs once for each. There's no counter and no `length` to check, so the loop can't go past the end.
+Read `for (int score : scores)` as "for each score in scores". The variable `score` takes each element of the array in turn, and the body runs once for each one. There's no counter to start, check, or step, and no index to get wrong. Compare this with the arrays chapter's approach of writing out each element, and the advantage is clear.
 
-### Over any collection of values
-
-The enhanced `for` works with arrays of any type, including `String` arrays, which the next part of the program uses:
+The program then does the same with an array of strings:
 
 ```java
-String[] names = {"Ada", "Grace"};
-int count = 0;
-for (String name : names) {
-    count++;
-    System.out.println(count + ": " + name);
+String[] colors = {"red", "green", "blue"};
+for (String color : colors) {
+    System.out.println(color);
 }
 ```
 
-The output is:
+The output is `red`, `green`, and `blue`, each on its own line. Here `color` is a `String`, so it holds any text. Each element is given to `color` before the body runs.
 
-```text
-1: Ada
-2: Grace
-```
+### When to use the other loops
 
-Here the loop variable is a `String`, and it refers to each name in turn. The counter `count` is a separate variable, which the loop updates itself, so the printed numbers count the passes.
+The enhanced `for` is the usual choice when you want to look at every element, and you don't need to know the position of each one. Use a `for` loop with a counter when you need the index, or when you want to skip some elements, or stop early, or visit only part of the array. The `for` loop from the last step handles those, because it gives you the counter as well as the value.
 
-### The loop variable is a copy of the value
+### Copying each value
 
-The last loop shows a limit that matters. For an `int` array, the loop variable holds a copy of each element:
-
-```java
-for (int score : scores) {
-    score = 0;
-}
-System.out.println("first score is still: " + scores[0]);
-```
-
-The output is:
-
-```text
-first score is still: 90
-```
-
-Setting `score` changes only the variable for that pass. It doesn't change the array, so `scores[0]` still holds 90. To change the elements, use an ordinary `for` loop with an index, as the last step showed.
-
-When the elements are objects, such as `String` values, the loop variable holds a reference to each object. Changing the variable's reference doesn't change the array, and changing the object through the reference does, if the object can be changed. `String` objects can't be changed, so for text this is mostly a matter of not expecting the array to change.
-
-### When to use the enhanced form
-
-Use the enhanced `for` when you need every element and don't need its index. Use an ordinary `for` when you need the index, need to change the array, or need to skip elements.
+For an `int` array, the loop variable is a copy of each element. Changing `score` inside the loop doesn't change the array. To change the elements themselves, use an ordinary `for` loop with an index, as the arrays chapter showed. For an array of objects, the loop variable is a reference to each object, and changing the object through it is visible in the array.
 
 ---
 
@@ -75,31 +51,33 @@ Use the enhanced `for` when you need every element and don't need its index. Use
 *These questions are written for this course.*
 
 ````quiz
-In `for (int score : scores)`, what does `score` hold on each pass?
-○ The index of the element.
-→ Not quite. The enhanced form gives you the element itself, not its index.
-◉ The next element of the array, in order.
-→ Yes. Each pass takes the next element, from the first to the last.
-○ The length of the array.
-→ Not quite. The length isn't used by the enhanced for.
+What does `for (int n : values)` do when `values` holds five integers?
+○ Counts from 0 to 4.
+→ Not quite. The loop visits the elements, and it doesn't count indexes.
+◉ Runs the body once for each element, in order, with n set to each value in turn.
+→ Yes. The variable n takes each element in turn.
+○ Runs the body five times, with n set to 0 to 4.
+→ Not quite. n holds the element values, not their positions.
 ````
 
 ````quiz
-After `for (int score : scores) { score = 0; }`, what does `scores[0]` hold?
-○ 0
-→ Not quite. Assigning to the loop variable doesn't change the array.
-◉ Its original value.
-→ Yes. The loop variable is a copy of each int element.
-○ null
-→ Not quite. An int element can't be null.
+Which loop is the better choice when you need the index of each element?
+○ The enhanced for, since it always gives the index.
+→ Not quite. The enhanced form gives the values, and doesn't provide an index.
+◉ A for loop with a counter.
+→ Yes. The counter gives you the index directly.
+○ A while loop with no counter.
+→ Not quite. Without a counter, the loop has no index to report.
 ````
 
 ---
 
 ### Try it in the runner
 
-Add `scores[0] = 100;` after the last loop, and print `scores[0]`. Predict the output before you press **Run**. It's 100, because this time the array element itself is changed. Then remove the line, and change the enhanced loop to `for (int score : scores) { scores[0] = 0; }`. Predict the first score afterwards. It's 0, because the loop body changes the element through the array. Remove the change before you continue.
+Add `"yellow"` to the end of the `colors` array, by changing its line to `String[] colors = {"red", "green", "blue", "yellow"};`, and press **Run**. Predict whether the loop needs any other change. It doesn't: the loop visits every element, including the new one. A Java array's length is fixed when it's created, so the change is made to the array's initializer.
+
+Then change `"green"` to `"orange"` in the `colors` array, and predict the second block of output. The loop visits each element in order, so the output is `red`, `orange`, and `blue`.
 
 ---
 
-The enhanced `for` visits every element with no index to manage. The next step covers `break` and `continue`, which change how any of these loops run.
+The enhanced `for` says what you mean, with no counter to get wrong. The next step covers the two statements that change how any loop runs: `break` and `continue`.

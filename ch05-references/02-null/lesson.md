@@ -1,55 +1,48 @@
 ## Null
 
-Sometimes a reference refers to nothing. Java has a special value for that, `null`, which means "no object here". A variable of an object type starts as `null` if you don't give it a value, and an unset element of an object array is `null` too, as the arrays chapter showed.
+A reference is another name for an object, and it's fixed to that object only while it refers to it. Java also has a value for a reference that refers to nothing, which is `null`. A reference can be `null`, can be given a different object at any time, and needs a check before it's used if it might be empty.
 
 Here's the program for this step, in `src/Main.java`:
 
 ```java
-String name = null;
-System.out.println("name is null: " + (name == null));
+int[] food = {1, 2, 3};
+int[] ref = food;
+int[] empty = null;
 
-if (name != null) {
-    System.out.println("name length: " + name.length());
-} else {
-    System.out.println("No name yet");
+System.out.println("food[0]: " + food[0]);
+System.out.println("ref[0]: " + ref[0]);
+
+if (empty == null) {
+    System.out.println("The reference is null.");
 }
 ```
 
 Press **Run**. The output is:
 
 ```text
-name is null: true
-No name yet
+food[0]: 1
+ref[0]: 1
+The reference is null.
 ```
 
-The check `name == null` is a comparison, like the ones in the decisions chapter. It asks whether the reference refers to nothing, and the answer is `true` here.
+`ref` refers to the same array as `food`, so its element reads the same value. `empty` is set to `null`, which means it refers to no object. The `if` checks for that case with `==`, the same comparison as in the decisions chapter.
 
-### Checking before you use
+### Using a reference that might be null
 
-Calling a method on a `null` reference throws a `NullPointerException`. The program avoids that by checking first: `name != null` is true only when there's an object to use, so `name.length()` runs only then. The `else` branch handles the case where there's nothing yet.
+Using a `null` reference, such as reading `empty[0]`, throws a `NullPointerException`, and the program stops. The `if` check is what prevents that. Before you use a reference that might be empty, check it, as this `if` does.
 
-The rest of the program shows what happens after the name is set:
+The program then sets `empty` to a real array:
 
 ```java
-name = "Ada";
-System.out.println("name is null: " + (name == null));
-System.out.println("name length: " + name.length());
+empty = food;
+System.out.println("empty[0] after it is set: " + empty[0]);
 ```
 
-The output is:
+The output is `empty[0] after it is set: 1`. The reference was reassigned to `food`'s array, and it now refers to that object. Reassigning a reference changes which object it refers to, and it doesn't change the object.
 
-```text
-name is null: false
-name length: 3
-```
+### Null or reference
 
-Once `name` refers to a `String`, it's no longer null, so the length can be read.
-
-### Why check
-
-A `null` reference is one of the most common causes of errors in Java programs. The compiler can't always tell whether a reference will be `null` when the program runs, so the program has to check. The check costs one comparison, and it turns a crash into a clear branch that the reader can see.
-
-Use `== null` and `!= null` for this check. Don't compare a reference with `equals`, because `null` has no methods to call.
+A reference that is `null` has no object, and a reference that is set always refers to one. Use a plain reference when the thing it refers to always exists. Use a reference that may be `null` when the object might be missing or might be chosen later, and check it before use.
 
 ---
 
@@ -58,33 +51,33 @@ Use `== null` and `!= null` for this check. Don't compare a reference with `equa
 *These questions are written for this course.*
 
 ````quiz
-What is the value of `String name;` when it's declared but never given a value, and used as a field of a class?
-○ An empty string, "".
-→ Not quite. A reference that's never assigned is null, not an empty string.
-◉ null
-→ Yes. Object references start as null until they're given an object.
-○ 0
-→ Not quite. A String reference can't hold a number.
+What does `empty` hold after `int[] empty = null;`?
+○ An empty array with no elements.
+→ Not quite. An empty array has a length of zero, but null is no array at all.
+◉ A reference that refers to no object.
+→ Yes. null means the reference has no object, and it must be checked before use.
+○ The number 0.
+→ Not quite. A reference can't hold a number, and null is not 0.
 ````
 
 ````quiz
-Which check is safe before calling `name.length()`?
-○ name.length() != null
-→ Not quite. That calls length() before the check, and it crashes first.
-◉ name != null
-→ Yes. The check happens before the method is called, so the call only runs when there is an object.
-○ name == ""
-→ Not quite. A null name is not equal to "", and that comparison doesn't guard against null.
+Which check is correct before reading `empty[0]`?
+○ if (empty[0] == null)
+→ Not quite. That reads the element first, which is the failure the check is meant to prevent.
+◉ if (empty != null)
+→ Yes. The check happens before the element is read.
+○ if (empty == 0)
+→ Not quite. A reference is compared with null, not with 0.
 ````
 
 ---
 
 ### Try it in the runner
 
-Remove the `if` and `else` check, leaving only `System.out.println("name length: " + name.length());` after `name` is set to `null`. Predict the result. The program throws a `NullPointerException` at that line. Restore the check before you continue.
+Remove the `if` check around `empty`, and add a line that reads `empty[0]` straight after `empty` is set to `null`. Predict what happens before you press **Run**. The program throws a `NullPointerException`, and the output stops at that line. Remove the line before you continue.
 
-Then change `name = "Ada";` to `name = "";`, and predict the length. The empty string is not null, so `name != null` is true, and the length is 0. The check guards against null, not against empty text.
+Then move the line `empty = food;` above the `if`, and predict whether the `if` still prints `The reference is null.`. It doesn't, because `empty` no longer refers to null before the check, so the check is false.
 
 ---
 
-`null` is the value of a reference that refers to nothing. Check for it before you use the object, and the program can't crash on a missing value. The last step covers comparing references, where `==` and `equals` give different answers.
+A reference can be null, and reassigning it changes what it refers to. The next step puts references to arrays together with the elements inside them, where the connection to the functions chapter becomes clear.

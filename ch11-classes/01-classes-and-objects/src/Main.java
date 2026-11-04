@@ -1,25 +1,22 @@
-class Counter {
-    int count;
-
-    void increment() {
-        count++;
-    }
-
-    int current() {
-        return count;
-    }
+class Car {
+    String brand;
+    String model;
+    int year;
 }
 
 public class Main {
     public static void main(String[] args) {
-        Counter clicks = new Counter();
-        Counter visits = new Counter();
+        Car carObj1 = new Car();
+        carObj1.brand = "BMW";
+        carObj1.model = "X5";
+        carObj1.year = 1999;
 
-        clicks.increment();
-        clicks.increment();
-        visits.increment();
+        Car carObj2 = new Car();
+        carObj2.brand = "Ford";
+        carObj2.model = "Mustang";
+        carObj2.year = 1969;
 
-        System.out.println("clicks: " + clicks.current());
-        System.out.println("visits: " + visits.current());
+        System.out.println(carObj1.brand + " " + carObj1.model + " " + carObj1.year);
+        System.out.println(carObj2.brand + " " + carObj2.model + " " + carObj2.year);
     }
 }

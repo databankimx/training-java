@@ -1,46 +1,47 @@
 ## Summary: Records
 
-This chapter covered grouping related values under one type.
+This chapter covered grouping related values into one type.
 
-* **A record groups related values.** `record Car(String brand, String model, int year)` declares the type.
-* **Components are read with methods.** `car.brand()` has parentheses, and it has the component's name.
-* **Java generates the constructor, accessors, and text form.** You write only the declaration.
-* **Records are immutable.** Their components are fixed when the record is created, and there are no setters.
-* **A changed value is a new record.** A method that needs a different value returns a new record.
-* **A compact constructor checks values.** The block runs before the components are set, so every record is valid.
-* **`equals` compares components.** Two records with the same values are equal, even as separate objects.
-* **`==` compares references.** For records, as for any object, it asks whether they are the same object.
+* **A record declaration creates a type.** `record Car(String brand, String model, int year) { }` describes what a car holds, and variables of type `Car` are created from it.
+* **Components are read with methods.** `car.year()` returns the year component of the variable `car`.
+* **Each component has its own type.** The compiler checks every value passed to the constructor against it.
+* **Records can be passed and returned.** A method can build one, and return it as a value.
+* **A record can't be changed.** A method that needs a different value returns a new record, and the caller stores it.
+* **Constructors set the components.** Every component is given a value when the record is created, and an extra constructor can supply defaults through `this(...)`.
+* **Constructor arguments are matched in order.** `new Settings("Scott", 9, true)` matches values to components in the order they're declared.
+* **A copy is a separate record.** Two records with the same values are independent objects, and creating one never changes another.
+* **Compact constructors check values.** A record can refuse an invalid value when it's created, as the records chapter's previous steps showed.
 
 ### Check your understanding
 
 *These questions are written for this course.*
 
 ````quiz
-Which expression reads the `model` component of `car`?
-○ car.model
-→ Not quite. Component fields are private, and the accessor is a method.
-◉ car.model()
-→ Yes. The accessor has the component's name and parentheses.
-○ car.getModel()
-→ Not quite. Records don't use the get prefix.
+Which constructor gives a record a default for its volume component?
+○ A constructor that sets volume to 5 in its body after creation.
+→ Not quite. A record's components can't be assigned after creation, so the default must be given in the constructor call.
+◉ An extra constructor that calls the full constructor with this(..., 5, ...).
+→ Yes. The default is passed to the full constructor when the record is created.
+○ A default keyword in the component list.
+→ Not quite. Java records have no default keyword for components.
 ````
 
 ````quiz
-Why can't a record's `x` value be changed after it's created?
-○ Because records are stored in read-only memory.
-→ Not quite. The reason is the design of the record, not the memory.
-◉ Because a record has no setters, and its fields are final.
-→ Yes. The components are fixed in the constructor, and nothing changes them afterwards.
-○ Because the compiler copies the value each time it's read.
-→ Not quite. The value is fixed, not copied on each read.
+A method receives a record and wants a changed version. What should it do?
+○ Assign to the component, since the caller will see the change.
+→ Not quite. A record's components can't be assigned.
+◉ Return a new record with the new value, and let the caller store it.
+→ Yes. That's how a record's value changes in Java.
+○ Pass a reference to the record, so the change is made in place.
+→ Not quite. A reference doesn't allow a record to change.
 ````
 
 ````quiz
-What runs before a record's components are set?
-○ Nothing; the components are set first.
-→ Not quite. A compact constructor's block runs before the components are assigned.
-◉ The compact constructor's block, where a check can throw an exception.
-→ Yes. The check runs first, so an invalid value is never created.
-○ The toString method.
-→ Not quite. toString runs when the record is printed, not when it's created.
+In `new Settings("Scott", 9, true)`, what does the value 9 set?
+○ The name component.
+→ Not quite. The first value goes to name.
+◉ The volume component, the second one declared.
+→ Yes. Constructor arguments are matched to components in declaration order.
+○ The muted component.
+→ Not quite. muted receives the third value, true.
 ````

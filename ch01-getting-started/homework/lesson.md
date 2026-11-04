@@ -1,10 +1,10 @@
 ## Homework
 
-These exercises practise the chapter's ideas: writing a program, printing text, and adding comments. Each one is a step in this folder, and the exercise's lesson says what to write.
+These exercises practise the first program: printing lines of text, and laying them out as a block. Each one is a step in this folder.
 
 The steps are:
 
-* [Introduce yourself](#goto/01-introduce-yourself): a program that prints a few lines about you.
-* [Banner](#goto/02-banner): a program that prints a line of text inside a box made of characters.
+* [Introduce yourself](#goto/01-introduce-yourself): a program that prints three lines about you.
+* [A banner](#goto/02-banner): a program that prints a box around a greeting, one line at a time.
 
-Give each one a try before you open its example. The example is a spoiler, and you'll learn more by working it out yourself.
+Write your own program in your project first. If you get stuck, reveal the example. The source shows the finished program, and the section below says which lines to change for your own version.

@@ -1,59 +1,66 @@
 ## Break and continue
 
-Two statements change how a loop runs, once it has started. `break` ends the loop straight away, and `continue` skips the rest of the current pass and moves on to the next one.
+Sometimes a loop has to change course partway through a pass. You may have found the value you were looking for, or you may want to skip the rest of one pass and move on. Two statements do that: `break` stops the loop, and `continue` skips to the next pass.
 
 Here's the first part of this step's program, in `src/Main.java`:
 
 ```java
-for (int i = 1; i <= 10; i++) {
-    if (i == 4) {
+int i = 0;
+while (true) {
+    ++i;
+    System.out.println(i);
+    if (i == 5) {
         break;
     }
-    System.out.println("break check: " + i);
 }
 ```
 
 Press **Run**. The output is:
 
 ```text
-break check: 1
-break check: 2
-break check: 3
+Break at 5:
+1
+2
+3
+4
+5
 ```
 
-The loop is set to run ten times, but when `i` reaches 4, the `if` runs `break`. The loop ends at that point, and the `println` for 4 never runs. The loop doesn't count any further, and the program continues after the loop's closing brace.
+The condition is `true`, so on its own the loop would never end. The `break` inside the `if` is what stops it. When `i` reaches 5, `break` leaves the loop at once, and the program carries on below it.
 
-`break` is the usual way to stop a loop when the answer has been found, such as the first matching element of an array. Once the answer is known, there's no point checking the rest.
+A `while (true)` loop is a common pattern for a loop whose exit point is in the middle of its body, such as a menu that repeats until the user chooses to quit. Make sure every path through the loop can reach a `break`, or the loop never ends.
 
 ### Continue
 
-`continue` skips the remaining statements in the loop body, and the loop goes on with its next pass:
+The second loop uses `continue`:
 
 ```java
-for (int i = 1; i <= 5; i++) {
-    if (i == 3) {
+for (int j = 1; j <= 10; ++j) {
+    if (j <= 5) {
         continue;
     }
-    System.out.println("continue check: " + i);
+    System.out.println(j);
 }
 ```
 
 The output is:
 
 ```text
-continue check: 1
-continue check: 2
-continue check: 4
-continue check: 5
+Continue past 5:
+6
+7
+8
+9
+10
 ```
 
-When `i` is 3, the `continue` skips the `println`, and the loop moves on to 4. The loop itself keeps running to the end, unlike `break`.
+When `j` is 5 or less, `continue` skips the rest of the body, so the `println` line doesn't run for those values. The loop doesn't end, though. It moves straight to the next pass, and the step `++j` still runs. Once `j` is 6, the test fails, `continue` isn't reached, and the number is printed.
 
-### Which one to use
+Notice what `continue` doesn't do: it doesn't skip the step. In a `for` loop, the step always runs before the next check of the condition. If you wrote the same thing as a `while` loop, you would have to move the increment to the top of the body, or the loop would never reach its end.
 
-Use `break` when the loop has finished its job. Use `continue` when one pass doesn't need the rest of the body, and the loop should go on. A common pattern is to `continue` past values you don't want, so the main work of the body only handles the rest.
+### Which loop does break affect?
 
-In a `while` loop, `continue` moves to the condition check. Make sure the counter or the change that ends the loop happens before the `continue`, or the loop can run forever. The `for` loop's step always runs after `continue`, so it's safer for this reason.
+`break` and `continue` apply only to the innermost loop they sit in. In nested loops, a `break` in the inner loop ends the inner loop, and the outer loop carries on with its next pass. Keep that in mind when you read a nested loop with a `break`, since it's easy to assume it stops everything.
 
 ---
 
@@ -62,33 +69,33 @@ In a `while` loop, `continue` moves to the condition check. Make sure the counte
 *These questions are written for this course.*
 
 ````quiz
-In a loop, what does `break` do?
-○ It skips to the next pass.
-→ Not quite. That's what continue does.
-◉ It ends the loop immediately, and the program continues after it.
-→ Yes. break leaves the innermost loop at once.
-○ It pauses the program until the user presses a key.
-→ Not quite. break leaves a loop. It doesn't wait for input.
+In a `for` loop, what does `continue` do?
+○ It ends the loop.
+→ Not quite. That's what break does.
+◉ It skips the rest of the current pass, and the step still runs before the next check.
+→ Yes. The loop moves on to its next pass, with the step applied as usual.
+○ It restarts the loop from the beginning, with the counter reset.
+→ Not quite. continue doesn't reset anything, and the counter keeps its value.
 ````
 
 ````quiz
-In the continue example, why is 3 not printed?
-○ Because the loop stops at 3.
-→ Not quite. break stops a loop, but this loop goes on past 3.
-◉ Because continue skips the rest of the body for that pass.
-→ Yes. The println is after the continue, so it doesn't run when i is 3.
-○ Because 3 is not in the array.
-→ Not quite. The loop uses a counter, not an array.
+A `break` is inside an inner loop, which is inside an outer loop. What does the break end?
+○ The whole program.
+→ Not quite. A break only ends a loop, not the program.
+○ The outer loop.
+→ Not quite. A break affects only the loop it sits in.
+◉ The inner loop only.
+→ Yes. The outer loop carries on with its next pass.
 ````
 
 ---
 
 ### Try it in the runner
 
-Change the `break` condition from `i == 4` to `i == 1`, and predict the output. The loop breaks on its first pass, before anything is printed, so the output is empty. Restore the original condition before you continue.
+Change the break condition from `i == 5` to `i == 3`, and press **Run**. Predict how many lines the first loop prints. It prints 1, 2, and 3, and then stops, so three lines.
 
-Then change `continue` in the second loop to `break`, and predict the output. The loop stops at 3, so only `continue check: 1` and `continue check: 2` appear. Restore `continue` before you continue.
+Then change `j <= 5` to `j <= 7` in the second loop, and predict the output. The loop prints 8, 9, and 10, since the first seven values are skipped.
 
 ---
 
-`break` leaves a loop, and `continue` moves it to the next pass. The next step puts loops to work in a complete program, a game of Battleship.
+`break` and `continue` give you control inside a loop, without rearranging the loop itself. The summary and homework put all of the chapter's loops to work.

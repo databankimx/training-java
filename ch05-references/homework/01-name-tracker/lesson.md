@@ -1,4 +1,4 @@
-## Name tracker
+## Homework: Name tracker
 
 A program has a `String` variable for the name of the user, which may be `null` until they've typed it. Write a program that greets the user, and handles the `null` case before it uses the name.
 

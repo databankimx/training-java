@@ -1,31 +1,28 @@
-## Banner
+## Homework: A banner
 
-Write a program that prints the word HELLO inside a box made of stars. The box has a border line above and below the word, and the border is as wide as the word, plus two stars at each side.
+Write a program that prints a box around a greeting, like this:
 
-Write your own program in your project first. If you get stuck, reveal the example: the source shows the finished program, and the section below says which lines to change for a different word.
+```text
+**********
+* Hello! *
+**********
+```
 
-### Where to change the code
+Write your own program in your project first. If you get stuck, reveal the example: the source shows the finished program, and the section below says which lines to change for your own greeting.
 
-The example prints three lines with `System.out.println`:
+The box has three lines. The top and bottom lines are the same length as the middle line, and the middle line has the greeting with a space on each side, inside the stars.
 
-* the first and last lines are the border, nine stars each
-* the middle line is the word, with a star and a space on each side
-
-To print a different word, change the middle line only. Keep the stars and spaces around it. The border must be as wide as the middle line, so if the word gets longer, add stars to both border lines to match.
+Use one `System.out.println` statement for each line. Don't print the box with a single long string, because the point of the exercise is to see how the lines fit together.
 
 ### What to check
 
-When you press **Run**, the Output pane should show:
-
-```text
-*********
-* HELLO *
-*********
-```
-
-Count the stars carefully: the border has nine, and the middle line has the five letters of HELLO, a space on each side, and a star at each end.
+Count the characters on each line. All three should be the same length. If the top line is longer or shorter than the middle line, the box won't look like a box.
 
 ### Extensions
 
-* Change the word to your own name, and make the box fit it. The border has to change width as the word changes.
-* Store the word in a variable, and print the border from the length of that variable, so the box fits any word.
+* Change the greeting to something longer, and work out how many stars the top and bottom lines need. Can you write the program so the stars come from a count, rather than being typed out? A `for` loop that prints stars would do it.
+* Print the same box with `System.out.print` for each piece of a line, and a final `System.out.println()` to end each line. The output shouldn't change.
+
+---
+
+*This exercise is not from the book. It practices the ideas in Chapter 1.*

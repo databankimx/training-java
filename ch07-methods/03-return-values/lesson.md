@@ -1,63 +1,59 @@
 ## Return values and overloading
 
-A method sends its result back with `return`. You've seen that in the last two steps. This step covers the rules for return values, and then overloading, where the same name serves several methods.
+A method that only prints is useful, but many methods are better at calculating something and handing the result back. A method that returns a value gives its caller a result to store, print, or use in another calculation.
 
-Here's the program for this step, in `src/Main.java`:
+Here's the first part of this step's program, in `src/Main.java`:
 
 ```java
-System.out.println("add(2, 3): " + add(2, 3));
-System.out.println("add(2.5, 1.5): " + add(2.5, 1.5));
-System.out.println("add(1, 2, 3): " + add(1, 2, 3));
+static int addFive(int x) {
+    return 5 + x;
+}
 ```
 
-The program has three methods called `add`. Press **Run**. The output is:
+The `int` before the name is the return type. It says the method gives back an `int`. The `return` statement sends the value back to the caller, and it also ends the method at that point. Nothing after a `return` runs.
 
-```text
-add(2, 3): 5
-add(2.5, 1.5): 4.0
-add(1, 2, 3): 6
+The program calls the method and uses its result:
+
+```java
+int res = addFive(3);
+System.out.println(res);
 ```
 
-Each call goes to the matching method. Java looks at the number and types of the arguments, and chooses the version whose parameters match.
+The output is `8`. The call `addFive(3)` is replaced by its result, 8, which is then stored in `res`. A method call can appear anywhere a value of its return type can appear, so you can print it, store it, or put it inside another expression.
+
+A method that gives nothing back uses `void` as its return type, as the first step did. `void` means there's no result to use, so a `void` method can't be the right-hand side of an assignment.
 
 ### Overloading
 
-Overloading means two or more methods share a name, and their parameter lists differ. The three `add` methods are:
-
-* `add(int a, int b)`, for two whole numbers.
-* `add(double a, double b)`, for two decimals.
-* `add(int a, int b, int c)`, for three whole numbers.
-
-The return type is not part of the choice. Two methods with the same parameters but different return types are not allowed, because the call would be ambiguous. Choose a different parameter list instead.
-
-The choice is made when the program is compiled, from the types of the arguments. `add(2, 3)` uses the `int` version, because both arguments are `int`. `add(2.5, 1.5)` uses the `double` version, because both arguments are decimals.
-
-### Replacing default values
-
-Overloading is Java's replacement for default parameter values. The greeting example has two methods:
+The program has two methods called `add`:
 
 ```java
-static String greeting() {
-    return "Hello, world.";
+static int add(int x, int y) {
+    return x + y;
 }
 
-static String greeting(String name) {
-    return "Hello, " + name + ".";
+static double add(double x, double y) {
+    return x + y;
 }
 ```
 
-The output is:
+Java allows this, because the parameters are different. When you call `add`, the compiler looks at the arguments and picks the version that matches them:
+
+```java
+int whole = add(8, 5);
+double decimal = add(4.3, 6.26);
+```
+
+The first call passes `int` values, so the `int` version runs and returns 13. The second passes `double` values, so the `double` version runs and returns 10.56. The program prints the results:
 
 ```text
-greeting: Hello, world.
-greeting(Ada): Hello, Ada.
+Int: 13
+Double: 10.56
 ```
 
-The version with no parameters acts as the default, and the caller chooses the version that matches the information it has. The same pattern works for any number of options, and each version is simple to read on its own.
+The `double` line uses `printf` with `%.2f`, which prints two places after the point. Without it, the sum of two decimal values can show extra digits from how decimals are stored.
 
-### Returning several values
-
-A method returns one value. When you need several, return an array or an object that holds them, rather than trying to return more than one value. A later chapter covers classes, which are the usual way to hold a group of related values.
+Overloads must differ in their parameters. Two methods that differ only in their return type can't be overloaded, because the call `add(8, 5);` would give the compiler no way to choose, and it would reject the code.
 
 ---
 
@@ -66,33 +62,31 @@ A method returns one value. When you need several, return an array or an object 
 *These questions are written for this course.*
 
 ````quiz
-Which two methods can be declared in the same class?
-○ int add(int a, int b) and double add(int a, int b)
-→ Not quite. These have the same parameter list, so the call would be ambiguous. Changing only the return type isn't enough.
-◉ int add(int a, int b) and double add(double a, double b)
-→ Yes. The parameter types differ, so the compiler can tell which one to call.
-○ int add(int a, int b) and int add(int x, int y)
-→ Not quite. Renaming the parameters doesn't change the parameter types, so these clash.
+What happens to the statements after a `return` in a method?
+○ They run, and then the method returns.
+→ Not quite. return ends the method at that point.
+◉ They don't run, because the method has already finished.
+→ Yes. return leaves the method immediately.
+○ They run only if the method has no return value.
+→ Not quite. A return always ends the method, whatever its type.
 ````
 
 ````quiz
-Which version does `add(2, 3)` call in the program?
-○ The double version, because it's the most precise.
-→ Not quite. Java doesn't choose by precision. It matches the types of the arguments.
-◉ The int version, because both arguments are int.
-→ Yes. The arguments match the int parameters exactly.
-○ The three-parameter version.
-→ Not quite. That needs three arguments, and this call has two.
+Which pair of methods can be overloaded?
+○ int f(int x) and double f(int x)
+→ Not quite. They differ only in their return type, so a call can't tell them apart.
+◉ int f(int x) and double f(double x)
+→ Yes. Their parameters differ, so the compiler can choose between them.
+○ int f(int x) and int f(int x) with the same body.
+→ Not quite. Two methods with identical parameters can't coexist, because the call would have no way to choose between them.
 ````
 
 ---
 
 ### Try it in the runner
 
-Change `add(2, 3)` to `add(2.0, 3)`, and predict the version it calls. The first argument is a `double`, so the call doesn't match the `int` version. The `double` version matches, because the `int` argument can be promoted to `double`. The output is 5.0. Restore the original call before you continue.
-
-Then add a method `static int add(int a, int b) { return a - b; }`, and predict the result. The compiler reports a duplicate method, because the same name and parameter types are declared twice. Remove the method before you continue.
+Call `add(8, 5.0)`, which passes an `int` and a `double`, and predict which overload is chosen. The `int` version doesn't accept a `double` argument, but an `int` can be widened to a `double`, so only the `double` version fits. The call compiles, and the result is 13.0. Change `5.0` to `5` to see the `int` version run again.
 
 ---
 
-Overloading lets one name describe a family of related methods, with the caller choosing the right one. The next step covers arrays as parameters, which work differently from the values you've passed so far.
+A method can take values in and give a result back, and overloading lets one name serve several types. The next step uses arrays, which are harder to pass to a method than a single value, and the length of the array becomes something the method can find for itself.

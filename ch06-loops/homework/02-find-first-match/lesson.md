@@ -1,4 +1,4 @@
-## Find the first match
+## Homework: Find the first match
 
 The array holds 12 in two places, at indexes 2 and 4. Write a program that finds the first index of the target value, and stops looking once it's found.
 

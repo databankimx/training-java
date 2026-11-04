@@ -1,6 +1,6 @@
 ## Ch06 · Loops
 
-A program often has to repeat work: reading lines until the user quits, checking every element of a list, or counting through a range of values. This chapter covers the loops Java offers for that, and the two statements that change how any loop runs. The enhanced `for` works directly on the arrays from the last two chapters.
+A program often has to repeat work: reading lines until the user quits, checking every element of a list, or counting through a range of values. This chapter covers the loops Java offers for that, and the two statements that change how any loop runs. The enhanced `for` works directly on the arrays from the last chapter.
 
 The steps are:
 

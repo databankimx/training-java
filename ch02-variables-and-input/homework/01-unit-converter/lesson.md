@@ -1,4 +1,4 @@
-## Unit converter
+## Homework: Unit converter
 
 Write a program that converts a temperature from Celsius to Fahrenheit.
 
@@ -9,19 +9,9 @@ The program should:
 * ask for a temperature in Celsius, with the prompt `Enter a temperature in Celsius: `
 * read it as a `double`, so decimals work
 * calculate the Fahrenheit value with the formula `F = C * 9 / 5 + 32`
-* print the result as `<celsius> C is <fahrenheit> F`, with one place after the point
+* print the result as `<celsius> C is <fahrenheit> F`, with one decimal place for each value
 
-Store the Fahrenheit value in a `final` variable, since it's calculated once and never changes. Use `System.out.flush()` after the prompt, so the question shows before the program waits for an answer.
-
-### Where to change the code
-
-The prompt, the reading, and the printing are the parts you'll write yourself. The formula is the one line that does the work:
-
-```java
-final double fahrenheit = celsius * 9 / 5 + 32;
-```
-
-Check that the formula is written as shown, and that `celsius` is a `double`, not an `int`.
+Store the Fahrenheit value in a `final` variable, since it's calculated once and never changes. Use `System.out.flush()` on the prompt, so the question shows before the program waits for an answer.
 
 ### What to check
 
@@ -31,12 +21,12 @@ Try these inputs, and compare your output with the answers:
 * `0` should give `0.0 C is 32.0 F`
 * `-40` should give `-40.0 C is -40.0 F`
 
-Watch out for integer division. If both numbers in a division are whole numbers, Java drops the fraction. Because `celsius` is a `double`, the multiplication by 9 is a decimal, and the division by 5 is too. If you change `celsius` to an `int`, the answers will be wrong, which is a good way to see why the type matters.
+Watch out for integer division. If you write `9 / 5` with two whole numbers, Java gives `1`, not `1.8`. The program avoids this because `celsius` is a `double`, so the calculation is done in decimals.
 
 ### Extensions
 
 * Add a second conversion, from Fahrenheit back to Celsius, and ask the user which one they want.
-* Print the result to two decimal places, using the `%.2f` form from the arithmetic lesson.
+* Print the result to two decimal places, using `printf` with `%.2f`, as the arithmetic lesson showed.
 
 ---
 

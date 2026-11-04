@@ -1,59 +1,58 @@
 ## Recursion
 
-A method can call itself. That's recursion, and it suits problems that are made of smaller copies of themselves, such as a countdown, a factorial, or a folder that contains folders. Every recursive method needs two parts, and this step builds both.
+A method that calls itself is called recursive. It sounds like a trick, but many problems have this shape: a task that's made of smaller copies of the same task. Folders are a good example. A folder contains files and other folders, and each of those folders contains files and folders in turn. To list everything under a folder, you list its entries, and for each subfolder you do the same job again, on a smaller part of the tree.
 
-Here's the program for this step, in `src/Main.java`:
+Here's the program for this step, in `src/Main.java`. The `makeSample` method builds a small tree of folders and files inside the step's folder, and `listFolder` lists it:
 
 ```java
-static void countdown(int n) {
-    if (n == 0) {
-        System.out.println("Liftoff");
-        return;
+static void listFolder(File folder, int depth) {
+    File[] entries = folder.listFiles();
+    Arrays.sort(entries);
+    for (File entry : entries) {
+        System.out.println(" ".repeat(depth * 2) + entry.getName());
+        if (entry.isDirectory()) {
+            listFolder(entry, depth + 1);
+        }
     }
-    System.out.println(n);
-    countdown(n - 1);
 }
 ```
 
-Press **Run**, and the output begins:
+Press **Run**. The output lists every entry, with each level indented under its folder. The output is:
 
 ```text
-countdown from 3:
-3
-2
-1
-Liftoff
+music
+  song.txt
+notes.txt
+photos
+  beach
+    wave.txt
+  holiday.txt
+readme.txt
 ```
 
-Each call prints its number, and then calls itself with one less. The call with `n` equal to 0 is the base case: it prints `Liftoff` and returns, without calling itself again.
+The program sorts the entries by name before it prints them, so the listing comes out in the same order every time. A folder's entries come from the file system in no particular order, and sorting makes the output repeatable.
 
-### The two parts
+### What the recursion does
 
-* **The base case** is the condition where the answer is known without any more calls. Here it's `n == 0`. The `return;` ends a `void` method early.
-* **The recursive case** reduces the problem and calls the method on the smaller part. Here it's `countdown(n - 1)`, which moves one step closer to 0.
+The method does one job: it lists the entries of one folder. For each entry, it prints the name. If the entry is a folder, the method calls itself on that folder, with `depth` one larger, to list what's inside. The call handles a smaller tree, and it finishes before the loop moves on to the next entry.
 
-Every call waits for the call it made to finish. The calls pile up, one on top of the other, and they unwind as each one returns. The base case stops the pile from growing without limit.
+The recursion stops because the tree is finite. An ordinary file doesn't call the method, so it's the end of that branch. A folder with no subfolders gives a loop that calls nothing more. Every branch eventually reaches files, and the calls unwind back to the top.
 
-### Factorial
+### The depth parameter
 
-The factorial of a number is the product of all the whole numbers from 1 up to it. The program computes `factorial(5)` as 120:
+The `depth` argument doesn't affect what gets listed. It only controls the indentation, so the output shows which folder each entry belongs to. Each call passes `depth + 1`, so entries inside a folder are indented one more step than the folder. The value is a counter that travels down the recursion, and it's the same idea as the parameters from earlier in the chapter.
 
-```java
-static int factorial(int n) {
-    if (n <= 1) {
-        return 1;
-    }
-    return n * factorial(n - 1);
-}
-```
+### The library behind it
 
-The output line is `factorial(5) = 120`. The base case is `n <= 1`, which returns 1. The recursive case multiplies `n` by the factorial of one less. So `factorial(5)` is 5 times `factorial(4)`, which is 5 times 4 times `factorial(3)`, and so on, until `factorial(1)` returns 1.
+`java.io.File` represents a file or a folder. `listFiles` returns the entries of a folder as an array, and `isDirectory` says whether an entry is a folder. The enhanced `for` loop works on that array, just as it does on any array, so the loop visits each entry in turn.
 
-### Without a base case
+`makeSample` uses `java.nio.file`, the newer library for files. Its methods create the folders and write the files, so the program has a tree to list. The runner rebuilds the step's folder on every run, so the sample is created again each time.
 
-A recursive method with no base case calls itself forever. Java stops it when the calls use up the space for them, and the program throws a `StackOverflowError`. That's the error to expect when a recursive method is missing its stopping condition, and it's the first thing to check when it appears.
+Recursion and loops often work together like this. The loop handles the entries at one level, and the method call handles each level below.
 
-Recursion can be elegant, but a loop is often clearer for a simple repeat. Use recursion when the problem really is made of smaller copies of itself, as a folder tree is.
+### A warning about loops
+
+A folder can contain a link that points back to an ancestor folder, and then the recursion never reaches a file or an empty folder. The program would keep going until something fails. Real tools track which folders they've visited, to avoid this. The sample tree has no such links, so this program is safe, but keep the risk in mind for any recursion over data you don't control.
 
 ---
 
@@ -62,43 +61,33 @@ Recursion can be elegant, but a loop is often clearer for a simple repeat. Use r
 *These questions are written for this course.*
 
 ````quiz
-What is the base case in `countdown`?
-○ The call with n equal to 1.
-→ Not quite. The method still prints 1, and then calls countdown(0).
-◉ The call with n equal to 0, which prints Liftoff and returns.
-→ Yes. The base case is the one that doesn't call itself again.
-○ The line that calls countdown(n - 1).
-→ Not quite. That's the recursive case, which moves towards the base case.
+What stops the recursion in `listFolder`?
+○ A counter that reaches a fixed limit.
+→ Not quite. The depth grows as the tree goes deeper, but nothing stops at a fixed limit.
+◉ The tree is finite, so every branch eventually reaches files, which don't call the method.
+→ Yes. Each branch ends at a file or an empty folder.
+○ The method returns a value to say it's finished.
+→ Not quite. listFolder returns nothing, and it stops because the tree runs out.
 ````
 
 ````quiz
-What does `factorial(4)` return?
-○ 10
-→ Not quite. That's the sum of 1 to 4, not the product.
-◉ 24
-→ Yes. 4 times 3 times 2 times 1 is 24.
-○ 4
-→ Not quite. A factorial multiplies all the numbers below it, not just the one given.
-````
-
-````quiz
-What error does a recursive method with no base case produce?
-○ A NullPointerException.
-→ Not quite. That's for using a null reference.
-◉ A StackOverflowError.
-→ Yes. The calls keep piling up until there's no room left for them.
-○ An ArrayIndexOutOfBoundsException.
-→ Not quite. That's for an index outside an array.
+What does the `depth` parameter change in the output?
+○ Which entries are listed.
+→ Not quite. Every entry is listed whatever the depth.
+◉ How far each entry is indented under its folder.
+→ Yes. depth only controls the indentation.
+○ The order in which the files appear.
+→ Not quite. The sort decides the order, not depth.
 ````
 
 ---
 
 ### Try it in the runner
 
-Remove the `if` block from `countdown`, leaving only `System.out.println(n);` and `countdown(n - 1);`, and press **Run**. The method never stops, so the program throws a `StackOverflowError`. The output shows some numbers, counting down into negative values, before the error. Restore the `if` block before you continue.
+In `makeSample`, change the file name `notes.txt` to `trip.txt`, and press **Run**. The listing shows the new name in the same place, since the entries are sorted. Then change the line that writes `wave.txt` so it writes the file into `music` instead of `photos/beach`, and predict where it appears in the listing before you run. It appears inside `music`, after `song.txt`, indented one step.
 
-Then change `factorial(5)` to `factorial(0)` in the output line, and predict the result. The base case is `n <= 1`, which returns 1 for 0 too, so the output is `factorial(0) = 1`.
+Then consider what would happen if `sample` contained a link back to `sample` itself. Describe what the recursion would do, and why the program would never finish. You don't need to build that case, since the lesson's warning explains it.
 
 ---
 
-Recursion solves a problem by solving a smaller copy of it, as long as there's a base case to stop at. The summary gathers the chapter together, and the homework uses methods on their own.
+Recursion is a method that handles one level of a problem, and calls itself for the smaller problems inside it. Some recursive solutions are correct but wasteful, since they repeat work they've already done. That's a question of cost, and the summary and homework look at it when they come back to the chapter's examples.

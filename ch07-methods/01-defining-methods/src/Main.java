@@ -1,19 +1,12 @@
 public class Main {
-    public static void main(String[] args) {
-        greet();
-        printSquare(4);
-        System.out.println("Sum: " + add(2, 3));
-    }
-
     static void greet() {
-        System.out.println("Hello from a method.");
+        System.out.println("I just got executed!");
     }
 
-    static void printSquare(int n) {
-        System.out.println(n + " squared is " + (n * n));
-    }
-
-    static int add(int a, int b) {
-        return a + b;
+    public static void main(String[] args) {
+        System.out.println("Before the calls");
+        greet();
+        greet();
+        System.out.println("After the calls");
     }
 }

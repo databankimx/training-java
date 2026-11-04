@@ -1,4 +1,4 @@
-## Shopping cart
+## Homework: Shopping cart
 
 A shopping cart keeps a running total of its item prices, stored in cents so the arithmetic stays exact. The cart refuses a price that isn't positive, and it reports the number of items and the total.
 

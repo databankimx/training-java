@@ -1,18 +1,27 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Path file = Path.of("notes.txt");
-        Files.writeString(file, "apples\nbananas\ncherries\n");
+        Files.createDirectories(Path.of("data"));
+        Files.writeString(Path.of("data/notes.txt"),
+                "First note: buy bread.\nSecond note: call the dentist.\nThird note: finish the report.\n");
 
-        String text = Files.readString(file);
-        System.out.print("Whole file:\n" + text);
-
-        List<String> lines = Files.readAllLines(file);
-        System.out.println("Line count: " + lines.size());
-        System.out.println("Second line: " + lines.get(1));
+        try {
+            BufferedReader in = new BufferedReader(new FileReader("data/notes.txt"));
+            String line;
+            int count = 0;
+            while ((line = in.readLine()) != null) {
+                count++;
+                System.out.println(count + ": " + line);
+            }
+            in.close();
+            System.out.println("Lines read: " + count);
+        } catch (IOException error) {
+            System.out.println("Could not open data/notes.txt");
+        }
     }
 }

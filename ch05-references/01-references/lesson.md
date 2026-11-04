@@ -1,53 +1,51 @@
 ## References
 
-When you write `int[] alias = original;`, Java doesn't copy the array. It copies the reference, so both variables now refer to the same array. This is the first thing to understand about object types in Java, and it's different from the `int` variables you've used so far, which each hold their own value.
+A variable is a name for a value stored in memory. Sometimes you want a second name for the same thing, so that either name refers to one object. In Java, a variable of an object type holds a reference to the object, and a second variable can hold a reference to the same object. The two names then refer to one thing.
 
 Here's the program for this step, in `src/Main.java`:
 
 ```java
-int[] original = {1, 2, 3};
-int[] alias = original;
+int[] food = {1, 2, 3};
+int[] meal = food;   // meal is another name for the same array
 
-alias[0] = 99;
-System.out.println("original[0]: " + original[0]);
-System.out.println("alias[0]: " + alias[0]);
+System.out.println("food[0]: " + food[0]);
+System.out.println("meal[0]: " + meal[0]);
 ```
 
-Press **Run**. The output is:
+Press **Run**. The output begins:
 
 ```text
-original[0]: 99
-alias[0]: 99
+food[0]: 1
+meal[0]: 1
 ```
 
-Changing an element through `alias` changes the element `original` sees, because both names refer to one array. The array exists once, and both variables are different routes to it.
+Both lines print the same value, because `meal` isn't a copy of `food`. It's a second name for the same array. The `=` copies the reference, not the array, and that's an easy point to mix up.
 
-### Reassigning a name
-
-Assigning a new object to a variable changes which object that variable refers to. It doesn't change the object the variable used to refer to:
+Next, the program changes an element through the second name:
 
 ```java
-alias = new int[]{7, 8, 9};
-System.out.println("original[0] after alias is reassigned: " + original[0]);
-System.out.println("alias[0] now: " + alias[0]);
+meal[0] = 99;
+System.out.println("food[0] after changing meal: " + food[0]);
 ```
 
-The output is:
+The output is `food[0] after changing meal: 99`. Changing an element through `meal` changed the array that `food` refers to, since they are the same array under two names.
 
-```text
-original[0] after alias is reassigned: 99
-alias[0] now: 7
+### Rules for references
+
+Java references are to objects, such as arrays and strings. A variable of a primitive type, such as `int`, holds its own value, and it can't be a second name for another `int` variable. That's why this step uses an array.
+
+A local variable must be given a value before it's used:
+
+```java
+int[] nothing;
+System.out.println(nothing[0]);   // error: nothing might not have been initialized
 ```
 
-`alias` now refers to a new array, with the values 7, 8, and 9. `original` still refers to the first array, and its first element is still 99. Only the variable that was reassigned has changed.
+Once a reference is set, assigning a new object to the variable makes it refer to that object, and the old object is unchanged. Assigning to an element changes the object, which every name for it sees.
 
-### Keeping references apart
+### Why references matter
 
-This is why copying an array needs care. If you want two independent arrays with the same values, you can't use `=`, because that only makes a second name for the first. Copying is done with a method, such as `Arrays.copyOf`, which creates a new array and fills it with the values. The methods chapter covers how to call such methods.
-
-### What the variable holds
-
-A variable of an array type holds a reference, not the array's values. The array itself lives elsewhere in memory, and Java manages that memory for you. You never see the address or do arithmetic on it. Java offers no way to look inside a reference, which is one of the things that keeps Java programs safer than languages with raw pointers.
+You already saw references as parameters, where a method receives a reference to its caller's array and can change its elements. A reference declared inside a method works the same way. The rules are the same whatever the reason: the reference and the object are one thing, as far as changes to the object are concerned.
 
 ---
 
@@ -56,33 +54,31 @@ A variable of an array type holds a reference, not the array's values. The array
 *These questions are written for this course.*
 
 ````quiz
-After `int[] b = a;`, what happens when you change `b[0]`?
-○ Only b changes, because it's a separate copy.
-→ Not quite. The assignment copies the reference, not the array, so there is only one array.
-◉ a[0] changes too, because both names refer to the same array.
-→ Yes. Both variables refer to the same array, so the change is seen through either name.
-○ Nothing changes, because arrays can't be modified.
-→ Not quite. Arrays can be modified through any name that refers to them.
+After `int[] meal = food;`, what happens when you write `meal[0] = 5;`?
+○ meal becomes a separate array holding 5, and food is unchanged.
+→ Not quite. The assignment copied the reference, not the array, so there is only one array.
+◉ food[0] becomes 5, because meal refers to the same array as food.
+→ Yes. Changing an element through either name changes the shared array.
+○ An error, because an array can't be changed through a reference.
+→ Not quite. Changing elements through a reference is the normal way to use one.
 ````
 
 ````quiz
-After `alias = new int[]{7, 8, 9};`, what does `original` refer to?
-○ The new array with 7, 8, and 9.
-→ Not quite. Reassigning alias doesn't change what original refers to.
-◉ The first array, which still holds its values.
-→ Yes. Only the variable that was reassigned now refers to something else.
-○ Nothing, because original was cleared.
-→ Not quite. Java never clears an object because a name was reassigned.
+After `int[] meal = food;`, what happens when you write `meal = new int[]{7, 8};`?
+○ food is changed to hold 7 and 8.
+→ Not quite. Assigning a new object to meal changes only meal.
+◉ meal refers to a new array, and food still refers to the original.
+→ Yes. Reassigning a variable changes which object it refers to, and no others.
+○ Both variables are cleared.
+→ Not quite. Reassignment doesn't clear the original object.
 ````
 
 ---
 
 ### Try it in the runner
 
-Add `original = new int[]{1, 2, 3};` after the last line, and then print `alias[0]`. Predict the value before you press **Run**. It's still 7, because `alias` still refers to the 7, 8, 9 array, and `original` being reassigned doesn't touch it. Remove the added lines before you continue.
-
-Then change `alias = new int[]{7, 8, 9};` to `alias = original;`, and predict the value of `original[0]` after the change. It's 99, because `alias` now refers to the same array as `original` again.
+Add a second reference to `food`, called `dinner`, and change `dinner[0]` to `10`. Predict what `food[0]` and `meal[0]` show before you press **Run**. They both show `10`, since all three names refer to the same array.
 
 ---
 
-Several names can refer to one object, and reassigning a name only changes which object that name refers to. The next step covers the special value that means a reference refers to nothing at all.
+A reference is another name for an existing object, and changes to the object are seen through every name for it. The next step covers null, the value a reference has when it refers to nothing.

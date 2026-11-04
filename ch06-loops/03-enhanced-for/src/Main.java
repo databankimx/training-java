@@ -1,20 +1,14 @@
 public class Main {
     public static void main(String[] args) {
-        int[] scores = {90, 85, 77};
+        int[] scores = {10, 20, 30, 40, 50};
+        System.out.println("Scores:");
         for (int score : scores) {
-            System.out.println("score: " + score);
+            System.out.println(score);
         }
 
-        String[] names = {"Ada", "Grace"};
-        int count = 0;
-        for (String name : names) {
-            count++;
-            System.out.println(count + ": " + name);
+        String[] colors = {"red", "green", "blue"};
+        for (String color : colors) {
+            System.out.println(color);
         }
-
-        for (int score : scores) {
-            score = 0;
-        }
-        System.out.println("first score is still: " + scores[0]);
     }
 }

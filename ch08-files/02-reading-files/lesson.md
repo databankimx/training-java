@@ -1,52 +1,55 @@
 ## Reading files
 
-Writing a file is only useful if a program can read it back. `Files` offers two common ways to read text: all of it as one `String`, or as a list of lines. This step uses both, on the same file.
+Reading a file mirrors writing one. You open the file with a `FileReader`, wrapped in a `BufferedReader`, and read from it with `readLine`. The main difference is that a file has an end, and the loop that reads it has to notice when it reaches that end.
 
 Here's the program for this step, in `src/Main.java`:
 
 ```java
-Path file = Path.of("notes.txt");
-Files.writeString(file, "apples\nbananas\ncherries\n");
-
-String text = Files.readString(file);
-System.out.print("Whole file:\n" + text);
+try {
+    BufferedReader in = new BufferedReader(new FileReader("data/notes.txt"));
+    String line;
+    int count = 0;
+    while ((line = in.readLine()) != null) {
+        count++;
+        System.out.println(count + ": " + line);
+    }
+    in.close();
+    System.out.println("Lines read: " + count);
+} catch (IOException error) {
+    System.out.println("Could not open data/notes.txt");
+}
 ```
 
-Press **Run**. The output begins:
+The program writes `data/notes.txt` before it reads it, since each run starts from a fresh copy of the step's folder. The file has three lines.
+
+Press **Run**. The output is:
 
 ```text
-Whole file:
-apples
-bananas
-cherries
+1: First note: buy bread.
+2: Second note: call the dentist.
+3: Third note: finish the report.
+Lines read: 3
 ```
 
-The program writes the file first, so it has something to read. `Files.readString` returns the whole file as one `String`, with the line breaks still in it. The `print` line adds the text after the label, and because the text ends with a newline, the output ends cleanly.
+The loop reads each line into `line`. `readLine` reads up to the end of a line, and drops the newline at the end. When it has no line left to read, it returns `null`, and the loop stops. That's the same pattern as the `while` loops from the loops chapter: the loop runs while the condition is true, and the condition here is "a line was read".
 
-### Reading as lines
+### Why the catch matters
 
-The second read splits the file into lines:
+A missing file, or one you aren't allowed to read, makes the `FileReader` throw an exception before the loop starts. The `catch` block reports it. Without the catch, the program would stop with an error, so the message is the clearer result for a missing file. A file that exists but is empty is different: the loop runs zero times, and the program prints `Lines read: 0`.
+
+### Reading words instead of lines
+
+`readLine` reads whole lines. To read a file one whitespace-separated word at a time, use a `Scanner` on the file, as you did with the keyboard:
 
 ```java
-List<String> lines = Files.readAllLines(file);
-System.out.println("Line count: " + lines.size());
-System.out.println("Second line: " + lines.get(1));
+Scanner words = new Scanner(new File("data/notes.txt"));
+while (words.hasNext()) {
+    String word = words.next();
+    // word holds one word at a time
+}
 ```
 
-The output is:
-
-```text
-Line count: 3
-Second line: bananas
-```
-
-`readAllLines` returns a `List<String>`. A `List` holds a sequence of items, and it's the Java way to hold a list whose length can change, unlike an array. The `size()` method gives the number of items, and `get(1)` returns the item at index 1. Indexes count from 0, as they do for arrays, so index 1 is the second line.
-
-The collections chapter covers `List` in depth. For now, the important part is that `readAllLines` gives you one item for each line, with no line breaks in them.
-
-### Reading a file that's missing
-
-If the file doesn't exist, `readString` and `readAllLines` throw a `NoSuchFileException`. The program in this step writes the file first, which is why it runs. A real program should check with `Files.exists` before reading, as the last step showed, or handle the exception.
+The loop stops at the end of the file, because `hasNext` returns `false` there. Each `next` skips spaces and newlines, so the loop sees every word whatever the line breaks look like. Use `readLine` when the line structure matters, and `Scanner` when it doesn't.
 
 ---
 
@@ -55,33 +58,33 @@ If the file doesn't exist, `readString` and `readAllLines` throw a `NoSuchFileEx
 *These questions are written for this course.*
 
 ````quiz
-Which method reads a file as one String, with its line breaks kept?
-○ Files.readAllLines
-→ Not quite. That returns a List with one item per line, and the breaks aren't in the items.
-◉ Files.readString
-→ Yes. It returns the whole file as one String, with its line breaks included.
-○ Files.exists
-→ Not quite. That checks whether the file is there, and doesn't read it.
+What does `readLine` return when the file has no more lines?
+○ An empty string.
+→ Not quite. An empty string would be a blank line, which is not the end of the file.
+◉ null, so the while loop stops.
+→ Yes. A read with no line left returns null, which ends the loop.
+○ A newline character.
+→ Not quite. The newline is dropped, and there's nothing left to return.
 ````
 
 ````quiz
-What is `lines.get(0)` in the program?
-○ The last line of the file.
-→ Not quite. Index 0 is the first item, not the last.
-◉ The first line, "apples".
-→ Yes. Indexes count from 0, so index 0 is the first line.
-○ The whole file as one String.
-→ Not quite. That's what readString returns, not the first line.
+Why does the program catch an exception around the file open?
+○ Because reading from a file always fails the first time.
+→ Not quite. Reading works when the file opens.
+◉ Because a missing file must be reported, rather than letting the program stop without a message.
+→ Yes. The catch block tells the reader what went wrong.
+○ Because the catch moves the reading position to the start.
+→ Not quite. Catching an exception doesn't move anything in the file.
 ````
 
 ---
 
 ### Try it in the runner
 
-Change the second line of the file's text to `"bananas\n\n"`, so the file has an empty line in the middle, and predict `lines.size()`. It's 4, because `readAllLines` keeps the empty line as an item. Restore the original text before you continue.
+Change the file name to `data/missing.txt` in the reader, and press **Run**. The program reports that it couldn't open the file. Change the name back before you continue.
 
-Then change `lines.get(1)` to `lines.get(3)`, and predict the result. Index 3 is past the end of a three-line list, so the program throws an `IndexOutOfBoundsException`. Restore the index before you continue.
+Then replace the `readLine` loop with the `Scanner` word loop from the lesson, counting words instead of lines. Predict the count for the three notes before you run it. The notes contain 4, 5, and 5 words, so the total is 14. Each word is counted with its punctuation attached, so `note:` is one word.
 
 ---
 
-Reading a file gives you text, either all at once or as a list of lines. The next step covers what happens when a file that already exists is written again, and how to add to the end of one.
+Reading and writing use the same ideas in opposite directions. The next step puts them together with a problem that catches many programmers out: what happens when a file is written over, and the new text is shorter than the old.

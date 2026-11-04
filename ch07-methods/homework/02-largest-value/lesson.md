@@ -1,4 +1,4 @@
-## Largest value
+## Homework: Largest value
 
 Write a method that takes an array of `int` values and returns the largest one. Use it on two arrays, and print each result.
 

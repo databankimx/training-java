@@ -2,7 +2,7 @@
 
 So far the program asks the user for values once it's running. Many programs take their values before they start, by reading words typed after the program's name. Those words are called command-line arguments. You've already used them: the runner's argument box sends whatever you type there to the program in exactly this way.
 
-Here's the program for this step, in `src/Main.java`. Press **Run** with no arguments first, then type the arguments in the box, as `4 9`, and press Run again. The quick picks above the box already contain both runs.
+Here's the program for this step, in `src/Main.java`. Press **Run** with no arguments first, then type the arguments in the box, as `4 9`, and press Run again.
 
 ```java
 public class Main {
@@ -32,13 +32,13 @@ Argument 2: 9
 4 + 9 = 13
 ```
 
-With no arguments, the output is the single line asking for two numbers, and `Arguments received: 0`.
+With no arguments, the output is `Arguments received: 0`, followed by the line asking for two numbers.
 
 ### args
 
-`main` takes one parameter that carries the arguments. `args` is an array of text, one item for each word typed after the program's name. `args.length` is the number of words, and `args[0]` is the first word the user typed.
+`main` takes one parameter that carries the arguments. `args` is an array of text, with one item for each word typed after the program's name. `args.length` is the number of words, and `args[0]` is the first word the user typed.
 
-That's a difference from C++, where the program's own name is included in the list. In Java, the name isn't passed in, so `args[0]` is the first argument, and the loop starts at 0. The output still numbers the arguments from 1, because that's how a reader expects to count them.
+The program's own name isn't passed in, so `args[0]` is the first argument, and the loop starts at 0. The output still numbers the arguments from 1, because that's how a reader expects to count them.
 
 ### Arguments are text
 

@@ -1,4 +1,4 @@
-## Same place
+## Homework: Same place
 
 Two places are recorded as points. Use `equals` and `==` to compare them, and predict each result before you run the program.
 

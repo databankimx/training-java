@@ -76,7 +76,7 @@ Adult and has ticket: false
 Adult or has ticket: true
 ```
 
-`age >= 18` is true, and `hasTicket` is false. So `&&` is false, because the person hasn't got a ticket, and `||` is true, because being an adult is enough for an OR. Each side of an operator is a full expression, so the comparison doesn't need extra parentheses. The outer parentheses are there only so the result is joined to the text after the calculation is done.
+`age >= 18` is true, and `hasTicket` is false. So `&&` is false, because the person hasn't got a ticket, and `||` is true, because being an adult is enough for an OR. Each side of an operator is a full expression, so the comparison doesn't need extra parentheses around it.
 
 ### Short-circuit evaluation
 
@@ -109,7 +109,7 @@ Here's the table for XOR:
 | f | T | t |
 | f | F | f |
 
-Java has a logical XOR operator, `^`, which works on `boolean` values. The program shows that next to two other ways of writing the same test:
+Java has a logical XOR operator, `^`, which works on `boolean` values. The program shows it next to two other ways of writing the same test:
 
 ```java
 boolean p = true;
@@ -131,7 +131,7 @@ p != q: true
 p ^ q: true
 ```
 
-The first form spells the logic out. The first half, `p || q`, needs at least one true input. The second half, `!(p && q)`, rules out the case where both are true. Together, they're true only when exactly one input is true.
+The first form spells the logic out. The first half, `p || q`, needs at least one true input. The second half, `!(p && q)`, rules out the case where both are true. Together, they're true only when exactly one input is true. It's longer, but each part maps directly onto the definition.
 
 The second form, `p != q`, is shorter. Two `boolean` values are different exactly when one is true and the other is false, which is XOR by definition.
 

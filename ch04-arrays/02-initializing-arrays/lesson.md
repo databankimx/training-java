@@ -45,7 +45,7 @@ The output is:
 Fourth square (not set yet): 0
 ```
 
-Java never leaves an element with a random value. The fourth square was never set, so it's the default for `int`, which is 0. In C++, the same element would hold whatever was in memory, and reading it would be undefined behavior. Java's default values are one of the reasons Java programs are easier to predict.
+Java never leaves an element with a random value. The fourth square holds the default for `int`, which is 0.
 
 ### Object arrays and null
 

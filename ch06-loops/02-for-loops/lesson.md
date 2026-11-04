@@ -1,74 +1,84 @@
 ## For loops
 
-When you know how many times a loop should run, the `for` loop puts everything about it in one line. The parentheses hold three parts, separated by semicolons: where the loop starts, the condition that keeps it going, and the step taken after each pass.
+A `while` loop leaves the counter to you. You set it before the loop, and you change it inside the loop. Counting loops are so common that Java has a loop built for them: the `for` loop. It keeps the start, the condition, and the step together, on one line at the top.
 
 Here's the first part of this step's program, in `src/Main.java`:
 
 ```java
-for (int i = 1; i <= 3; i++) {
-    System.out.println("for pass " + i);
+for (int i = 0; i < 5; ++i) {
+    System.out.println(i + 1);
 }
 ```
 
 Press **Run**. The output is:
 
 ```text
-for pass 1
-for pass 2
-for pass 3
+Counting up:
+1
+2
+3
+4
+5
 ```
 
-`int i = 1` runs once, at the start. It declares the counter `i`, which exists only inside the loop. `i <= 3` is checked before each pass, and `i++` runs after each pass, adding one to the counter.
+The three parts inside the parentheses are separated by semicolons:
 
-Declaring the counter in the `for` line keeps it from leaking out of the loop, so the next loop in the program can use the name `i` again. Java does this for you, and it's the usual style.
+* `int i = 0` runs once, before the loop starts. It creates the counter, which exists only inside the loop.
+* `i < 5` is checked before each pass, as in a `while` loop. When it's false, the loop stops.
+* `++i` runs after each pass. It moves the counter on before the next check.
+
+The output starts at 1 because the body prints `i + 1`, while the counter itself starts at 0. The counter stops at 4 because the loop stops as soon as `i` reaches 5.
 
 ### Changing the step
 
-The step doesn't have to be one. The second loop counts down by five:
+The step doesn't have to be 1. The next loop adds 2 each time:
 
 ```java
-for (int i = 10; i >= 0; i -= 5) {
-    System.out.println("counting down: " + i);
+for (int i = 0; i < 10; i += 2) {
+    System.out.println(i + 2);
 }
 ```
 
-The output is:
+The output is 2, 4, 6, 8, 10. The counter takes the values 0, 2, 4, 6, and 8, and the body adds 2 to each one for display.
 
-```text
-counting down: 10
-counting down: 5
-counting down: 0
+The loop can also count down. Here `i--` subtracts 1 after each pass:
+
+```java
+for (int i = 5; i > 0; i--) {
+    System.out.println(i);
+}
 ```
 
-`i -= 5` takes five away after each pass. The condition `i >= 0` stops the loop once the counter goes below zero. The loop runs for 10, 5, and 0, and then 0 minus 5 fails the test.
+The output is 5, 4, 3, 2, 1. Notice that the condition is `i > 0`, not `i < 0`. The loop has to keep going while the counter is still positive.
+
+It doesn't matter whether you write `++i` or `i++` in the step part of a `for` loop, because the value of the step isn't used. Many programmers prefer `++i`, so it's the form this course uses.
 
 ### Nested loops
 
-A loop inside another loop runs the inner one completely for each pass of the outer one. The last loop in the program prints a small grid:
+A loop can sit inside another loop. The inner loop runs completely for each pass of the outer one:
 
 ```java
-for (int row = 1; row <= 2; row++) {
-    for (int col = 1; col <= 3; col++) {
-        System.out.print(row + "," + col + " ");
+for (int i = 0; i < 2; ++i) {
+    for (int j = 0; j < 3; ++j) {
+        System.out.println(i + ", " + j);
     }
-    System.out.println();
 }
 ```
 
 The output is:
 
 ```text
-1,1 1,2 1,3 
-2,1 2,2 2,3 
+0, 0
+0, 1
+0, 2
+1, 0
+1, 1
+1, 2
 ```
 
-The outer loop runs twice, for `row` 1 and 2. For each row, the inner loop runs three times, for `col` 1 to 3. The `System.out.print` keeps the output on one line, and `System.out.println()` with no text ends the row.
+The outer counter `i` stays at 0 while the inner counter `j` runs through 0, 1, and 2. Then `i` moves to 1, and `j` starts again from 0. The inner loop has its own `j`, so the two counters don't interfere.
 
-Each row ends with a space, because the inner loop prints a space after every pair. That's harmless here, but it's worth knowing it's there.
-
-### Which loop to choose
-
-Use `for` when the number of passes is known, or when the counter moves in a regular way. Use `while` when the loop depends on something that changes unpredictably, such as user input. Both can do the same job, but the `for` line makes the counting easier to read.
+Nested loops are how you work with grids and tables. They're also a common place to make mistakes, because it's easy to use the wrong counter in the inner loop. Give each counter a clear name when the loops are big.
 
 ---
 
@@ -77,33 +87,34 @@ Use `for` when the number of passes is known, or when the counter moves in a reg
 *These questions are written for this course.*
 
 ````quiz
-How many times does `for (int i = 0; i < 3; i++)` run?
-○ Two times.
-→ Not quite. The counter starts at 0 and runs while it's below 3, so it's 0, 1, and 2.
-◉ Three times.
-→ Yes. The counter takes the values 0, 1, and 2.
-○ Four times.
-→ Not quite. The condition i < 3 stops the loop before i reaches 3.
+In `for (int i = 0; i < 5; ++i)`, when does `++i` run?
+○ Before the first pass.
+→ Not quite. The start part, `int i = 0`, runs before the first pass.
+◉ After each pass, before the next check of the condition.
+→ Yes. The step runs after the body, and then the condition is checked again.
+○ Only once, at the end of the loop.
+→ Not quite. It runs after every pass that finishes.
 ````
 
 ````quiz
-In a nested loop, how many times does the inner loop body run in total when the outer loop runs 2 times and the inner loop runs 3 times on each pass?
+How many lines does this loop print in total?
+`for (int i = 0; i < 2; ++i) { for (int j = 0; j < 3; ++j) { ... } }`
+○ 2
+→ Not quite. The inner loop runs three times for each pass of the outer loop.
 ○ 3
-→ Not quite. That's only one pass of the inner loop.
+→ Not quite. The outer loop runs twice, so the inner loop runs in full twice.
 ◉ 6
-→ Yes. The inner loop runs 3 times for each of the 2 passes of the outer loop.
-○ 5
-→ Not quite. The inner loop body runs 2 times 3, which is 6.
+→ Yes. Two passes of the outer loop, each with three passes of the inner loop.
 ````
 
 ---
 
 ### Try it in the runner
 
-Change `i <= 3` in the first loop to `i < 3`, and predict the output. The loop now runs for 1 and 2 only, so it prints two lines. Restore the original condition before you continue.
+Change the step in the counting-by-twos loop from `i += 2` to `i += 3`, and press **Run**. Before you do, predict the numbers. The counter takes the values 0, 3, 6, and 9, and the body adds 2 to each, so the output is 2, 5, 8, and 11.
 
-Then change `i -= 5` to `i -= 3` in the second loop, and predict the output. The counter takes the values 10, 7, 4, 1, and then stops at -2, which is below zero. It prints four lines: 10, 7, 4, and 1.
+Then change the nested loops so the outer loop runs three times, and predict how many lines print. The answer is nine, since three passes of the outer loop each run three passes of the inner loop.
 
 ---
 
-A `for` loop gathers the start, the test, and the step into one line. The next step covers `for` loops that go over every element of an array, which is the most common case in practice.
+The `for` loop is the one to reach for whenever you know how many times something should repeat. The next step shows a shorter form of the loop, which works on a list of values.

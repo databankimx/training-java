@@ -1,29 +1,23 @@
 public class Main {
+    static int addFive(int x) {
+        return 5 + x;
+    }
+
+    static int add(int x, int y) {
+        return x + y;
+    }
+
+    static double add(double x, double y) {
+        return x + y;
+    }
+
     public static void main(String[] args) {
-        System.out.println("add(2, 3): " + add(2, 3));
-        System.out.println("add(2.5, 1.5): " + add(2.5, 1.5));
-        System.out.println("add(1, 2, 3): " + add(1, 2, 3));
-        System.out.println("greeting: " + greeting());
-        System.out.println("greeting(Ada): " + greeting("Ada"));
-    }
+        int res = addFive(3);
+        System.out.println(res);
 
-    static int add(int a, int b) {
-        return a + b;
-    }
-
-    static double add(double a, double b) {
-        return a + b;
-    }
-
-    static int add(int a, int b, int c) {
-        return a + b + c;
-    }
-
-    static String greeting() {
-        return "Hello, world.";
-    }
-
-    static String greeting(String name) {
-        return "Hello, " + name + ".";
+        int whole = add(8, 5);
+        double decimal = add(4.3, 6.26);
+        System.out.println("Int: " + whole);
+        System.out.printf("Double: %.2f%n", decimal);
     }
 }

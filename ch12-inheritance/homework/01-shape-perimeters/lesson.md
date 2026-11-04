@@ -1,4 +1,4 @@
-## Shape perimeters
+## Homework: Shape perimeters
 
 Add a perimeter to the shape hierarchy. `Shape` declares `perimeter` as an abstract method, and each concrete shape supplies its own formula. Print the perimeter of a rectangle and a circle through the parent type.
 

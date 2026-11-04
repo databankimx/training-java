@@ -1,28 +1,29 @@
 ## Set up your workstation
 
-This step has no code. It checks that the tools are in place before you write any.
+Before we write any Java, we need a Java compiler, which turns the text you write into a program the computer can run. This course uses **Eclipse Temurin 25**, the Java 25 runtime and development kit, and **Maven**, which builds the lesson runner itself. If you haven't set them up yet, do that first.
 
-You need two things: the Java Development Kit (JDK), which compiles and runs Java programs, and this runner, which shows your work. This course uses Eclipse Temurin 25 LTS, a third-party build of the JDK.
+The full steps are in [QUICKSTART.md](../../QUICKSTART.md) at the root of the repository. The short version is:
 
-### Check the JDK
+1. Install Eclipse Temurin 25 to `C:\Program Files\Eclipse Adoptium`.
+2. Install Maven, and check that `mvn` is on your PATH.
+3. Start the lesson runner.
 
-Open a terminal and run these two commands:
+### Check the compiler
+
+Open a PowerShell window, and run:
 
 ```pwsh
-java -version
 javac -version
 ```
 
-The first prints the version of the Java runtime, and the second prints the version of the compiler. Both should report version 25. Temurin prints its name in the first line, such as `Temurin-25`.
+You should see a version number of 25. If you see an older version, or the command isn't found, the runner won't build the later chapters, so check your PATH or the installation.
 
-If either command isn't found, the JDK isn't on your PATH. Install Temurin 25 and open a new terminal, so the change takes effect.
+### What is this step for?
 
-### Check the runner
+This step doesn't have any code to run, and that's on purpose. The Run button is grayed out, and the Source tab says the step has no code. Read the lesson, make sure the setup works, and then move on to the next step.
 
-If you can read this page, the runner is working. Its menu lists the chapters, and the Output pane is empty until you run a step.
-
-**Check:** `javac -version` prints 25, and this page is showing in the runner.
+When everything is working, you'll have a compiler, Maven, and the runner itself. You don't need to know how those fit together yet. The next lessons will show you what happens when you press Run.
 
 ---
 
-*This step has no code, so there is nothing to run.*
+And that's the whole setup. From here on, the work happens in the runner.

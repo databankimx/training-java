@@ -1,4 +1,4 @@
-## Read with cleanup
+## Homework: Read with cleanup
 
 The program writes a file with two readings, then reads three lines from it. The file has only two, so the third read has nothing to return. This exercise shows what the program does with that, and how the cleanup runs.
 

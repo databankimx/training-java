@@ -1,50 +1,44 @@
 ## Summary: Getting started
 
-This chapter covered the tools, and the shape of a Java program.
+This chapter covered the smallest complete Java program, and the tools that compile and run it.
 
-* **The JDK has two parts.** `javac` compiles source into bytecode, and `java` runs it.
-* **The runner works in two stages.** Compiling reports any errors, and running shows what the program prints.
-* **A class's name must match its file.** A public class `Main` lives in `Main.java`.
-* **Execution starts in `main`.** The runtime calls `public static void main(String[] args)` first.
-* **`System.out.println` prints a line.** `System` comes from `java.lang`, which Java imports for every program.
-* **Other packages need an import.** `import java.util.List;` tells the compiler where `List` lives.
-* **Comments are for readers.** `//` for a line, `/* */` for a block, and `/** */` for documentation read by javadoc.
-* **Comments are not checked.** Keep them in step with the code they describe.
+* **A program starts in `main`.** Every program has a `public static void main(String[] args)` method, and the runtime calls it first.
+* **`System.out.println` writes output.** It prints its text and moves to a new line. `System.out.print` prints without the new line.
+* **Imports name classes from other packages.** `java.lang` is imported automatically. Other packages need an `import`, or a full name that includes the package.
+* **Comments are notes for readers.** `//` runs to the end of the line, and `/* ... */` can cover several lines. The compiler ignores both.
+* **A class is in a file with its name.** `public class Main` is in `Main.java`.
+* **A run has two stages.** The runner compiles the source with `javac`, and then runs the program with `java`. Knowing which stage failed tells you where to look.
 
 ### Check your understanding
 
 *These questions are written for this course.*
 
 ````quiz
-What happens when you press Run on a Java step?
-○ The source is run directly, with no compile step.
-→ Not quite. Java source is always compiled first.
-◉ The source is compiled with javac, and the compiled class is run with java.
-→ Yes. The two stages match the two lines the Output pane shows.
-○ The program is copied to a folder and started from there.
-→ Not quite. The runner compiles the program and runs the compiled class.
+Which method is the program's starting point?
+○ start
+→ Not quite. Java doesn't look for a method with that name.
+◉ main
+→ Yes. The runtime calls main first, and it must have the signature shown in the lesson.
+○ run
+→ Not quite. The runtime doesn't look for a method called run.
 ````
 
 ````quiz
-Which name must match the file name for a public class?
-○ The method name.
-→ Not quite. The method name is main, and it doesn't need to match the file.
-◉ The class name.
-→ Yes. A public class must be declared in a file with the same name.
-○ The name of the folder.
-→ Not quite. The file name matters, not the folder.
+Which line is a comment?
+◉ // Print the greeting before the prompt
+→ Yes. Everything after // on that line is ignored by the compiler.
+○ System.out.println("Hello");
+→ Not quite. That line is code, and the compiler runs it.
+○ import java.util.ArrayList;
+→ Not quite. An import is a statement, and it tells the compiler what a name refers to.
 ````
 
 ````quiz
-Why does `List` need an import, when `System` doesn't?
-○ Because List is a newer class.
-→ Not quite. Age has nothing to do with it.
-◉ Because `System` is in java.lang, which Java imports automatically, and `List` is in java.util.
-→ Yes. Only java.lang is imported for you.
-○ Because `System` is a keyword.
-→ Not quite. System is a class, and it isn't a keyword.
+When the Output pane shows "Compiling", which stage is it?
+○ Running the program.
+→ Not quite. That's the stage that shows the program's own output.
+◉ Compiling the source into a class file.
+→ Yes. The compiler turns the source into bytecode in the compiling stage.
+○ Saving the file.
+→ Not quite. The runner doesn't save anything when you press Run.
 ````
-
----
-
-The next chapter covers the variables a program uses to hold values, and reading input from the user.

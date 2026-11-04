@@ -1,4 +1,4 @@
-## Payroll
+## Homework: Payroll
 
 A company pays two kinds of employee. A salaried employee earns a fixed annual salary, and an hourly employee earns a rate for each hour worked. Both have a name and a monthly pay, but the pay is worked out in different ways. Write the hierarchy, and print the monthly pay of each employee through the parent type.
 

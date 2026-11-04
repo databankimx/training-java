@@ -1,68 +1,46 @@
 ## Comments
 
-A comment is text the compiler ignores. It's there for the people who read the code, including you in six months. Java has three kinds, and this program uses each one.
+Programs are read far more often than they're written, and most of the reading is done by people, including future you. Comments are how you leave notes for those readers. The compiler ignores every one of them, so a comment can say as much as you like without changing what the program does.
+
+Java has two kinds of comment:
+
+* `//` starts a comment that runs to the end of the line. It's the one you'll use most.
+* `/* ... */` makes a comment that can cover several lines, or part of one.
+
+Here's the program from the first lesson, with comments added:
 
 ```java
-/**
- * A program that prints a greeting.
- *
- * This is a documentation comment. Tools such as javadoc read it to build the program's reference pages.
- */
-public class Main {
-    public static void main(String[] args) {
-        // A line comment runs from the two slashes to the end of the line.
-        System.out.println("Hello World!");
-
-        /* A block comment can cover several lines,
-           and the compiler ignores all of it. */
+// Hello World, with comments added. The compiler ignores this line.
+public class Main {                       // The class that holds the program
+    public static void main(String[] args) {   // The start of the program
+        System.out.println("Hello World!");    // println sends the text to the output
         System.out.println("I am learning Java");
+
+        /* The program has nothing more to do, so it finishes here.
+           A block comment can run over several lines. */
     }
 }
 ```
 
-Press **Run**. The output is the same as the first program:
+Press **Run**. The output is the same as before:
 
 ```text
 Hello World!
 I am learning Java
 ```
 
-### The three kinds
+Good comments explain something the code can't say for itself. A comment such as `// print hello` repeats the code in English, and it adds nothing. A comment such as `// Show the greeting before the prompt, so the user knows what to type` tells you why, and that's the part you'll need later.
 
-* **Line comments** start with `//`, and run to the end of the line. Use them for a short note on the line they sit beside, or above.
-* **Block comments** start with `/*` and end with `*/`, and can run over several lines. Use them for a longer note, or to switch off a few lines while you test.
-* **Documentation comments** start with `/**` and end with `*/`, and sit directly above a class, a method, or a field. The tool `javadoc` reads them to build a reference page. They're the comments to write for anyone who will use your code, rather than for yourself.
+The `public static void main` line is a fair example of a line that's worth a note. A comment that says what the method is for is more useful than one that says what the keywords mean, since the keywords are the same in every program.
 
-### What to write
-
-A comment should say why the code does something, or what a reader needs to know that the code doesn't show. It shouldn't repeat what the code already says. `// print hello` above `System.out.println("Hello")` adds nothing, while `// the greeting is printed before the course name, as the course asks` says something useful.
-
-### Comments are not checked
-
-The compiler doesn't check what a comment says. A comment that is out of date is worse than no comment, because a reader trusts it. When you change the code, change the comment above it at the same time.
-
----
-
-### Quiz
-
-*These questions are written for this course.*
-
-````quiz
-Which comment is the right kind for describing a class to someone who will use it?
-○ A line comment, starting with //.
-→ Not quite. A line comment is for a short note on one line, and it isn't read by documentation tools.
-◉ A documentation comment, starting with /**, above the class.
-→ Yes. javadoc reads these, so they describe the class for the people who use it.
-○ A block comment that is later removed.
-→ Not quite. Block comments are for longer notes or for switching off code, not for the reference description.
-````
+Comments can also be useful while you test. `/* ... */` lets you switch off part of a program without deleting it, so you can bring it back when you need it.
 
 ---
 
 ### Try it in the runner
 
-Put `//` in front of the `System.out.println("Hello World!");` line, and press **Run**. Only the second line prints, because the compiler ignores the commented-out line. Remove the `//` before you continue.
+Put `/*` in front of the second `println` line, and `*/` after it, so that line is inside a comment. Press **Run**. The second line of output disappears, because the compiler doesn't see that line at all. Remove the markers, and the line comes back.
 
 ---
 
-Comments change nothing the program does. They change how easily someone else can understand it.
+Comments cost you a few seconds when you write them, and they save a lot of time when someone, including you a month from now, has to read the code. Write them as you go, while the reason is still fresh.

@@ -1,4 +1,4 @@
-## Shared scores
+## Homework: Shared scores
 
 Two variables refer to one array of scores, and then one of them is given a new array. Work out what each variable sees, then write the program to check your answer.
 
