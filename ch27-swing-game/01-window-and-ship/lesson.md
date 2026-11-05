@@ -1,5 +1,7 @@
 ## The window and the ship
 
+The game and its design come from the Alien Invasion project in *Python Crash Course*, 3rd Edition, by Eric Matthes (No Starch Press). The lessons in this chapter, and the game's design, are borrowed from the Python version of this training, which is based on that book. Thank you to Eric Matthes for the project. The alien and ship images and animations, and the sound effects, are by Scott McLean, and may be used however users wish.
+
 This is the first step of the Alien Invasion game. The finished game is a single window where a ship at the bottom of the screen shoots at a fleet of aliens. This step builds the foundation: a window, a ship that moves with the arrow keys, and the timer that keeps the game moving. The game is split across several files, one per job, and this step uses four.
 
 Press **Run**. A window opens with a grey ship at the bottom. Press the left and right arrow keys, and the ship moves along the bottom edge. It stops at each side of the window.
