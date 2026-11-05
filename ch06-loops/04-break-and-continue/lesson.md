@@ -98,4 +98,4 @@ Then change `j <= 5` to `j <= 7` in the second loop, and predict the output. The
 
 ---
 
-`break` and `continue` give you control inside a loop, without rearranging the loop itself. The summary and homework put all of the chapter's loops to work.
+`break` and `continue` give you control inside a loop, without rearranging the loop itself. The next step shows how your own class can be used in an enhanced `for` loop.

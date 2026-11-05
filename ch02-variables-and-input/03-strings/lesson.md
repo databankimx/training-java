@@ -103,4 +103,4 @@ Change `greeting.charAt(0)` to `greeting.charAt(4)`, and predict the letter befo
 
 ---
 
-That's enough about strings for now. The next step asks the user for text, which is where you'll first put a string to work with real input.
+That's enough about strings for now. The next step covers the methods that work on strings: trimming, searching, splitting, and formatting.

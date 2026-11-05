@@ -1,15 +1,16 @@
-## Ch02 · Variables and Input
+## Ch02 · Variables and input
 
-Chapter 1 ended with programs that only print fixed text. This chapter adds the two things that make a program do real work: a place to keep values, which are variables, and a way to get values from the person using the program, which is input.
+A program needs somewhere to keep values, and a way to get them from the person using it. This chapter covers variables and their types, arithmetic and the rules that decide its results, strings and the methods that work on them, reading input from the keyboard, and values passed in on the command line.
 
 The steps are:
 
-* [Variables](#goto/01-variables): declaring and changing variables, the common types, the numeric types and characters, naming rules, and constants.
-* [Arithmetic](#goto/02-arithmetic): the operators, integer and decimal division, converting between types, printing decimals neatly, and the math methods.
-* [Strings](#goto/03-strings): an introduction to text, with the basics. We come back to strings in more depth later.
-* [User input](#goto/04-user-input): reading a line of text and reading numbers from the user.
-* [Command-line arguments](#goto/05-command-line-arguments): receiving values when the program starts, and converting them.
-* [Summary](#goto/06-summary): a recap of the chapter and a short quiz. The homework is listed under the chapter.
+* [Variables](#goto/01-variables): declaring variables, the basic types, and constants.
+* [Arithmetic](#goto/02-arithmetic): the operators, integer division, precedence, and the math methods.
+* [Strings](#goto/03-strings): creating, joining, and measuring text.
+* [String methods and formatting](#goto/04-string-methods): trimming, searching, splitting, comparing, and formatting text.
+* [User input](#goto/05-user-input): reading lines and numbers from the keyboard.
+* [Command-line arguments](#goto/06-command-line-arguments): values passed to the program before it starts.
+* [Summary](#goto/07-summary): a recap of the chapter and a short quiz. The homework is listed under the chapter.
 
 ---
 

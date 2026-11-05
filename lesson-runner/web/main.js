@@ -193,6 +193,34 @@ let spoilerHidden = false;
 let pickKind = "run";
 let stepCommands = [];
 
+// The last step or chapter the reader opened is remembered, so the next start of the runner opens it again.
+const LAST_KEY = "c-training-last";
+
+function rememberLast(last) {
+  localStorage.setItem(LAST_KEY, JSON.stringify(last));
+}
+
+function restoreLast() {
+  let last = null;
+  try {
+    last = JSON.parse(localStorage.getItem(LAST_KEY) || "null");
+  } catch {
+    return;
+  }
+  if (!last) return;
+  const chapter = chapters.find((c) => c.path === last.chapterPath);
+  if (!chapter) return;
+  if (last.kind === "step") {
+    const step = [...chapter.steps, ...chapter.homework].find((s) => s.path === last.stepPath);
+    if (step) selectStep(chapter, step);
+  } else if (last.kind === "section") {
+    const section = chapter.sections.find((s) => s.path === last.sectionPath);
+    if (section) selectSection(chapter, section);
+  } else {
+    selectChapter(chapter);
+  }
+}
+
 // Output
 
 /** Colors a line by what it says, so compiler status is not mistaken for an error. */
@@ -348,6 +376,7 @@ function selectSection(chapter, section) {
   selectedChapter = chapter;
   selectedSection = section;
   homeworkMode = false;
+  rememberLast({ kind: "section", chapterPath: chapter.path, sectionPath: section.path });
   renderChapters();
   renderSteps();
   showOverview(section.path, "section:" + section.path, section.title, chapter.title);
@@ -401,6 +430,7 @@ function selectChapter(chapter) {
   selectedChapter = chapter;
   selectedSection = null;
   homeworkMode = false;
+  rememberLast({ kind: "chapter", chapterPath: chapter.path });
   renderChapters();
   renderSteps();
   revealSubChapters();
@@ -446,6 +476,7 @@ async function selectStep(chapter, step) {
     clearOutputFiles();
   }
   selectedStep = step;
+  rememberLast({ kind: "step", chapterPath: chapter.path, stepPath: step.path });
   renderStepOptions(step);
   titleEl.textContent = step.title;
   subtitleEl.textContent = homeworkMode ? `${chapter.title} · ${chapter.homework_title}` : selectedSection ? selectedSection.title : chapter.title;
@@ -936,6 +967,7 @@ invoke("list_parts")
     openPart = null;
     chapters = result.flatMap((part) => part.chapters);
     renderChapters();
+    restoreLast();
   })
   .catch((error) => appendOutput(`${error}\n`, "stderr"));
 

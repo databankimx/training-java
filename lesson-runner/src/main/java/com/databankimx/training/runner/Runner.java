@@ -55,7 +55,7 @@ final class Runner {
                 compileAndRun(step, source, programArgs, test);
             } catch (Exception error) {
                 output(error.getMessage() == null ? error.toString() : error.getMessage() + "\n", "stderr");
-                finished(null);
+                finished(1);
             }
         }, "run-step");
         worker.setDaemon(true);
@@ -71,6 +71,10 @@ final class Runner {
         copyTree(step.resolve("src"), sources);
         // A test is a class named Tests in the step's tests folder. It is compiled with the step's source.
         copyTree(step.resolve("tests"), build.resolve("tests"));
+        // Chapter assets, such as images and sounds, are shared by the chapter's steps, so they are copied beside the program.
+        if (step.getParent() != null) {
+            copyTree(step.getParent().resolve("assets"), build.resolve("assets"));
+        }
         // The visualizer page is copied beside the program, so the trace the program writes is found next to it.
         Path page = step.resolve("visualize.html");
         if (Files.isRegularFile(page)) {
@@ -82,12 +86,18 @@ final class Runner {
 
         status("Compiling " + step.getFileName() + "...");
         List<String> files = new ArrayList<>(javaFiles(sources));
-        files.addAll(javaFiles(build.resolve("tests")));
+        if (test) {
+            files.addAll(javaFiles(build.resolve("tests")));
+        }
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         if (compiler == null) {
             throw new IllegalStateException("No Java compiler is available. The runner needs a full JDK, not a JRE.");
         }
+        Path junitJar = test && usesJUnit(build.resolve("tests")) ? junitJar(step) : null;
         List<String> options = new ArrayList<>(List.of("-encoding", "UTF-8", "-d", classes.toString()));
+        if (junitJar != null) {
+            options.addAll(List.of("-cp", junitJar.toString()));
+        }
         options.addAll(files);
         ByteArrayOutputStream messages = new ByteArrayOutputStream();
         int compiled = compiler.run(null, null, messages, options.toArray(new String[0]));
@@ -103,7 +113,10 @@ final class Runner {
         status(test ? "Running tests" : "Running Main");
         String java = Paths.get(System.getProperty("java.home"), "bin", "java.exe").toString();
         String mainClass = test ? "Tests" : "Main";
-        List<String> command = new ArrayList<>(List.of(java, "-cp", classes.toString(), mainClass));
+        List<String> command = junitJar != null
+                ? new ArrayList<>(List.of(java, "-jar", junitJar.toString(), "execute", "--disable-ansi-colors", "--class-path", classes.toString(),
+                        "--scan-class-path", classes.toString(), "--details", "tree"))
+                : new ArrayList<>(List.of(java, "-cp", classes.toString(), mainClass));
         command.addAll(programArgs);
         process = new ProcessBuilder(command).directory(build.toFile()).start();
         input = process.getOutputStream();
@@ -175,6 +188,33 @@ final class Runner {
         message.addProperty("event", name);
         message.add("payload", payload);
         events.accept(message);
+    }
+
+    /** True when a test in the step's tests folder uses JUnit, so the JUnit launcher must run it. */
+    private static boolean usesJUnit(Path tests) throws IOException {
+        for (String file : javaFiles(tests)) {
+            if (Files.readString(Path.of(file)).contains("org.junit")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** The JUnit console launcher, kept with the course's other vendored files. Throws when it is missing. */
+    private static Path junitJar(Path step) {
+        Path root = step;
+        while (root != null && !Files.exists(root.resolve("parts.json"))) {
+            root = root.getParent();
+        }
+        if (root == null) {
+            throw new IllegalStateException("Could not find the course folder above " + step);
+        }
+        Path jar = root.resolve("resources").resolve("vendor").resolve("junit")
+                .resolve("junit-platform-console-standalone.jar");
+        if (!Files.isRegularFile(jar)) {
+            throw new IllegalStateException("JUnit is not installed. Place junit-platform-console-standalone.jar in resources\\vendor\\junit, then press Test again.");
+        }
+        return jar;
     }
 
     private static List<String> javaFiles(Path dir) throws IOException {
