@@ -1,15 +1,5 @@
-## Banner: walkthrough
+## Homework: A banner: walkthrough
 
-The box is three lines. The top and bottom borders are nine stars, which is the width of the middle line, and the middle line is the word between a star and a space at each side:
+The top and bottom lines are ten stars. The middle line is an asterisk, a space, the greeting `Hello!`, a space, and an asterisk, which is also ten characters. Each line is printed by its own `println`, so the three lines stack up as a box.
 
-```java
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("*********");
-        System.out.println("* HELLO *");
-        System.out.println("*********");
-    }
-}
-```
-
-The middle line has seven characters inside the stars, which is the five letters of HELLO and a space on each side. The border has to be the same width as that line, or the box won't close.
+Counting the characters is the check that matters. A line that's one character longer or shorter breaks the box, and it's the easiest mistake to make when the lines are typed by hand.

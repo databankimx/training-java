@@ -32,11 +32,16 @@ public final class FetchNatives {
 
     public static void run(Path natives, boolean rewriteManifest) throws Exception {
         Path manifest = natives.resolve(MANIFEST_NAME);
-        if (Files.exists(manifest) && !rewriteManifest) {
-            System.out.println(manifest + " already exists.");
-            System.out.println("Review the files, then run with --rewrite-manifest to record new hashes.");
-            System.exit(1);
+        boolean manifestExists = Files.exists(manifest);
+        // A missing manifest can only be recorded by its owner, on purpose. Otherwise a fresh clone would approve
+        // whatever it downloaded.
+        if (!manifestExists && !rewriteManifest) {
+            throw new IllegalStateException(
+                    "natives.sha256 is not in the repository. Only the course owner records the approved hashes, with "
+                    + "--fetch-natives --rewrite-manifest, on the machine that approves them.");
         }
+        // An approved manifest is never overwritten. The fetch installs the natives, then checks them against it.
+        boolean approved = manifestExists && !rewriteManifest;
 
         Files.createDirectories(natives);
 
@@ -47,13 +52,41 @@ public final class FetchNatives {
         CefApp app = builder.build();
         app.dispose();
 
+        if (approved) {
+            verify(manifest, natives);
+            System.out.println("The natives match the approved hashes in " + manifest);
+            return;
+        }
+
         List<String> lines = new ArrayList<>();
         for (Path file : nativeFiles(natives)) {
             String relative = natives.relativize(file).toString();
             lines.add(sha256(file) + "  " + relative);
         }
+        // Recreate the folder in case the browser install replaced it, then record the hashes.
+        Files.createDirectories(natives);
         Files.write(manifest, lines);
         System.out.println("Recorded " + lines.size() + " file(s) in " + manifest);
+    }
+
+    /** Checks each file named in the approved manifest against its recorded hash. A missing or changed file fails. */
+    private static void verify(Path manifest, Path natives) throws Exception {
+        List<String> problems = new ArrayList<>();
+        for (String line : Files.readAllLines(manifest)) {
+            if (line.isBlank()) {
+                continue;
+            }
+            String[] parts = line.split("  ", 2);
+            Path file = natives.resolve(parts[1]);
+            if (!Files.isRegularFile(file)) {
+                problems.add("missing " + parts[1]);
+            } else if (!sha256(file).equals(parts[0])) {
+                problems.add("changed " + parts[1]);
+            }
+        }
+        if (!problems.isEmpty()) {
+            throw new IllegalStateException("The natives do not match the approved hashes: " + problems);
+        }
     }
 
     /** Every regular file under the natives folder, except the manifest itself, in a fixed order. */

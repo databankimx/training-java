@@ -1,30 +1,24 @@
-## Introduce yourself
+## Homework: Introduce yourself
 
-Write a program that prints three lines: your name, the city you live in, and one thing you want to learn from this course.
+Write a program that introduces you in three lines. The program should print:
 
-Write your own program in your project first. If you get stuck, reveal the example: the source shows the finished program, and the section below says which lines to change for your own answers.
+* your name, as `My name is ...`
+* where you're learning Java, as `I am learning Java at DataBank.`
+* one thing about yourself, as `I like ...`
 
-### Where to change the code
+Each line should end in a newline, so the output shows each line on its own. Use `System.out.println` for each line, and put the code in a `public class Main` with a `main` method, as in the lessons.
 
-In `main`, change the text in each of the three `System.out.println` lines:
-
-* the first line, after `"Name: "`, holds your name
-* the second line, after `"City: "`, holds the city you live in
-* the third line, after `"Learning: "`, holds what you want to learn
-
-Keep the quotation marks and the semicolon at the end of each line.
+Write your own program in your project first. If you get stuck, reveal the example: the source shows the finished program, and the section below says which lines to change for your own details.
 
 ### What to check
 
-When you press **Run**, the Output pane should show three lines, with your own answers in place of these examples:
-
-```text
-Name: Ada Lovelace
-City: London
-Learning: how to write programs that do real work
-```
+When you press **Run**, the three lines should appear in order, with the compiler and runner lines above them and the exit code at the bottom. Compare your output with the requirements, and fix any line that's missing or on the wrong line.
 
 ### Extensions
 
-* Print a blank line between the lines you wrote and the status line the runner shows, using `System.out.println()` with no text.
-* Add a comment above each line that says what it prints.
+* Print a fourth line, with the time you spent on this exercise.
+* Use `System.out.print` for one of the lines, followed by `System.out.println()` with no text to end it. Can you see any difference in the output?
+
+---
+
+*This exercise is not from the book. It practices the ideas in Chapter 1.*

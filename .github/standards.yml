@@ -1,0 +1,10 @@
+# DataBank Standards Policy Configuration
+# See Custom-Dev-Developer-Guide.md for full rule documentation.
+#
+# The chapter folders (ch*) contain training lessons and exercises. They are
+# teaching material, not production code, and are excluded from standards
+# enforcement. The lesson-runner application remains in scope.
+java:
+  excluded_globs:
+    - "ch*/**"
+    - "final-project/**"

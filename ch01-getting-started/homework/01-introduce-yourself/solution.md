@@ -1,15 +1,5 @@
-## Introduce yourself: walkthrough
+## Homework: Introduce yourself: walkthrough
 
-The program needs three calls to `System.out.println`, one inside `main` for each line:
+Each line is one call to `System.out.println`, so each one ends in a new line. The text inside the quotes is what appears in the output, so changing the words changes the introduction and nothing else.
 
-```java
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Name: Ada Lovelace");
-        System.out.println("City: London");
-        System.out.println("Learning: how to write programs that do real work");
-    }
-}
-```
-
-Each call prints its text and then a newline, so the three lines appear one under another. Replace the examples with your own answers.
+The three lines follow the requirements in order, and the `main` method and class are the same as in the hello-world lesson.

@@ -35,9 +35,18 @@
         "ch20-lambdas",
         "ch21-testing",
         "ch22-concurrency",
-        "ch23-build-systems",
+        "ch23-async-programming",
         "ch24-debugging-and-sanitizers",
         "ch25-modern-features",
+        "ch26-swing-gui",
+        "ch27-swing-game",
+        "ch28-regular-expressions",
+        "ch29-bitwise-operators",
+        "ch30-recursion",
+        "ch31-dates-and-times",
+        "ch32-trie",
+        "ch33-json",
+        "ch34-maven",
         "final-project"
       ]
     }

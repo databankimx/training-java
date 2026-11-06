@@ -41,6 +41,9 @@ lesson-runner/runner.log
 # Runtime files that must never be committed: the Chromium runtime the JCEF sample app downloads (about 100 MB or more),
 # exception and debug logs from troubleshooting, and the packaged runner
 lesson-runner/jcef-bundle/
+lesson-runner/jcef-cache/
+# Written by setup.ps1 on each machine: the JDK folder that run.bat uses
+lesson-runner/jdk.path
 lesson-runner/exceptions*.txt
 lesson-runner/debug.log
 lesson-runner/dist/

@@ -3,7 +3,12 @@ package com.databankimx.training.runner;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
@@ -57,6 +62,15 @@ final class LessonWindow {
         });
         window.add(browser.getUIComponent(), BorderLayout.CENTER);
         BrowserSizing.follow(window, browser);
+        // The same Databank icon as the main window. If the file is missing, the Java icon is kept.
+        Path icon = Paths.get("resources", "icon_databank_blue.png");
+        try {
+            if (Files.exists(icon)) {
+                window.setIconImage(ImageIO.read(icon.toFile()));
+            }
+        } catch (IOException ignored) {
+            // The icon could not be read, so the Java icon is kept.
+        }
         window.setSize(900, 700);
         window.setLocationRelativeTo(null);
         window.setVisible(true);

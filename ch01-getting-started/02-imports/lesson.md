@@ -1,40 +1,41 @@
-## Imports
+## Imports and packages
 
-The last program used `System.out`, and it didn't need an import. The reason is that `System` belongs to `java.lang`, a package that Java imports into every program automatically. Most of the standard library is not like that. Its classes live in other packages, and a program must name them before it uses them.
+In the last lesson, `System.out.println` used the class name `System` directly, with no setup. Java's classes are grouped into packages, and a package is a named container for classes. The standard library puts `System` and `String` in `java.lang`, and that package is imported into every program automatically. Classes from other packages, such as `ArrayList` in `java.util`, need an import, or a full name that includes the package.
 
-This program uses `List`, which is in `java.util`, so it starts with an import:
+The program has two parts. The first uses a short name, after importing it:
 
 ```java
+import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
-    public static void main(String[] args) {
-        List<String> greetings = List.of("Hello World!", "I am learning Java");
-        for (String greeting : greetings) {
-            System.out.println(greeting);
-        }
-    }
-}
+List<String> names = new ArrayList<>();
+names.add("Ada");
+names.add("Grace");
+System.out.println(names);
 ```
 
-Press **Run**. The output is the same two lines as the last step:
+Press **Run**. The output is:
 
 ```text
-Hello World!
-I am learning Java
+[Ada, Grace]
 ```
 
-### What an import does
+The two `import` lines tell the compiler what `List` and `ArrayList` refer to, and they must come before the class. After that, the short names work throughout the file. `List` is an interface and `ArrayList` is the class that implements it, so the program declares the variable with the interface and creates the object with the class.
 
-`import java.util.List;` tells the compiler that the name `List` means `java.util.List`. The name in full is the package, followed by the class. Without the import, the compiler reports that it cannot find the symbol `List`, and the error names the line where the class is used.
+### Full names
 
-Every class has a full name made of its package and its own name. `java.util.List` is the list class in the `java.util` package. An import saves writing that full name every time.
+The second part doesn't use an import. It writes the full name, which includes the package:
 
-You can also import every class in a package with a star, such as `import java.util.*;`. Star imports are convenient in small programs, but a named import shows a reader exactly which classes the program uses, so the course names each one.
+```java
+java.util.ArrayList<String> other = new java.util.ArrayList<>();
+System.out.println(other.size());
+```
 
-### What Java imports for you
+The output is `0`. The full name always works, and it needs no import, but it's long. Most programs import the classes they use and write short names, and they use full names only when two packages contain a class with the same name.
 
-Java imports the `java.lang` package into every program. That's why `System`, `String`, and `Math` need no import. Everything else in the standard library needs one, with the exception of classes written in the same package as your program.
+### Wildcard imports
+
+An import can name a whole package with `*`, as in `import java.util.*;`. That brings in every public class of the package. It's shorter, and it's common in examples. Many style guides prefer naming each class, since a reader can then see at a glance where a name comes from, and since a wildcard can bring in a name that clashes with one you define yourself. The compiler reports a clash only when the ambiguous name is used.
 
 ---
 
@@ -43,21 +44,21 @@ Java imports the `java.lang` package into every program. That's why `System`, `S
 *These questions are written for this course.*
 
 ````quiz
-Why does this program need `import java.util.List;`?
-○ Because every Java program needs at least one import.
-→ Not quite. A program needs an import only for the classes it uses from other packages.
-◉ Because `List` is in `java.util`, which Java does not import automatically.
-→ Yes. Only java.lang is imported for you, and List is not in it.
-○ Because the import makes the program run faster.
-→ Not quite. An import tells the compiler where to find a class. It has no effect on speed.
+Which package is imported into every Java program automatically?
+○ java.util
+→ Not quite. java.util holds collections and helpers, and it needs an import.
+◉ java.lang
+→ Yes. System and String come from java.lang, which needs no import.
+○ java.io
+→ Not quite. Input and output classes such as File need an import from java.io.
 ````
 
 ---
 
 ### Try it in the runner
 
-Remove the import line, and press **Run**. The compile stage fails, because `List` can't be found. The error names the line where `List` is used, and nothing runs. Put the import back before you continue.
+Remove the `import java.util.ArrayList;` line, and press **Run**. The build fails, with an error saying the class `ArrayList` can't be found. The compiler doesn't know the name without the import. Restore the line, or change the declaration to `java.util.ArrayList<String>` in full, and the program builds again. Either fix is correct.
 
 ---
 
-The import tells the compiler where a class lives, and `java.lang` is the one package Java provides without asking.
+Packages keep names organized, and imports let a program use them by short names. The next step covers comments, which leave notes for the people who read the code.

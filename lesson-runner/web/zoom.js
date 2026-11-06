@@ -1,3 +1,5 @@
+import { isTrackpad } from "./wheel.js";
+
 const MIN_SIZE = 8;
 const MAX_SIZE = 40;
 
@@ -13,7 +15,9 @@ export function enableZoom(pane, name, defaultSize) {
     (event) => {
       if (!event.ctrlKey) return;
       event.preventDefault();
-      size = Math.min(Math.max(size + (event.deltaY < 0 ? 1 : -1), MIN_SIZE), MAX_SIZE);
+      // Zoom in when the wheel moves up. A mouse reports that movement with the opposite sign, as the scrolling does.
+      const up = isTrackpad() ? event.deltaY < 0 : event.deltaY > 0;
+      size = Math.min(Math.max(size + (up ? 1 : -1), MIN_SIZE), MAX_SIZE);
       pane.style.setProperty(`--${name}-size`, `${size}px`);
     },
     { passive: false },
