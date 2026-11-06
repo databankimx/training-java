@@ -43,6 +43,10 @@ public final class FetchNatives {
         // An approved manifest is never overwritten. The fetch installs the natives, then checks them against it.
         boolean approved = manifestExists && !rewriteManifest;
 
+        // The browser install replaces the natives folder, which also holds the manifest. Keep the approved lines in
+        // memory, so the manifest can be restored unchanged after the install.
+        List<String> approvedLines = approved ? Files.readAllLines(manifest) : null;
+
         Files.createDirectories(natives);
 
         // Building the app is what downloads and installs the natives on first run.
@@ -53,6 +57,11 @@ public final class FetchNatives {
         app.dispose();
 
         if (approved) {
+            if (!Files.exists(manifest)) {
+                Files.createDirectories(natives);
+                Files.write(manifest, approvedLines);
+                System.out.println("Restored the approved manifest, which the browser install had removed.");
+            }
             verify(manifest, natives);
             System.out.println("The natives match the approved hashes in " + manifest);
             return;

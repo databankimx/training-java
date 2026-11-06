@@ -29,7 +29,8 @@
 
 param(
     [switch]$InstallMissing,
-    [string]$RepoUrl
+    [string]$RepoUrl,
+    [string]$Branch = "main"
 )
 
 $ErrorActionPreference = "Stop"
@@ -235,7 +236,7 @@ if (-not (Test-Path (Join-Path $repoRoot "parts.json"))) {
         }
         Write-Host "Cloning the repository into $defaultRepoPath..." -ForegroundColor Cyan
         New-Item -ItemType Directory -Force -Path (Split-Path $defaultRepoPath -Parent) | Out-Null
-        & $gitExe clone $RepoUrl $defaultRepoPath
+        & $gitExe clone --branch $Branch $RepoUrl $defaultRepoPath
         if ($LASTEXITCODE -ne 0) {
             throw "git clone failed with exit code $LASTEXITCODE. Check the URL, and your access to the repository."
         }
