@@ -73,7 +73,7 @@ From the repository root, in PowerShell:
 powershell -ExecutionPolicy Bypass -File .\setup.ps1
 ```
 
-The script checks for JDK 25 and Maven 3.10.0, checks the repository, and builds the runner. Its steps are: compile the runner; copy the runner's libraries into `lesson-runner\dist\lib`; download the JCEF natives into `resources\vendor\jcef\natives` if they are missing, then check them against the approved hashes in `natives.sha256`; and package the runner, which copies the natives into `lesson-runner\dist\natives`. It needs internet access the first time, to download the natives.
+The script checks for JDK 25, Maven 3.10.0, and Git, checks the repository, and builds the runner. Run it from an Administrator PowerShell with `-InstallMissing` to install any missing tools. QUICKSTART.md describes both options. Its steps are: compile the runner; copy the runner's libraries into `lesson-runner\dist\lib`; download the JCEF natives into `resources\vendor\jcef\natives` if they are missing, then check them against the approved hashes in `natives.sha256`; and package the runner, which copies the natives into `lesson-runner\dist\natives`. It needs internet access the first time, to download the natives.
 
 Then start the lesson runner:
 

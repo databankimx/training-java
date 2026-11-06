@@ -73,6 +73,9 @@ public final class Window {
         CefAppBuilder builder = new CefAppBuilder();
         builder.setInstallDir(natives.toFile());
         builder.getCefSettings().windowless_rendering_enabled = true;
+        // The browser's cache lives in its own folder, which CEF needs to be set explicitly to avoid a warning and
+        // shared process state.
+        builder.getCefSettings().root_cache_path = Paths.get("jcef-cache").toAbsolutePath().toString();
         builder.setAppHandler(new MavenCefAppHandlerAdapter() {
             @Override
             public void stateHasChanged(CefApp.CefAppState state) {

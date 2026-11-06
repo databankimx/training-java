@@ -24,6 +24,7 @@ You need two tools installed on your machine. The setup script checks for them a
 |---|---|---|
 | **JDK** (Eclipse Temurin) | 25 | `C:\Program Files\Eclipse Adoptium\jdk-25.0.5.8-hotspot` |
 | **Apache Maven** | 3.10.0 or later | `C:\Tools\apache-maven-3.10.0` |
+| **Git** (optional, to clone the repository) | any recent version | `C:\Program Files\Git` |
 
 ### Install with winget (easiest)
 
@@ -54,6 +55,19 @@ From the repository root in PowerShell:
 ```pwsh
 powershell -ExecutionPolicy Bypass -File .\setup.ps1
 ```
+
+To install the missing tools as well (JDK 25, Maven, and Git), open PowerShell **as Administrator** and run:
+
+```pwsh
+powershell -ExecutionPolicy Bypass -File .\setup.ps1 -InstallMissing
+```
+
+With `-InstallMissing`, the script:
+- installs the JDK and Git with winget
+- downloads Maven 3.10.0 from Maven Central, checks it against the SHA-1 that Maven Central publishes, and extracts it to `C:\Tools`
+- finds the JDK wherever winget put it, and records the folder in `lesson-runner\jdk.path`
+
+Winget must be available. If it isn't, install App Installer from the Microsoft Store first. The script stops with a message if any install fails.
 
 The script:
 1. Checks for JDK 25 (`java.exe` and `javac.exe`) and Maven 3.10.0 or later
@@ -135,6 +149,9 @@ Then restart `run.bat`.
 | **Setup says Maven is missing** | Download from [maven.apache.org](https://maven.apache.org/download.cgi) and install to `C:\Tools\apache-maven-3.10.0`. Then run setup.ps1 again. |
 | **Setup says the natives do not match the approved hashes** | The downloaded JCEF files differ from the approved list in `natives.sha256`. Do not change the list. Tell the course owner, who decides whether the change is approved. |
 | **Setup fails while downloading the natives** | Check your internet access, and that the download isn't blocked by a proxy or security software. Then run setup.ps1 again. |
+| **Console shows `Exception in thread "AWT-EventQueue-1"` at startup** | Known and harmless. The runner's window still opens and works. The message is printed by the Java runtime while the Chromium browser starts, and it doesn't appear in `runner.log`. Ignore it, unless the window fails to open or a step stops responding. |
+| **Console shows `ERROR:chrome\...` lines at startup** | Expected. Chromium checks Windows registry keys that don't exist on this machine. These messages don't affect the runner. |
+| **Console shows `Cannot create directory 'browser/images/...'`** | Chromium couldn't unpack a resource folder. Check that the runner's icons and text display correctly. If they don't, report it. |
 | **Maven build fails** | Check that the JDK path is exactly as shown above. Run `mvn -q compile` in `lesson-runner` to see the full error. |
 | **run.bat says "java.exe not found"** | Verify the JDK is installed at `C:\Program Files\Eclipse Adoptium\jdk-25.0.5.8-hotspot`. The batch file uses that exact path. |
 | **run.bat says "cannot find java"** | Close any other instances of the lesson runner. The port 47800 might be in use. Restart the runner. |
