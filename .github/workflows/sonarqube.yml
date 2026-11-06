@@ -61,7 +61,8 @@ jobs:
           cache: maven
       - name: Build lesson runner
         working-directory: lesson-runner
-        run: mvn --batch-mode --no-transfer-progress verify
+        # Compile only. The package phase runs a PowerShell native-verification step that is Windows-specific.
+        run: mvn --batch-mode --no-transfer-progress compile
       - name: Compute SonarQube PR/branch args
         id: sonar_args
         env:
