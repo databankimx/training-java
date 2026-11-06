@@ -32,8 +32,16 @@ public final class FetchNatives {
 
     public static void run(Path natives, boolean rewriteManifest) throws Exception {
         Path manifest = natives.resolve(MANIFEST_NAME);
+        boolean manifestExists = Files.exists(manifest);
+        // A missing manifest can only be recorded by its owner, on purpose. Otherwise a fresh clone would approve
+        // whatever it downloaded.
+        if (!manifestExists && !rewriteManifest) {
+            throw new IllegalStateException(
+                    "natives.sha256 is not in the repository. Only the course owner records the approved hashes, with "
+                    + "--fetch-natives --rewrite-manifest, on the machine that approves them.");
+        }
         // An approved manifest is never overwritten. The fetch installs the natives, then checks them against it.
-        boolean approved = Files.exists(manifest) && !rewriteManifest;
+        boolean approved = manifestExists && !rewriteManifest;
 
         Files.createDirectories(natives);
 
@@ -55,6 +63,8 @@ public final class FetchNatives {
             String relative = natives.relativize(file).toString();
             lines.add(sha256(file) + "  " + relative);
         }
+        // Recreate the folder in case the browser install replaced it, then record the hashes.
+        Files.createDirectories(natives);
         Files.write(manifest, lines);
         System.out.println("Recorded " + lines.size() + " file(s) in " + manifest);
     }
