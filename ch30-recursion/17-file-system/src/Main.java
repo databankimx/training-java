@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Set;
 
 public class Main {
-    // Folders to leave out: the compiled classes, and the version control and Python cache folders.
-    static final Set<String> SKIP = Set.of("classes", ".git", "__pycache__");
+    // Folders to leave out: the compiled classes, and the version control folder.
+    static final Set<String> SKIP = Set.of("classes", ".git");
 
     // Lists a folder and everything in it. Each folder calls the method again, one level deeper, so the output is
     // indented to show the tree.

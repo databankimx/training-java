@@ -497,9 +497,14 @@ async function selectStep(chapter, step) {
 
 // Source editor
 
+// The highlighting language follows the file: XML files are highlighted as XML, and everything else as Java.
+function languageFor(file) {
+  return file && file.endsWith(".xml") ? "xml" : "java";
+}
+
 function renderEditor() {
   const text = editor.value;
-  highlightEl.innerHTML = highlightCode(text, "java") + "\n";
+  highlightEl.innerHTML = highlightCode(text, languageFor(currentFile)) + "\n";
   const lineCount = text.split("\n").length;
   gutter.textContent = Array.from({ length: lineCount }, (_, i) => i + 1).join("\n");
   const modified = text !== original;

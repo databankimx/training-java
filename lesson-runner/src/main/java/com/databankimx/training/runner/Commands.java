@@ -169,14 +169,15 @@ final class Commands {
         return Files.isRegularFile(file) ? Files.readString(file, StandardCharsets.UTF_8) : "";
     }
 
-    /** The Java files in a step's src folder. Main.java comes first, since it is the file the editor opens. */
+    /** The Java and XML files in a step's src folder. Main.java comes first, since it is the file the editor opens. */
     private static JsonArray sourceFiles(Path step) throws IOException {
         Path src = step.resolve("src");
         List<String> names = new ArrayList<>();
         if (Files.isDirectory(src)) {
             try (Stream<Path> files = Files.walk(src)) {
                 files.filter(Files::isRegularFile)
-                        .filter(p -> p.getFileName().toString().endsWith(".java"))
+                        .filter(p -> p.getFileName().toString().endsWith(".java")
+                                || p.getFileName().toString().endsWith(".xml"))
                         .map(p -> src.relativize(p).toString())
                         .sorted(Comparator.comparing((String n) -> !n.equals("Main.java")).thenComparing(n -> n))
                         .forEach(names::add);

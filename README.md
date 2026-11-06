@@ -70,10 +70,10 @@ See [QUICKSTART.md](QUICKSTART.md) for a step-by-step guide.
 From the repository root, in PowerShell:
 
 ```pwsh
-powershell -ExecutionPolicy Bypass -File .\setup.ps1 -InstallMissing
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
 ```
 
-The script checks the JDK, Maven, and the lesson runner build, downloads JCEF natives into `resources\vendor`, and builds the runner.
+The script checks for JDK 25 and Maven 3.10.0, checks the repository, and builds the runner. Its steps are: compile the runner; copy the runner's libraries into `lesson-runner\dist\lib`; download the JCEF natives into `resources\vendor\jcef\natives` if they are missing, then check them against the approved hashes in `natives.sha256`; and package the runner, which copies the natives into `lesson-runner\dist\natives`. It needs internet access the first time, to download the natives.
 
 Then start the lesson runner:
 
@@ -89,13 +89,14 @@ cd lesson-runner
 | Eclipse Temurin JDK 25 | Lessons and runner | Compiles and runs every lesson program | GPL 2.0 with Classpath exception |
 | Maven 3.10.0 | Lessons and runner | Builds the lesson runner | Apache 2.0 |
 | JCEF (Java Chromium Embedded Framework) `me.friwi:jcefmaven:146.0.10` | Lesson runner | The runner's window and browser integration | Apache 2.0 (with BSD-style Chromium/CEF components) |
+| Gson 2.11.0 (through jcefmaven) | Lesson runner | Reads the course catalogue and the runner's messages | Apache 2.0 |
 | Chromium/CEF natives (Windows x64) | Lesson runner | Native browser rendering engine for JCEF | BSD-style |
 | JUnit 5 | Lessons and tests | Unit testing framework for step tests | EPL-2.0 |
 | highlight.js 11.11.1 | Lesson runner (web) | Syntax coloring in the Source and Lesson panes | BSD-3-Clause |
 | marked.js | Lesson runner (web) | Converts lesson Markdown to HTML | MIT |
 | viz.js | Lesson runner (web) | Renders diagrams in lessons (Graphviz in JavaScript) | MIT |
 
-All third-party libraries listed above have been license-vetted and approved for use under section 12 of the Development Rules of Engagement.
+All third-party libraries listed above have been license-vetted and approved for use under section 12 of the Development Rules of Engagement. The runner also bundles libraries that jcefmaven brings in, such as the Apache Commons, GlueGen, JOGL, and error_prone_annotations jars. They appear in `lesson-runner\dist\lib` after setup, and they still need the same licence review before this statement covers them.
 
 ### VS Code
 
@@ -126,7 +127,6 @@ The chapter list on the left shows each chapter, such as *Ch01 · Getting Starte
 - If a program asks for input, type in the input box under the Output pane, then press Enter or click **Go**.
 - Press **Escape**, or click **Stop**, to stop a run. The Run button becomes Stop while a program runs.
 - The **Backtrace** checkbox is not available for Java (stack traces already show class, method, and line).
-- Steps that declare options in their configuration show a checkbox for each option, next to Run and Test. Each checkbox starts at the default the step declares. Choices are kept while you move between steps, and reset when the runner restarts.
 
 #### Quick picks
 
@@ -141,7 +141,7 @@ Homework steps ask you to write your own program first. The Run button stays dis
 | Key | Action |
 |---|---|
 | F5 | Run the current step |
-| Escape | Stop a running program, or cancel the input |
+| Escape | Stop a running program. When nothing is running, Escape discards your unsaved edits to the source. |
 
 #### Troubleshooting
 

@@ -113,11 +113,16 @@ final class Runner {
         status(test ? "Running tests" : "Running Main");
         String java = Paths.get(System.getProperty("java.home"), "bin", "java.exe").toString();
         String mainClass = test ? "Tests" : "Main";
-        List<String> command = junitJar != null
-                ? new ArrayList<>(List.of(java, "-jar", junitJar.toString(), "execute", "--disable-ansi-colors", "--class-path", classes.toString(),
-                        "--scan-class-path", classes.toString(), "--details", "tree"))
-                : new ArrayList<>(List.of(java, "-cp", classes.toString(), mainClass));
-        command.addAll(programArgs);
+        List<String> command;
+        if (junitJar != null) {
+            command = new ArrayList<>(List.of(java, "-jar", junitJar.toString(), "execute", "--disable-ansi-colors", "--class-path", classes.toString(),
+                    "--scan-class-path", classes.toString(), "--details", "tree"));
+            command.addAll(programArgs);
+        } else {
+            // The program's arguments go through an argument file, which the launcher reads itself, so Windows never
+            // expands wildcards such as * in them.
+            command = new ArrayList<>(List.of(java, "@" + argumentFile(build, classes, mainClass, programArgs)));
+        }
         process = new ProcessBuilder(command).directory(build.toFile()).start();
         input = process.getOutputStream();
         Thread out = pipe(process.getInputStream(), "stdout");
@@ -127,6 +132,28 @@ final class Runner {
         err.join();
         input = null;
         finished(code);
+    }
+
+    /**
+     * Writes the class path, the main class, and the program's arguments to an argument file, and returns its path. Each
+     * item is quoted, so spaces and symbols reach the program exactly as they were typed.
+     */
+    private static String argumentFile(Path build, Path classes, String mainClass, List<String> programArgs) throws IOException {
+        List<String> lines = new ArrayList<>();
+        lines.add(quoted("-cp"));
+        lines.add(quoted(classes.toString()));
+        lines.add(quoted(mainClass));
+        for (String arg : programArgs) {
+            lines.add(quoted(arg));
+        }
+        Path file = build.resolve("program-args.txt");
+        Files.write(file, lines, StandardCharsets.UTF_8);
+        return file.toString();
+    }
+
+    /** An argument wrapped in double quotes, with backslashes and double quotes escaped, as an argument file expects. */
+    private static String quoted(String text) {
+        return "\"" + text.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
     }
 
     /** Sends a line the user typed to the running program. */

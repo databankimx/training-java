@@ -23,7 +23,7 @@ You need two tools installed on your machine. The setup script checks for them a
 | Tool | Version | Default Install Path |
 |---|---|---|
 | **JDK** (Eclipse Temurin) | 25 | `C:\Program Files\Eclipse Adoptium\jdk-25.0.5.8-hotspot` |
-| **Apache Maven** | 3.10.0 | `C:\Tools\apache-maven-3.10.0` |
+| **Apache Maven** | 3.10.0 or later | `C:\Tools\apache-maven-3.10.0` |
 
 ### Install with winget (easiest)
 
@@ -33,6 +33,8 @@ If you have [Windows Package Manager](https://github.com/microsoft/winget-cli) i
 winget install -e --id EclipseAdoptium.Temurin.25.JDK
 winget install -e --id ApacheFoundation.Maven
 ```
+
+The JDK installs to the path in the table above only if winget uses that version. Check the path after installing. Maven installed by winget may go to a different folder, which the setup script doesn't search, so install Maven manually to `C:\Tools\apache-maven-3.10.0` as described below.
 
 ### Install manually
 
@@ -54,12 +56,14 @@ powershell -ExecutionPolicy Bypass -File .\setup.ps1
 ```
 
 The script:
-1. Checks for JDK 25 and Maven 3.10.0
+1. Checks for JDK 25 (`java.exe` and `javac.exe`) and Maven 3.10.0 or later
 2. Verifies the repository structure
-3. Builds the lesson runner with Maven
+3. Builds the lesson runner: it compiles the runner, copies its libraries into `lesson-runner\dist\lib`, downloads the JCEF natives if they're missing, checks them against the approved hashes in `resources\vendor\jcef\natives\natives.sha256`, and packages the runner
 4. Prints a summary
 
-If any tool is missing, the script reports which one and where to install it.
+The first run needs internet access, to download the JCEF natives. Later runs reuse them.
+
+If any tool is missing, the script reports which one and where to install it, and it stops before building.
 
 ---
 
@@ -106,7 +110,7 @@ Congratulations! Your setup is working.
 | Key | Action |
 |---|---|
 | **F5** | Run the current step |
-| **Escape** | Stop a running program |
+| **Escape** | Stop a running program. When nothing is running, Escape discards your unsaved edits to the source. |
 
 ---
 
@@ -128,7 +132,9 @@ Then restart `run.bat`.
 | Issue | What to do |
 |---|---|
 | **Setup says JDK 25 is missing** | Install using winget: `winget install -e --id EclipseAdoptium.Temurin.25.JDK`. Or download from [adoptium.net](https://adoptium.org/temurin/releases/) and install to `C:\Program Files\Eclipse Adoptium\jdk-25.0.5.8-hotspot`. Then run setup.ps1 again. |
-| **Setup says Maven is missing** | Install using winget: `winget install -e --id ApacheFoundation.Maven`. Or download from [maven.apache.org](https://maven.apache.org/download.cgi) and install to `C:\Tools\apache-maven-3.10.0`. Then run setup.ps1 again. |
+| **Setup says Maven is missing** | Download from [maven.apache.org](https://maven.apache.org/download.cgi) and install to `C:\Tools\apache-maven-3.10.0`. Then run setup.ps1 again. |
+| **Setup says the natives do not match the approved hashes** | The downloaded JCEF files differ from the approved list in `natives.sha256`. Do not change the list. Tell the course owner, who decides whether the change is approved. |
+| **Setup fails while downloading the natives** | Check your internet access, and that the download isn't blocked by a proxy or security software. Then run setup.ps1 again. |
 | **Maven build fails** | Check that the JDK path is exactly as shown above. Run `mvn -q compile` in `lesson-runner` to see the full error. |
 | **run.bat says "java.exe not found"** | Verify the JDK is installed at `C:\Program Files\Eclipse Adoptium\jdk-25.0.5.8-hotspot`. The batch file uses that exact path. |
 | **run.bat says "cannot find java"** | Close any other instances of the lesson runner. The port 47800 might be in use. Restart the runner. |
@@ -143,4 +149,3 @@ For other issues, check the Output pane in the runner for error messages, or con
 ## Next steps
 
 - Read [README.md](README.md) for an overview of the course structure and how to use the runner.
-- See [AUTHORING.md](AUTHORING.md) for how to create or modify lesson steps (if you're an instructor).

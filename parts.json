@@ -44,6 +44,9 @@
         "ch29-bitwise-operators",
         "ch30-recursion",
         "ch31-dates-and-times",
+        "ch32-trie",
+        "ch33-json",
+        "ch34-maven",
         "final-project"
       ]
     }
