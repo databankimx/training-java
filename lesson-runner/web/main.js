@@ -550,7 +550,7 @@ async function loadSourceFile(step, file) {
   if (currentFile === "Main.java" && !editor.readOnly) mainDraft = editor.value;
   currentFile = file;
   setFileButton(file);
-  const text = await invoke("read_source", { path: step.path, file });
+  const text = (await invoke("read_source", { path: step.path, file })).replace(/\r\n/g, "\n");
   if (file === "Main.java") {
     originalMain = text;
     editor.value = mainDraft ?? text;

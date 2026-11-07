@@ -94,3 +94,95 @@ Run each step and compare its output with its lesson. Where a lesson gives an ex
 - [ ] CI scans pass: the standards policy scan, SonarQube, and Snyk.
 - [ ] The code is reviewed, and the reviewer confirms it meets DataBank standards.
 - [ ] The work is tied to an approved quote or engagement, as the Development Rules of Engagement require.
+
+---
+
+## 11. training-c
+
+### Clean VM setup (blocker)
+
+- [x] Run from a reset VM with `setup.ps1 -InstallMissing` completes. The run took about seven minutes, and the summary shows `ok` for every line.
+- [x] Git, MSYS2, the toolchain (gcc, cmake, ninja, gdb), and ImageMagick install, with retries after the core upgrade.
+- [x] A DNS failure to `mirror.msys2.org` is retried before the script stops.
+- [x] The MSYS2 folder is added to the user PATH, and VS Code finds gcc and gdb after a restart.
+- [x] The repository clones `main`, and the clone's copy of the script takes over.
+- [ ] Commit and push the updated README and QUICKSTART to `main`.
+
+### Lesson runner (blocker)
+
+- [x] The runner builds and starts.
+- [x] Run works on a single-file lesson.
+- [x] Test works on Ch21.
+- [x] Quick picks fill the input box and run.
+- [x] The visualizer opens for Ch16.
+- [x] Typed input reaches a Ch02 program.
+- [x] A file-writing example (Ch08) writes its file where the lesson says.
+- [x] A multi-file lesson (Ch13, 02-include-guards) builds and runs in the runner.
+- [x] The final project's `demo` and `selftest` run, and the bonus step's selftest passes.
+
+### VS Code (blocker)
+
+- [x] Choosing the GCC 16.2.0 ucrt64 kit works, and the CMake Tools notice is dismissed.
+- [x] Ctrl+Shift+B builds a single file.
+- [x] `C/C++: run active file` builds and runs a single file.
+- [x] F5 with `Debug active C file (MSYS2 gdb)` starts the debugger, and stepping and the Variables panel work.
+- [x] A multi-file lesson in VS Code reports `undefined reference`, as the README says, and is built through the runner instead.
+- [x] The CMake command in the README and QUICKSTART works, with the step's folder in the `cd` line.
+
+### Memory checking (Chapter 5 and Chapter 24)
+
+- [x] `-fsanitize=address` fails to link on this toolchain (`cannot find -lasan`), so the lesson's claim holds.
+- [x] Dr. Memory crashed on the test machine, with a log that shows no report, so it's removed from the course.
+- [x] `gcc -fanalyzer` reports a double free, with the events in order.
+- [x] `gcc -fanalyzer` reports an unchecked `malloc` result, and the checked version compiles cleanly.
+- [x] `gcc -fanalyzer` does not report the missing `free` in either leak example, even with `-Wanalyzer-malloc-leak`. The lessons say leaks are checked by review.
+
+### Open items
+
+- [ ] Delete `resources\vendor\drmemory\fetch-drmemory.ps1` and its install folder, unless the course keeps it.
+- [ ] Test the VS Code multi-file tasks on the VM: `C/C++: build lesson (CMake)` and `C/C++: run lesson (CMake)` on Ch13, 02-include-guards. Then commit the tasks and docs to `main`.
+
+---
+
+## 12. training-c-plus-plus
+
+### Clean VM setup (blocker)
+
+- [x] The setup script's first clean run on the VM completes. The summary shows `ok` for every line.
+- [x] The repository clones `main` into `C:\Development\training\training-c-plus-plus`, and the clone's copy of the script takes over.
+- [x] The toolchain (g++, cmake, ninja, gdb) installs, and the MSYS2 folder is on the user PATH.
+- [x] Second clean run, with the summary and the time recorded. The summary matched the first run, and the run took just over seven minutes.
+- [ ] Commit the runner fix (`web/main.js`, line endings) and the setup, docs, and tasks changes to `dev`, then merge to `main`.
+
+### Lesson runner (blocker)
+
+- [x] The runner builds and starts.
+- [x] Run works on a single-file lesson.
+- [x] Test works on Ch21.
+- [x] Quick picks fill the input box and run.
+- [x] The modified flag is off for an unedited file, after the line-ending fix.
+- [x] The final project's `demo` and `selftest` run, and the bonus step's `selftest` passes.
+- [x] The standard-library and C++23 lessons (Ch14, Ch20, Ch22, Ch25) build and run.
+- [x] The runner's debugger stepping works on a Ch05 example.
+- [ ] Visualizer on Ch16, if the course has one.
+- [ ] Backtrace checkbox on Ch24, 01-stack-traces.
+
+### VS Code (blocker)
+
+- [x] No CMake Tools prompt appears, since the `.vscode` files are already in place.
+- [ ] Ctrl+Shift+B builds a single file.
+- [x] `C/C++: run active file` builds and runs a single file.
+- [x] F5 with `Debug active C++ file (MSYS2 gdb)` builds the file, starts gdb, and stops at a breakpoint.
+- [x] `C/C++: run lesson (CMake)` and `C/C++: build lesson (CMake)` build and run the Ch13 multi-file lesson, with the output matching the runner.
+
+### Memory checking (Chapter 24)
+
+- [x] `-fsanitize=address` fails to link on this toolchain (`cannot find -lasan`), so the lesson's claim holds.
+- [x] `g++ -fanalyzer` reports a double free for `malloc` and `free`, with the events in order.
+- [x] `g++ -fanalyzer` reports a use after `delete` for a double `delete`. The lesson describes it that way.
+- [x] Dr. Memory isn't referenced in the C++ course.
+
+### Open items
+
+- [ ] Check the C++ course's Ch24 homework and summary wording against the analyzer output.
+- [ ] Decide whether the C++ course needs the Dr. Memory fetch script deleted, if it has one. The search found no references to it.
