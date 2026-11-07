@@ -72,6 +72,10 @@ public final class Window {
     public static void open(Path natives, Path web) throws Exception {
         CefAppBuilder builder = new CefAppBuilder();
         builder.setInstallDir(natives.toFile());
+        // RUNNER_BROWSER_LOG=1 makes Chromium write its own log to the terminal, to show why a window is blank.
+        if ("1".equals(System.getenv("RUNNER_BROWSER_LOG"))) {
+            builder.addJcefArgs("--enable-logging=stderr", "--v=0");
+        }
         builder.getCefSettings().windowless_rendering_enabled = true;
         // The browser's cache lives in its own folder, which CEF needs to be set explicitly to avoid a warning and
         // shared process state.
@@ -163,7 +167,7 @@ public final class Window {
         Thread watchdog = new Thread(() -> {
             try {
                 Thread.sleep(3000);
-            } catch (InterruptedException interrupted) {
+            } catch (InterruptedException _) {
                 Thread.currentThread().interrupt();
             }
             Runtime.getRuntime().halt(0);

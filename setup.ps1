@@ -29,7 +29,7 @@
 
 param(
     [switch]$InstallMissing,
-    [string]$RepoUrl,
+    [string]$RepoUrl = "https://github.com/databankimx/training-java.git",
     [string]$Branch = "main"
 )
 
@@ -242,7 +242,7 @@ if (-not (Test-Path (Join-Path $repoRoot "parts.json"))) {
         }
         $repoRoot = $defaultRepoPath
     } else {
-        throw "This script isn't inside the training repository, and no repository was found at $defaultRepoPath. Clone the repository first, or run again with -RepoUrl <clone address>."
+        throw "This script isn't inside the training repository, and no repository was found at $defaultRepoPath. Clone the repository first, or check the clone address in this script's -RepoUrl default."
     }
     # Run the repository's own copy of this script, so every later step uses the cloned files.
     Write-Host "Continuing from the repository at $repoRoot" -ForegroundColor Cyan

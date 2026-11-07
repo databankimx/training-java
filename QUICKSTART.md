@@ -1,168 +1,141 @@
-# Quick Start
+# Quickstart
 
-This guide takes you from a fresh copy of the repository to a working lesson runner.
+This guide takes you from a fresh machine to a working lesson runner, where every lesson example can run. Follow the steps in order. Each step says how to check it worked. The last section covers the errors you're most likely to see.
+
+Commands are for **Windows PowerShell**, and assume you're in the repository root, `training-java`, unless a step says otherwise.
 
 ---
 
 ## Where to clone the repository
 
-Clone the repository under `C:\Development`, for example:
-
-```
-C:\Development\training\training-java
-```
-
-The lesson runner builds and runs lesson examples inside the repository. Security software on managed machines is configured to allow operations under `C:\Development`. A copy in other locations, such as your Downloads or a temporary folder, may have issues with file operations.
+Clone the repository under `C:\Development`, for example `C:\Development\training\training-java`. The lesson runner builds and runs each exercise inside the repository, in a folder called `.lesson-runner`. Security software on managed machines is set up to allow that folder when it's under `C:\Development`. A copy somewhere else, such as your Downloads folder or a temporary folder, may have its new programs removed as they're built.
 
 ---
 
-## Prerequisites
+## Quick setup with the script
 
-You need two tools installed on your machine. The setup script checks for them and reports if they're missing.
+`setup.ps1` installs what's missing, clones the repository if you don't have it yet, checks the JDK and Maven, builds the lesson runner, and checks the browser files against the approved hashes. It's safe to run more than once.
 
-| Tool | Version | Default Install Path |
-|---|---|---|
-| **JDK** (Eclipse Temurin) | 25 | `C:\Program Files\Eclipse Adoptium\jdk-25.0.5.8-hotspot` |
-| **Apache Maven** | 3.10.0 or later | `C:\Tools\apache-maven-3.10.0` |
-| **Git** (optional, to clone the repository) | any recent version | `C:\Program Files\Git` |
-
-### Install with winget (easiest)
-
-If you have [Windows Package Manager](https://github.com/microsoft/winget-cli) installed, use these commands:
-
-```pwsh
-winget install -e --id EclipseAdoptium.Temurin.25.JDK
-winget install -e --id ApacheFoundation.Maven
-```
-
-The JDK installs to the path in the table above only if winget uses that version. Check the path after installing. Maven installed by winget may go to a different folder, which the setup script doesn't search, so install Maven manually to `C:\Tools\apache-maven-3.10.0` as described below.
-
-### Install manually
-
-Alternatively, download and install manually to the default paths shown above:
-
-- **JDK 25**: Download from [adoptium.net/temurin](https://adoptium.org/temurin/releases/) and install to `C:\Program Files\Eclipse Adoptium\jdk-25.0.5.8-hotspot`
-- **Maven 3.10.0**: Download from [maven.apache.org](https://maven.apache.org/download.cgi) and install to `C:\Tools\apache-maven-3.10.0`
-
-The setup script looks for them at these exact paths.
-
----
-
-## Quick setup
-
-From the repository root in PowerShell:
-
-```pwsh
-powershell -ExecutionPolicy Bypass -File .\setup.ps1
-```
-
-To install the missing tools as well (JDK 25, Maven, and Git), open PowerShell **as Administrator** and run:
+Open **PowerShell as Administrator**, go to the folder where you saved `setup.ps1`, and run:
 
 ```pwsh
 powershell -ExecutionPolicy Bypass -File .\setup.ps1 -InstallMissing
 ```
 
+The `-ExecutionPolicy Bypass` part lets this one script run. It doesn't change any setting on your machine.
+
 With `-InstallMissing`, the script:
-- installs the JDK and Git with winget
-- downloads Maven 3.10.0 from Maven Central, checks it against the SHA-1 that Maven Central publishes, and extracts it to `C:\Tools`
-- finds the JDK wherever winget put it, and records the folder in `lesson-runner\jdk.path`
 
-Winget must be available. If it isn't, install App Installer from the Microsoft Store first. The script stops with a message if any install fails.
+- installs the **JDK 25** (Eclipse Temurin) and **Git** with winget, if they're missing
+- downloads **Maven 3.10.0** from Maven Central, checks it against the SHA-1 that Maven Central publishes, and extracts it to `C:\Tools`
+- clones the repository into `C:\Development\training\training-java`, if the script isn't already inside it, and continues from the clone
+- finds the JDK wherever winget put it, and records its folder in `lesson-runner\jdk.path`
 
-The script:
-1. Checks for JDK 25 (`java.exe` and `javac.exe`) and Maven 3.10.0 or later
-2. Verifies the repository structure
-3. Builds the lesson runner: it compiles the runner, copies its libraries into `lesson-runner\dist\lib`, downloads the JCEF natives if they're missing, checks them against the approved hashes in `resources\vendor\jcef\natives\natives.sha256`, and packages the runner
-4. Prints a summary
+An Administrator window is needed for the installs. Without `-InstallMissing`, the script doesn't install anything. It stops and shows what's missing, and the command to fix it. Winget must be available. If it isn't, install **App Installer** from the Microsoft Store first. Company policy can block installs, in which case the script says so, and you'll need IT.
 
-The first run needs internet access, to download the JCEF natives. Later runs reuse them.
-
-If any tool is missing, the script reports which one and where to install it, and it stops before building.
+When the script finishes, it prints a summary. Steps 1 to 4 below cover the same work, if you need to see what the script does, or want to run one part by hand.
 
 ---
 
-## Start the lesson runner
+## 1. Install the JDK
 
-After setup succeeds, start the runner from the repository root:
+The script does this step with `-InstallMissing`. To install it yourself, use winget in PowerShell:
+
+```pwsh
+winget install -e --id EclipseAdoptium.Temurin.25.JDK
+```
+
+Or download the JDK 25 installer from [adoptium.net](https://adoptium.net/temurin/releases/?version=25) and install it.
+
+**Check:** `C:\Program Files\Eclipse Adoptium\jdk-25.0.5.8-hotspot\bin\java.exe` exists, or another `jdk-25` folder exists under `C:\Program Files\Eclipse Adoptium`. The setup script finds either one.
+
+---
+
+## 2. Install Maven
+
+The script does this step with `-InstallMissing`. To install it by hand, download **Maven 3.10.0** from [maven.apache.org](https://maven.apache.org/download.cgi) (the binary zip), and extract it so that the folder `C:\Tools\apache-maven-3.10.0` exists. The setup script looks for it at that path.
+
+Don't use winget for Maven. Its install folder isn't the one the script looks in.
+
+**Check:** `C:\Tools\apache-maven-3.10.0\bin\mvn.cmd` exists.
+
+---
+
+## 3. Run the setup script
+
+From the repository root:
+
+```pwsh
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```
+
+If you didn't install the tools with `-InstallMissing`, add it, from an Administrator PowerShell, after the installs above.
+
+The script checks the JDK and Maven versions, verifies the repository, and builds the runner. It copies the runner's libraries into `lesson-runner\dist\lib`. It downloads the browser's native files (JCEF) once, checks them against the approved list in `resources\vendor\jcef\natives\natives.sha256`, and copies them into `lesson-runner\dist\natives`.
+
+The first run needs internet access, to download the browser files. Later runs reuse them.
+
+**Check:** the summary at the end shows `ok` for each line, and the last line says the runner is built.
+
+---
+
+## 4. Start the lesson runner
+
+From the repository root:
 
 ```pwsh
 cd lesson-runner
 .\run.bat
 ```
 
-A window titled **Lesson Runner** opens. The chapters appear on the left. Click a chapter to see its steps, then click a step to open it.
+A window titled **Lesson Runner** opens, with the chapters on the left. Click a chapter to see its steps, then click a step to open it.
+
+**Check:** the window shows the chapter list, and the Ch01 chapter opens when you click it.
 
 ---
 
-## Try your first step
+## 5. Your first run of each kind of step
 
-1. Click **Ch01 · Getting Started** on the left
-2. Click **01-hello-world** under the chapter
-3. The step opens with a lesson and a **Source** tab showing `Main.java`
-4. Press **Run** (or **F5**)
-5. The Output pane shows the program's output: `Hello, World!`
+Work through these once, to confirm each kind of example runs.
 
-Congratulations! Your setup is working.
+| Kind | Where | What you should see |
+|---|---|---|
+| Program with output | Ch01, 01-hello-world | `Hello, World!` in the Output pane. Press **Run** (or F5) |
+| Source you can edit | Ch01, 01-hello-world | The **Source** tab shows `Main.java`. Edit it and press **Run** to see the change. **Reset** restores the original |
+| Program that waits for input | Ch02, user input | A prompt. Type a line in the input box, and press Enter |
+| Stopping a run | Ch02, user input | Press Run, then **Stop** or Escape before typing. The Run button comes back |
+| Test button | A step with tests | Press **Test**. The output reports the tests that ran |
 
----
-
-## Running and testing steps
-
-| Action | How |
-|---|---|
-| **Run a step** | Click the step, then press **Run** or **F5**, or click the Run button. Output appears in the Output pane. |
-| **Edit code** | Click the **Source** tab, edit `Main.java`, and press **Run** to test your changes. |
-| **Reset edits** | Click **Reset** to restore the original `Main.java`. |
-| **Stop a run** | Press **Escape** or click **Stop**. |
-| **Test a step** | Press **Test** or click the Test button (if the step has tests). |
-| **View input** | If a program asks for input, type in the input box below the Output pane and press Enter. |
+The first run of each step builds it, so it can take several seconds.
 
 ---
 
-## Keyboard shortcuts
+## 6. If you're using VS Code
 
-| Key | Action |
-|---|---|
-| **F5** | Run the current step |
-| **Escape** | Stop a running program. When nothing is running, Escape discards your unsaved edits to the source. |
+The lesson runner has its own editor, so VS Code is optional. If you want it for editing the code, install VS Code from [code.visualstudio.com](https://code.visualstudio.com), and open the repository root.
 
----
+Add the **Extension Pack for Java** (publisher Microsoft). It checks your code as you type, and offers completion and navigation. It uses the JDK that the setup script found, so restart VS Code after setup if the JDK doesn't appear in the status bar.
 
-## Rebuilding after changes
-
-If you modify the runner's Java code, rebuild it:
-
-```pwsh
-cd lesson-runner
-mvn -q compile
-```
-
-Then restart `run.bat`.
+**Check:** the Extensions view lists the Java extension pack as installed, and the status bar shows the JDK 25 version.
 
 ---
 
 ## Troubleshooting
 
-| Issue | What to do |
+| What you see | What to do |
 |---|---|
-| **Setup says JDK 25 is missing** | Install using winget: `winget install -e --id EclipseAdoptium.Temurin.25.JDK`. Or download from [adoptium.net](https://adoptium.org/temurin/releases/) and install to `C:\Program Files\Eclipse Adoptium\jdk-25.0.5.8-hotspot`. Then run setup.ps1 again. |
-| **Setup says Maven is missing** | Download from [maven.apache.org](https://maven.apache.org/download.cgi) and install to `C:\Tools\apache-maven-3.10.0`. Then run setup.ps1 again. |
-| **Setup says the natives do not match the approved hashes** | The downloaded JCEF files differ from the approved list in `natives.sha256`. Do not change the list. Tell the course owner, who decides whether the change is approved. |
-| **Setup fails while downloading the natives** | Check your internet access, and that the download isn't blocked by a proxy or security software. Then run setup.ps1 again. |
-| **Console shows `Exception in thread "AWT-EventQueue-1"` at startup** | Known and harmless. The runner's window still opens and works. The message is printed by the Java runtime while the Chromium browser starts, and it doesn't appear in `runner.log`. Ignore it, unless the window fails to open or a step stops responding. |
-| **Console shows `ERROR:chrome\...` lines at startup** | Expected. Chromium checks Windows registry keys that don't exist on this machine. These messages don't affect the runner. |
-| **Console shows `Cannot create directory 'browser/images/...'`** | Chromium couldn't unpack a resource folder. Check that the runner's icons and text display correctly. If they don't, report it. |
-| **Maven build fails** | Check that the JDK path is exactly as shown above. Run `mvn -q compile` in `lesson-runner` to see the full error. |
-| **run.bat says "java.exe not found"** | Verify the JDK is installed at `C:\Program Files\Eclipse Adoptium\jdk-25.0.5.8-hotspot`. The batch file uses that exact path. |
-| **run.bat says "cannot find java"** | Close any other instances of the lesson runner. The port 47800 might be in use. Restart the runner. |
-| **"Only output from first run appears"** | The web server persists data between runs at a fixed port. This is intentional. Close and restart the runner to reset the browser state. |
-| **The runner window doesn't open** | Check that `lesson-runner\target\classes` exists (the Maven build output). If it doesn't, run `mvn -q compile` again. |
-| **The chapters don't load** | Check that `parts.json` exists in the repository root and that chapter folders (ch01-getting-started, ch02-variables-and-input, etc.) are present. |
+| The setup script says the JDK is missing | Run it again with `-InstallMissing` from an Administrator PowerShell, or install the JDK (step 1). |
+| The setup script says Maven is missing | Run it again with `-InstallMissing`, or install Maven to `C:\Tools\apache-maven-3.10.0` (step 2). |
+| The script says it can't resolve or download Maven | Check the network. The download is from Maven Central, so the machine needs access to `repo1.maven.org`. |
+| The setup script says a native file doesn't match the approved hashes | The downloaded browser files differ from the approved list in `natives.sha256`. Don't change the list. Tell the course owner, who decides whether the change is approved. |
+| The setup script fails while downloading the natives | Check your internet access, and that a proxy or security software isn't blocking the download. Then run the script again. |
+| `run.bat` can't find `java.exe` | Run `setup.ps1` again, so it records the JDK folder in `lesson-runner\jdk.path`. |
+| Maven build fails | Run `mvn -q compile` in `lesson-runner` to see the full error. |
+| Console shows `Exception in thread "AWT-EventQueue-1"` at startup | Known and harmless. The window still opens and works. It's printed by the Java runtime while the browser starts, and it doesn't appear in `runner.log`. |
+| Console shows `ERROR:chrome\...` lines at startup | Expected. Chromium checks Windows registry keys that don't exist on this machine. These messages don't affect the runner. |
+| Console shows `Cannot create directory 'browser/images/...'` | Chromium couldn't unpack a resource folder. Check that the runner's icons and text display correctly. If they don't, report it. |
+| The window opens but is blank (black) | The browser can't draw on some virtual machines, because they have no graphics hardware for it. The course's runner works on a physical machine. To see the browser's own log, run `$env:RUNNER_BROWSER_LOG = "1"` and then `.\run.bat`. If the log shows `No task runner for threadId 0`, the browser can't start on that machine. |
+| The runner window doesn't open | Check that `lesson-runner\target\classes` exists. If it doesn't, run `mvn -q compile` in `lesson-runner`. |
+| The chapters don't load | Check that `parts.json` exists in the repository root, and that the chapter folders are present. |
 
-For other issues, check the Output pane in the runner for error messages, or consult [README.md](README.md).
-
----
-
-## Next steps
-
-- Read [README.md](README.md) for an overview of the course structure and how to use the runner.
+If a problem isn't listed here, note the step you were on and the full error text, and report it. Include the terminal output, because the first error is often the useful one.
