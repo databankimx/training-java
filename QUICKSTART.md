@@ -19,19 +19,19 @@ Clone the repository under `C:\Development`, for example `C:\Development\trainin
 Open **PowerShell as Administrator**, go to the folder where you saved `setup.ps1`, and run:
 
 ```pwsh
-powershell -ExecutionPolicy Bypass -File .\setup.ps1 -InstallMissing
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
 ```
 
 The `-ExecutionPolicy Bypass` part lets this one script run. It doesn't change any setting on your machine.
 
-With `-InstallMissing`, the script:
+By default, the script:
 
 - installs the **JDK 25** (Eclipse Temurin) and **Git** with winget, if they're missing
 - downloads **Maven 3.10.0** from Maven Central, checks it against the SHA-1 that Maven Central publishes, and extracts it to `C:\Tools`
 - clones the repository into `C:\Development\training\training-java`, if the script isn't already inside it, and continues from the clone
 - finds the JDK wherever winget put it, and records its folder in `lesson-runner\jdk.path`
 
-An Administrator window is needed for the installs. Without `-InstallMissing`, the script doesn't install anything. It stops and shows what's missing, and the command to fix it. Winget must be available. If it isn't, install **App Installer** from the Microsoft Store first. Company policy can block installs, in which case the script says so, and you'll need IT.
+An Administrator window is needed, because the script installs by default. To check only, without installing anything, run `powershell -ExecutionPolicy Bypass -File .\setup.ps1 -InstallMissing:$false`. It stops and shows what's missing, and the command to fix it. Winget must be available. If it isn't, install **App Installer** from the Microsoft Store first. Company policy can block installs, in which case the script says so, and you'll need IT.
 
 When the script finishes, it prints a summary. Steps 1 to 4 below cover the same work, if you need to see what the script does, or want to run one part by hand.
 
@@ -39,7 +39,7 @@ When the script finishes, it prints a summary. Steps 1 to 4 below cover the same
 
 ## 1. Install the JDK
 
-The script does this step with `-InstallMissing`. To install it yourself, use winget in PowerShell:
+The script does this step by default. To install it yourself, use winget in PowerShell:
 
 ```pwsh
 winget install -e --id EclipseAdoptium.Temurin.25.JDK
@@ -53,7 +53,7 @@ Or download the JDK 25 installer from [adoptium.net](https://adoptium.net/temuri
 
 ## 2. Install Maven
 
-The script does this step with `-InstallMissing`. To install it by hand, download **Maven 3.10.0** from [maven.apache.org](https://maven.apache.org/download.cgi) (the binary zip), and extract it so that the folder `C:\Tools\apache-maven-3.10.0` exists. The setup script looks for it at that path.
+The script does this step by default. To install it by hand, download **Maven 3.10.0** from [maven.apache.org](https://maven.apache.org/download.cgi) (the binary zip), and extract it so that the folder `C:\Tools\apache-maven-3.10.0` exists. The setup script looks for it at that path.
 
 Don't use winget for Maven. Its install folder isn't the one the script looks in.
 
@@ -69,7 +69,7 @@ From the repository root:
 powershell -ExecutionPolicy Bypass -File .\setup.ps1
 ```
 
-If you didn't install the tools with `-InstallMissing`, add it, from an Administrator PowerShell, after the installs above.
+The script installs missing tools by default. To check only, without installing anything, run it with `-InstallMissing:$false`.
 
 The script checks the JDK and Maven versions, verifies the repository, and builds the runner. It copies the runner's libraries into `lesson-runner\dist\lib`. It downloads the browser's native files (JCEF) once, checks them against the approved list in `resources\vendor\jcef\natives\natives.sha256`, and copies them into `lesson-runner\dist\natives`.
 
@@ -114,7 +114,7 @@ The first run of each step builds it, so it can take several seconds.
 
 The lesson runner has its own editor, so VS Code is optional. If you want it for editing the code, install VS Code from [code.visualstudio.com](https://code.visualstudio.com), and open the repository root.
 
-Add the **Extension Pack for Java** (publisher Microsoft). It checks your code as you type, and offers completion and navigation. It uses the JDK that the setup script found, so restart VS Code after setup if the JDK doesn't appear in the status bar.
+Add the **Extension Pack for Java** (publisher Microsoft) yourself if the setup script couldn't install it. It checks your code as you type, and offers completion and navigation. It uses the JDK that the setup script found, so restart VS Code after setup if the JDK doesn't appear in the status bar.
 
 **Check:** the Extensions view lists the Java extension pack as installed, and the status bar shows the JDK 25 version.
 
@@ -124,8 +124,8 @@ Add the **Extension Pack for Java** (publisher Microsoft). It checks your code a
 
 | What you see | What to do |
 |---|---|
-| The setup script says the JDK is missing | Run it again with `-InstallMissing` from an Administrator PowerShell, or install the JDK (step 1). |
-| The setup script says Maven is missing | Run it again with `-InstallMissing`, or install Maven to `C:\Tools\apache-maven-3.10.0` (step 2). |
+| The setup script says the JDK is missing | Run it again from an Administrator PowerShell, or install the JDK (step 1). |
+| The setup script says Maven is missing | Run it again from an Administrator PowerShell, or install Maven to `C:\Tools\apache-maven-3.10.0` (step 2). |
 | The script says it can't resolve or download Maven | Check the network. The download is from Maven Central, so the machine needs access to `repo1.maven.org`. |
 | The setup script says a native file doesn't match the approved hashes | The downloaded browser files differ from the approved list in `natives.sha256`. Don't change the list. Tell the course owner, who decides whether the change is approved. |
 | The setup script fails while downloading the natives | Check your internet access, and that a proxy or security software isn't blocking the download. Then run the script again. |
