@@ -186,3 +186,35 @@ Run each step and compare its output with its lesson. Where a lesson gives an ex
 
 - [ ] Check the C++ course's Ch24 homework and summary wording against the analyzer output.
 - [ ] Decide whether the C++ course needs the Dr. Memory fetch script deleted, if it has one. The search found no references to it.
+
+---
+
+## 13. training-python
+
+### Clean VM setup (blocker)
+
+- [x] `setup.ps1 -InstallMissing` completes on a VM. The summary shows `ok` for every line that applies. The run took about seven minutes, most of it the library install.
+- [x] The repository environment (`.venv`), the web environment, and the MathJax and Prism install go into the repository, not the global Python or npm.
+- [x] The VS Code settings are copied into `.vscode`.
+- [ ] Set `GITHUB_TRAINING_TOKEN` and confirm the Chapter 17 exercises run. The summary warns until it's set.
+- [ ] Commit `setup.ps1`, `QUICKSTART.md`, and `lesson-runner\core\wrapper.py` to `dev`, then merge to `main`. A fresh clone's handover uses the repository's copy of the script once it's on `main`.
+- [ ] Confirm the clone step works from a folder with no repository. Use a fresh VM, or move the existing clone out of the way first.
+
+### Lesson runner (blocker)
+
+- [x] The runner launches, and most lessons run. Visualizations work.
+- [x] The expanded Alien Invasion game (`14-7-expanding-the-game`) runs on a VM with no sound device, with silent audio. The wrapper handles this for lessons that import pygame.
+- [x] Runs from VS Code match the runner, after installing the Python extension.
+- [ ] The first web run asks for the admin account, and the Django and Flask builds start the browser.
+- [ ] Ch17 GitHub exercises run with the token set.
+- [ ] S12 and S17 show a connection error without a database server, and work with one. The QUICKSTART says this is expected.
+
+### VS Code (blocker)
+
+- [ ] A VS Code run of the expanded game on the VM needs `$env:SDL_AUDIODRIVER = "dummy"` set before `code .`. This is documented in QUICKSTART's troubleshooting table. Decide whether the course should set it for students, or leave it documented.
+
+### Open items
+
+- [ ] Decide what to do with `claude-resume.md` in the repository root. It looks like an AI working note, not course content.
+- [ ] Confirm the repository address `https://github.com/databankimx/training-python.git`, which the setup script clones by default.
+- [ ] Check the Python course's Dr. Memory and sanitizer references, if any, against the other courses. The search hasn't been run on this repository yet.

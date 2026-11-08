@@ -7,7 +7,7 @@ The steps are:
 * [Number representation](#goto/01-number-representation): place values, fixed-width bits, negative numbers, and overflow.
 * [Truth tables](#goto/02-truth-tables): the complement, AND, OR, and XOR, one bit at a time.
 * [Bitwise AND](#goto/03-bitwise-and): keeping shared bits, and checking whether a number is odd.
-* [Bit flags](#goto/04-bit-flags): one bit per product in a licence value, and checking each one with AND.
+* [Bit flags](#goto/04-bit-flags): one bit per product in a license value, and checking each one with AND.
 * [Bitwise OR](#goto/05-bitwise-or): turning bits on, and adding a permission.
 * [Bit flags, combined with OR](#goto/06-flags-redux): bundles of products built from their bits.
 * [Bitwise NOT](#goto/07-bitwise-not): flipping bits, limiting a complement to a width, and setting or clearing one bit.

@@ -1,6 +1,6 @@
 ## Bit flags, combined with OR
 
-Sometimes one setting needs to stand for several bits. A licence bundle, for example, covers several products, and a check for any one of them should still work. OR makes this simple. The bits of several flags are combined into one value, and that value has every one of their bits set. A value like that is called a bit-mask.
+Sometimes one setting needs to stand for several bits. A license bundle, for example, covers several products, and a check for any one of them should still work. OR makes this simple. The bits of several flags are combined into one value, and that value has every one of their bits set. A value like that is called a bit-mask.
 
 ### The scenario
 
@@ -89,12 +89,12 @@ The enum is named `Bundle` in the program, to avoid confusion with the `Package`
 
 ### Checking a product in a bundle
 
-The check from the bit flags step doesn't change at all. It asks whether a product's bit is set, and a bundle has the bits of all its products set. So a Work licence passes the word processing check, because the word processing bit is part of the Work value:
+The check from the bit flags step doesn't change at all. It asks whether a product's bit is set, and a bundle has the bits of all its products set. So a Work license passes the word processing check, because the word processing bit is part of the Work value:
 
 ```java
-int licences = Bundle.WORK.bits;
+int licenses = Bundle.WORK.bits;
 for (Product product : Product.values()) {
-    if (isLicensed(licences, product)) {
+    if (isLicensed(licenses, product)) {
         System.out.println("  " + product.name());
     }
 }
@@ -112,7 +112,7 @@ Products in the Work bundle:
   COLLABORATION
 ```
 
-The check is the same whether the licence is a single product or a whole bundle. Only the enum has to change when a bundle changes.
+The check is the same whether the license is a single product or a whole bundle. Only the enum has to change when a bundle changes.
 
 ---
 
@@ -131,7 +131,7 @@ What is the value of the Personal bundle, which is word processing (1) OR email 
 ````
 
 ````quiz
-Why doesn't the licence check change when a bundle gains a product?
+Why doesn't the license check change when a bundle gains a product?
 ○ Because bundles are not checked at all.
 → Not quite. Bundles are checked, through their bits.
 ◉ Because the check only asks whether a product's bit is set, and the bundle's value already has that bit.
@@ -144,7 +144,7 @@ Why doesn't the licence check change when a bundle gains a product?
 
 ### Try it in the runner
 
-Change the line that sets `licences` to `Bundle.PERSONAL.bits`, and predict the list before you press **Run**. It shows WORD_PROCESSING and EMAIL_CLIENT only. Then change it to `Bundle.ULTRA_DELUXE.bits`, and predict the number of products listed. All eight are listed, since Ultra Deluxe has every bit set.
+Change the line that sets `licenses` to `Bundle.PERSONAL.bits`, and predict the list before you press **Run**. It shows WORD_PROCESSING and EMAIL_CLIENT only. Then change it to `Bundle.ULTRA_DELUXE.bits`, and predict the number of products listed. All eight are listed, since Ultra Deluxe has every bit set.
 
 ---
 
