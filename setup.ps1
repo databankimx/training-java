@@ -28,8 +28,8 @@
 #>
 
 param(
-    [switch]$InstallMissing,
-    [string]$RepoUrl,
+    [bool]$InstallMissing = $true,
+    [string]$RepoUrl = "https://github.com/databankimx/training-java.git",
     [string]$Branch = "main"
 )
 
@@ -242,13 +242,11 @@ if (-not (Test-Path (Join-Path $repoRoot "parts.json"))) {
         }
         $repoRoot = $defaultRepoPath
     } else {
-        throw "This script isn't inside the training repository, and no repository was found at $defaultRepoPath. Clone the repository first, or run again with -RepoUrl <clone address>."
+        throw "This script isn't inside the training repository, and no repository was found at $defaultRepoPath. Clone the repository first, or check the clone address in this script's -RepoUrl default."
     }
     # Run the repository's own copy of this script, so every later step uses the cloned files.
     Write-Host "Continuing from the repository at $repoRoot" -ForegroundColor Cyan
-    $childArgs = @()
-    if ($InstallMissing) { $childArgs += "-InstallMissing" }
-    & (Join-Path $repoRoot "setup.ps1") @childArgs
+    & (Join-Path $repoRoot "setup.ps1") -InstallMissing:$InstallMissing
     exit $LASTEXITCODE
 }
 
@@ -310,6 +308,39 @@ try {
     Add-Result "Lesson runner build" "ok" "dist\lib and dist\natives"
 } finally {
     Pop-Location
+}
+
+# VS Code and the Java extension ---------------------------------------------------------------------
+
+Write-Host ""
+Write-Host "Checking VS Code and the Extension Pack for Java..." -ForegroundColor Cyan
+$codeCommand = Get-Command code -ErrorAction SilentlyContinue
+if (-not $codeCommand -and $InstallMissing) {
+    Write-Host "  VS Code is missing: installing it" -ForegroundColor Yellow
+    & winget install -e --id Microsoft.VisualStudioCode --silent --accept-package-agreements --accept-source-agreements
+    if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne -1978335189) {
+        Add-Result "VS Code" "warning" "winget couldn't install it (exit code $LASTEXITCODE). Install it from code.visualstudio.com"
+    }
+    foreach ($folder in @((Join-Path $env:LOCALAPPDATA "Programs\Microsoft VS Code\bin"), (Join-Path $env:ProgramFiles "Microsoft VS Code\bin"))) {
+        if (Test-Path (Join-Path $folder "code.cmd")) { $env:Path = "$folder;$env:Path" }
+    }
+    $codeCommand = Get-Command code -ErrorAction SilentlyContinue
+}
+if (-not $codeCommand) {
+    Add-Result "VS Code" "warning" "not on PATH. Install it, open a new PowerShell window, and run this script again"
+} else {
+    Add-Result "VS Code" "ok" $codeCommand.Source
+    $installedExtensions = (& code --list-extensions 2>$null)
+    if ($installedExtensions -contains "vscjava.vscode-java-pack") {
+        Add-Result "Java extension pack" "ok" "already installed"
+    } else {
+        & code --install-extension vscjava.vscode-java-pack
+        if ($LASTEXITCODE -eq 0) {
+            Add-Result "Java extension pack" "ok" "installed"
+        } else {
+            Add-Result "Java extension pack" "warning" "couldn't be installed. Install 'Extension Pack for Java' from the Extensions view"
+        }
+    }
 }
 
 Show-Summary

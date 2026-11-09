@@ -46,5 +46,4 @@ lesson-runner/jcef-cache/
 lesson-runner/jdk.path
 lesson-runner/exceptions*.txt
 lesson-runner/debug.log
-lesson-runner/dist/
 

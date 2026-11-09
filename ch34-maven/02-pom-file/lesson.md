@@ -48,7 +48,7 @@ The `properties` section holds values that the rest of the file can use. `maven.
 
 A dependency is a library the project uses. Maven downloads it, and puts it on the classpath for the build. The example uses JUnit, the testing framework from the testing chapter, in the `test` scope. A `test` dependency is available to the tests but not included in the program's jar.
 
-Each dependency is named by the same three values. Before adding one, check its licence. The Development Rules of Engagement ask for the same check on any library the course uses, as the JSON and testing chapters did.
+Each dependency is named by the same three values. Before adding one, check its license. The Development Rules of Engagement ask for the same check on any library the course uses, as the JSON and testing chapters did.
 
 ### Running it
 

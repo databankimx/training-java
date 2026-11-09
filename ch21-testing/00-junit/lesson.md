@@ -40,7 +40,7 @@ clamp(-3, 0, 10) = 0
 
 ### Installing JUnit
 
-JUnit is a third-party library, so the course doesn't include it in the repository. The runner needs the console launcher, the file `junit-platform-console-standalone.jar`, placed in `resources/vendor/junit` in the course folder. The runner reports a clear message if the file is missing. The jar's licence must be checked before it's added, as with any vendored library.
+JUnit is a third-party library, so the course doesn't include it in the repository. The runner needs the console launcher, the file `junit-platform-console-standalone.jar`, placed in `resources/vendor/junit` in the course folder. The runner reports a clear message if the file is missing. The jar's license must be checked before it's added, as with any vendored library.
 
 ### Why a framework
 

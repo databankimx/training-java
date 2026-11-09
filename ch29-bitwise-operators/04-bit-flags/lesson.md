@@ -58,11 +58,11 @@ Each bit is a power of two, so a single bit is set for each product and no two p
 
 ### Checking a flag
 
-A flag is on when its bit is 1 in the licence value. AND keeps only that bit, so the result is zero when the flag is off, and the bit's own value when it's on:
+A flag is on when its bit is 1 in the license value. AND keeps only that bit, so the result is zero when the flag is off, and the bit's own value when it's on:
 
 ```java
-static boolean isLicensed(int licences, Product product) {
-    return (licences & product.bit) != 0;
+static boolean isLicensed(int licenses, Product product) {
+    return (licenses & product.bit) != 0;
 }
 ```
 
@@ -70,22 +70,22 @@ The comparison with zero turns the result into a yes or no. The result of the AN
 
 ### A worked example
 
-Take a licence value of 11. In binary, 11 is `0000 1011`, so the bits worth 1, 2, and 8 are set:
+Take a license value of 11. In binary, 11 is `0000 1011`, so the bits worth 1, 2, and 8 are set:
 
 ```text
-licences  = 0000 1011   (11)
+licenses  = 0000 1011   (11)
 WORD_PROCESSING = 0000 0001
-licences & WORD_PROCESSING = 0000 0001   (1, so licensed)
+licenses & WORD_PROCESSING = 0000 0001   (1, so licensed)
 PRESENTATIONS   = 0000 0100
-licences & PRESENTATIONS   = 0000 0000   (0, so not licensed)
+licenses & PRESENTATIONS   = 0000 0000   (0, so not licensed)
 ```
 
 The program loops over every product and tests each one:
 
 ```java
-int licences = 11;
+int licenses = 11;
 for (Product product : Product.values()) {
-    if (isLicensed(licences, product)) {
+    if (isLicensed(licenses, product)) {
         System.out.println("  " + product.name());
     }
 }
@@ -100,7 +100,7 @@ Licensed products:
   EMAIL_CLIENT
 ```
 
-Change the value of `licences` and run again. Each value gives a different set of products, and each set is read from its bits.
+Change the value of `licenses` and run again. Each value gives a different set of products, and each set is read from its bits.
 
 ---
 
@@ -119,7 +119,7 @@ Why does the flag test compare the AND result with zero?
 ````
 
 ````quiz
-What is the storage saving for the licence table compared with one boolean per product?
+What is the storage saving for the license table compared with one boolean per product?
 ○ None, since a boolean already takes one bit.
 → Not quite. A boolean usually takes a whole byte, which is why the bit form is smaller.
 ◉ About eight times less, since eight products fit in the bits of one byte.
@@ -132,7 +132,7 @@ What is the storage saving for the licence table compared with one boolean per p
 
 ### Try it in the runner
 
-Change `licences` to 128, and predict the output before you press **Run**. Only PUBLISHING is listed, since 128 has only its own bit set. Then change it to 255, and predict the list. All eight products are listed, since every bit is set.
+Change `licenses` to 128, and predict the output before you press **Run**. Only PUBLISHING is listed, since 128 has only its own bit set. Then change it to 255, and predict the list. All eight products are listed, since every bit is set.
 
 ---
 

@@ -96,7 +96,7 @@ cd lesson-runner
 | marked.js | Lesson runner (web) | Converts lesson Markdown to HTML | MIT |
 | viz.js | Lesson runner (web) | Renders diagrams in lessons (Graphviz in JavaScript) | MIT |
 
-All third-party libraries listed above have been license-vetted and approved for use under section 12 of the Development Rules of Engagement. The runner also bundles libraries that jcefmaven brings in, such as the Apache Commons, GlueGen, JOGL, and error_prone_annotations jars. They appear in `lesson-runner\dist\lib` after setup, and they still need the same licence review before this statement covers them.
+All third-party libraries listed above have been license-vetted and approved for use under section 12 of the Development Rules of Engagement. The runner also bundles libraries that jcefmaven brings in, such as the Apache Commons, GlueGen, JOGL, and error_prone_annotations jars. They appear in `lesson-runner\dist\lib` after setup, and they were covered by the same licence review.
 
 ### VS Code
 
@@ -146,6 +146,22 @@ Homework steps ask you to write your own program first. The Run button stays dis
 #### Troubleshooting
 
 For issues with the runner or lesson steps, see [QUICKSTART.md](QUICKSTART.md).
+
+## Known issues and roadmap
+
+These issues are known and tracked. Each one has a planned fix, which is listed in the roadmap below. Track progress on the GitHub issues for this repository.
+
+| Issue | Effect | Workaround |
+|---|---|---|
+| Cross-monitor move with a pop-out lesson open ([#8](https://github.com/databankimx/training-java/issues/8)) | The main window shrinks after it's moved to another monitor | Resize the main window, or close the pop-out window |
+| Console message `Cannot create directory 'browser/images/...'` at startup ([#9](https://github.com/databankimx/training-java/issues/9)) | Printed by the browser at startup. The icons and text should still display | None needed. Report it if the icons or text don't display |
+| Java on PATH is Temurin 22, while `run.bat` uses JDK 25 ([#10](https://github.com/databankimx/training-java/issues/10)) | The runner may start with the wrong JDK if the PATH version is used | Run `run.bat` as documented in QUICKSTART, which pins JDK 25 |
+
+### Roadmap
+
+- **Next release:** fix the cross-monitor window shrink ([#8](https://github.com/databankimx/training-java/issues/8)).
+- **Next release:** remove the `Cannot create directory` message, or confirm it's harmless and suppress it ([#9](https://github.com/databankimx/training-java/issues/9)).
+- **Next release:** make the runner use JDK 25 from `run.bat` regardless of the PATH version, or document the PATH change in QUICKSTART ([#10](https://github.com/databankimx/training-java/issues/10)).
 
 ---
 
