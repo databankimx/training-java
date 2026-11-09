@@ -67,6 +67,10 @@ function Test-Administrator {
     return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
+function Write-Note([string]$message) {
+    Write-Host "   $message"
+}
+
 # Returns the JDK 25 folder: the default path, or any jdk-25 folder under Eclipse Adoptium. Null if none is found.
 function Find-Jdk {
     $candidates = @($jdkDefault)

@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "DataBank SonarQube",
+        "projectKey": "training-java"
+    }
+}
