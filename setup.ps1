@@ -1631,8 +1631,13 @@ if ($script:RunTestsEffective) {
 }
 
 if (-not $NoLaunch) {
-    Write-Stage "Starting the lesson runner"
-    Start-Runner (Get-Prop $script:Config "launch" $null)
+    # A runner started after a failed step would open a broken window, so it's held back until the setup passes.
+    if (@($script:Problems | Where-Object { $_.Status -eq "failed" }).Count -gt 0) {
+        Write-Stage "Not starting the lesson runner, because a step failed. Fix it, then run the script again."
+    } else {
+        Write-Stage "Starting the lesson runner"
+        Start-Runner (Get-Prop $script:Config "launch" $null)
+    }
 }
 
 Write-Log ""
