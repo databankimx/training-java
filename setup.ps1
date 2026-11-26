@@ -24,7 +24,8 @@
     Step types: npm (command: ci or install), npm-run (script, for example test), python-venv (path, requirements),
     command (folder, exe, args, optional check, optional pathPrepend), copy (source, dest, backup),
     msbuild-restore (solution), write-file (path, content or contentFrom, optional ifMissing), dotnet-build (projects),
-    download (url, path, and optional extract "zip" with folder).
+    download (url, path, and optional extract "zip" with folder), verify-hashes (manifest: checks the files in the
+    manifest's folder against its SHA-256 list, and fails on a missing, changed, or unlisted file).
     The launch section takes kind "electron" (the runner's Electron app in folder) or "exe" (a built program at file).
 
     Every step may set: name, type, folder, enabled, requires (install names), runTests, elevated.
@@ -1045,6 +1046,49 @@ function Invoke-DotnetBuildStep($Step, [string]$Name) {
     Set-Outcome $Name "ok" "$($projects.Count) project(s)"
 }
 
+# Checks files against an approved hash list. Each line of the manifest is a SHA-256 hash, two spaces, and a path
+# relative to the manifest's folder. Fails if an approved file is missing or changed, or if the folder has a file that
+# isn't in the list. The manifest itself is not checked.
+function Invoke-VerifyHashesStep($Step, [string]$Name) {
+    $manifest = Get-RepoPath (Get-Prop $Step "manifest" $null)
+    if (-not (Test-Path -LiteralPath $manifest -PathType Leaf)) { throw "No approved hash list at $manifest." }
+    $folder = Split-Path -Parent $manifest
+    $manifestName = Split-Path -Leaf $manifest
+
+    $approved = @{}
+    foreach ($line in Get-Content -LiteralPath $manifest) {
+        if ($line.Trim() -eq "") { continue }
+        $parts = $line -split "  ", 2
+        if ($parts.Count -ne 2) { throw "Malformed line in ${manifest}: $line" }
+        $approved[$parts[1].Replace('\', '/')] = $parts[0].ToLowerInvariant()
+    }
+
+    $problems = New-Object System.Collections.ArrayList
+    foreach ($relative in $approved.Keys) {
+        $path = Join-Path $folder ($relative -replace '/', '\')
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { [void]$problems.Add("missing: $relative"); continue }
+        $actual = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant()
+        if ($actual -ne $approved[$relative]) { [void]$problems.Add("changed: $relative") }
+    }
+
+    $folderFull = (Resolve-Path -LiteralPath $folder).Path.TrimEnd('\')
+    Get-ChildItem -LiteralPath $folder -Recurse -File | ForEach-Object {
+        $relative = $_.FullName.Substring($folderFull.Length).TrimStart('\').Replace('\', '/')
+        if ($relative -ne $manifestName -and -not $approved.ContainsKey($relative)) {
+            [void]$problems.Add("not approved: $relative")
+        }
+    }
+
+    if ($problems.Count -eq 0) {
+        Set-Outcome $Name "ok" "$($approved.Count) file(s) match the approved hashes"
+        return
+    }
+    $shown = @($problems | Select-Object -First 5) -join "; "
+    $more = ""
+    if ($problems.Count -gt 5) { $more = " and $($problems.Count - 5) more" }
+    throw "$($problems.Count) problem(s): $shown$more."
+}
+
 function Invoke-Step($Step) {
     $name = Get-Prop $Step "name" "(unnamed step)"
     $type = Get-Prop $Step "type" ""
@@ -1072,6 +1116,7 @@ function Invoke-Step($Step) {
             "download"        { Invoke-DownloadStep $Step $name }
             "msbuild-restore" { Invoke-MsBuildRestoreStep $Step $name }
             "write-file"      { Invoke-WriteFileStep $Step $name }
+            "verify-hashes"   { Invoke-VerifyHashesStep $Step $name }
             "dotnet-build"    { Invoke-DotnetBuildStep $Step $name }
             default           { throw "Unknown step type '$type' in setup.json." }
         }
@@ -1195,10 +1240,10 @@ function Invoke-Bootstrap {
 # ---------------------------------------------------------------------------------------------------------------------
 
 $KnownInstalls = @("git", "powershell7", "node", "python", "dotnet", "jdk", "maven", "msys2", "rust", "visualStudio", "buildTools", "vcRuntime", "vscode", "notepadPlusPlus")
-$KnownStepTypes = @("npm", "npm-run", "python-venv", "command", "copy", "msbuild-restore", "write-file", "dotnet-build", "download")
+$KnownStepTypes = @("npm", "npm-run", "python-venv", "command", "copy", "msbuild-restore", "write-file", "dotnet-build", "download", "verify-hashes")
 $KnownRootSettings = @("schemaVersion", "name", "folder", "repoUrl", "branch", "baseDirectory", "runTests", "installs", "steps", "launch")
 $KnownInstallSettings = @("install", "pinned", "sideBySide", "orNewer", "winget", "override", "root", "url", "workloads", "packages", "extensions")
-$KnownStepSettings = @("name", "type", "folder", "enabled", "requires", "runTests", "command", "script", "path", "requirements", "exe", "args", "check", "source", "dest", "backup", "solution", "content", "contentFrom", "projects", "elevated", "url", "extract", "pathPrepend", "ifMissing")
+$KnownStepSettings = @("name", "type", "folder", "enabled", "requires", "runTests", "command", "script", "path", "requirements", "exe", "args", "check", "source", "dest", "backup", "solution", "content", "contentFrom", "projects", "elevated", "url", "extract", "pathPrepend", "ifMissing", "manifest")
 
 function Test-IsText($Value) { return ($Value -is [string]) }
 function Test-IsFlag($Value) { return ($Value -is [bool]) }
@@ -1219,6 +1264,7 @@ function Get-RequiredStepSettings([string]$Type) {
         "msbuild-restore" { return @("solution") }
         "write-file"      { return @("path") }
         "download"        { return @("url", "path") }
+        "verify-hashes"   { return @("manifest") }
         default           { return @() }
     }
 }

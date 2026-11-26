@@ -68,6 +68,12 @@
       "requires": [ "jdk" ]
     },
     {
+      "name": "Verify the natives",
+      "type": "verify-hashes",
+      "manifest": "resources\\vendor\\jcef\\natives\\natives.sha256",
+      "requires": [ "jdk" ]
+    },
+    {
       "name": "Package the runner",
       "type": "command",
       "folder": "lesson-runner",
