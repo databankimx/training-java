@@ -47,7 +47,7 @@
       "type": "command",
       "folder": "lesson-runner",
       "exe": "powershell.exe",
-      "args": [ "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "Remove-Item -LiteralPath 'dist\\lib', 'dist\\natives' -Recurse -Force -ErrorAction SilentlyContinue" ],
+      "args": [ "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "if (Test-Path -LiteralPath 'dist') { try { Remove-Item -LiteralPath 'dist' -Recurse -Force -ErrorAction Stop } catch { Write-Error 'Could not clear lesson-runner\\dist, because a file in it is in use. Close any Lesson Runner window, then run the script again.'; exit 1 } }" ],
       "requires": [ "jdk" ]
     },
     {
