@@ -20,7 +20,7 @@
     "vscode": {
       "install": true,
       "winget": "Microsoft.VisualStudioCode",
-      "extensions": [ "redhat.java", "vscjava.vscode-maven" ]
+      "extensions": [ "redhat.java", "vscjava.vscode-maven", "vscjava.vscode-java-pack" ]
     },
     "notepadPlusPlus": { "install": false, "winget": "Notepad++.Notepad++" },
     "buildTools": { "install": false }
