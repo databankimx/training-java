@@ -77,6 +77,9 @@ public final class Window {
             builder.addJcefArgs("--enable-logging=stderr", "--v=0");
         }
         builder.getCefSettings().windowless_rendering_enabled = true;
+        // A VM has no GPU, so Chromium's hardware path never produces a frame and the window stays black. These flags
+        // make Chromium draw in software, which works on any machine.
+        builder.addJcefArgs("--disable-gpu", "--disable-gpu-compositing");
         // The browser's cache lives in its own folder, which CEF needs to be set explicitly to avoid a warning and
         // shared process state.
         builder.getCefSettings().root_cache_path = Paths.get("jcef-cache").toAbsolutePath().toString();
