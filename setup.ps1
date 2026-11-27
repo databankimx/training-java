@@ -538,6 +538,9 @@ function Get-ProgramVersion([string]$Name, $Spec) {
                 Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
             if ($java) {
                 $script:InstallPaths["jdk"] = Split-Path -Parent (Split-Path -Parent $java)
+                # Maven (mvn.cmd) and other Java tools refuse to run without JAVA_HOME. Point it at the JDK found here,
+                # so every later step in this run, and the runner it starts, uses the same JDK.
+                $env:JAVA_HOME = $script:InstallPaths["jdk"]
                 return (Get-CommandOutput $java @("-version"))
             }
             return $null
