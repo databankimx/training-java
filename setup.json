@@ -3,7 +3,7 @@
   "name": "Working With Java",
   "folder": "training-java",
   "repoUrl": "https://github.com/databankimx/training-java.git",
-  "branch": "main",
+  "branch": "dev",
   "baseDirectory": "C:\\Development\\training",
   "runTests": false,
   "installs": {
@@ -22,7 +22,7 @@
       "winget": "Microsoft.VisualStudioCode",
       "extensions": [ "redhat.java", "vscjava.vscode-maven", "vscjava.vscode-java-pack" ]
     },
-    "notepadPlusPlus": { "install": false, "winget": "Notepad++.Notepad++" },
+    "notepadPlusPlus": { "install": true, "winget": "Notepad++.Notepad++" },
     "buildTools": { "install": false }
   },
   "steps": [

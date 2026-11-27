@@ -26,7 +26,9 @@
     msbuild-restore (solution), write-file (path, content or contentFrom, optional ifMissing), dotnet-build (projects),
     download (url, path, and optional extract "zip" with folder), verify-hashes (manifest: checks the files in the
     manifest's folder against its SHA-256 list, and fails on a missing, changed, or unlisted file).
-    The launch section takes kind "electron" (the runner's Electron app in folder) or "exe" (a built program at file).
+    The launch section takes kind "command" (a long-running program, such as cmd.exe running npm run tauri dev, started
+    in the background with "exe", "args" and "folder"), kind "electron" (the runner's Electron app in folder, optionally opening "main", a script
+    path such as lesson-runner/main.js, instead of the folder itself) or "exe" (a built program at file).
 
     Every step may set: name, type, folder, enabled, requires (install names), runTests, elevated.
     A step or install that needs an elevated PowerShell makes the script stop before anything is installed.
@@ -692,6 +694,41 @@ function Install-Msys2($Spec, [bool]$Upgrade) {
     Add-UserPathEntry (Join-Path $root "ucrt64\bin")
 }
 
+# Adds "Open with Code" to the Explorer right-click menu for files, folders, and the background of a folder.
+# Written under HKEY_CURRENT_USER, so it needs no administrator rights and applies to the current user only.
+function Install-VsCodeContextMenu {
+    try {
+        $exe = @(
+            (Join-Path $env:LOCALAPPDATA "Programs\Microsoft VS Code\Code.exe"),
+            (Join-Path $env:ProgramFiles "Microsoft VS Code\Code.exe")) |
+            Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+        if (-not $exe) {
+            Set-Outcome "vscode-context-menu" "warning" "Code.exe wasn't found, so the Open with Code menu entries weren't added."
+            return
+        }
+        # The keys are written with .NET. The PowerShell registry provider treats * in a key name as a wildcard, and
+        # New-Item and New-ItemProperty don't take -LiteralPath.
+        $entries = @(
+            @{ Path = "Software\Classes\*\shell\VSCode";                    Argument = "%1" },
+            @{ Path = "Software\Classes\Directory\shell\VSCode";            Argument = "%1" },
+            @{ Path = "Software\Classes\Directory\Background\shell\VSCode"; Argument = "%V" }
+        )
+        $hkcu = [Microsoft.Win32.Registry]::CurrentUser
+        foreach ($entry in $entries) {
+            $shellKey = $hkcu.CreateSubKey($entry.Path)
+            $shellKey.SetValue("", "Open w&ith VS Code")
+            $shellKey.SetValue("Icon", "`"$exe`",0")
+            $shellKey.Close()
+            $commandKey = $hkcu.CreateSubKey($entry.Path + "\command")
+            $commandKey.SetValue("", "`"$exe`" `"$($entry.Argument)`"")
+            $commandKey.Close()
+        }
+        Set-Outcome "vscode-context-menu" "ok" "Open with Code added to the Explorer right-click menu for this user"
+    } catch {
+        Set-Outcome "vscode-context-menu" "warning" ("Couldn't add the Open with Code menu entries: " + $_.Exception.Message)
+    }
+}
+
 function Install-VsCodeExtensions($Spec) {
     $extensions = @(Get-Prop $Spec "extensions" @())
     if ($extensions.Count -eq 0) { return }
@@ -784,7 +821,10 @@ function Invoke-InstallItem([string]$Name) {
             }
         }
 
-        if ($Name -eq "vscode") { Install-VsCodeExtensions $spec }
+        if ($Name -eq "vscode") {
+            Install-VsCodeExtensions $spec
+            Install-VsCodeContextMenu
+        }
     } catch {
         Set-Outcome $Name "failed" $_.Exception.Message
     }
@@ -869,7 +909,11 @@ function Invoke-NpmStep($Step, [string]$Name) {
             return
         }
     }
-    Set-Outcome $Name "ok" $folder
+    if (Test-Path -LiteralPath $electronExe) {
+        Set-Outcome $Name "ok" "$folder (Electron binary present)"
+    } else {
+        Set-Outcome $Name "ok" $folder
+    }
 }
 
 function Invoke-NpmRunStep($Step, [string]$Name) {
@@ -919,6 +963,20 @@ function Invoke-PythonVenvStep($Step, [string]$Name) {
         if ($install.Code -ne 0) { Show-FailureTail $install; throw "pip install -r $requirements failed (exit $($install.Code))." }
     }
     Set-Outcome $Name "ok" $venv
+}
+
+# Looks for an environment variable (in the user's settings, or in this session). A missing variable is reported as a
+# warning, and the setup carries on. This step never fails the setup.
+function Invoke-CheckVariableStep($Step, [string]$Name) {
+    $variable = Get-Prop $Step "variable" $null
+    $message = Get-Prop $Step "message" "The environment variable $variable isn't set."
+    $value = [Environment]::GetEnvironmentVariable($variable, "User")
+    if (-not $value) { $value = [Environment]::GetEnvironmentVariable($variable, "Process") }
+    if ($value) {
+        Set-Outcome $Name "ok" "$variable is set"
+    } else {
+        Set-Outcome $Name "warning" $message
+    }
 }
 
 function Invoke-CommandStep($Step, [string]$Name) {
@@ -1119,6 +1177,7 @@ function Invoke-Step($Step) {
             "download"        { Invoke-DownloadStep $Step $name }
             "msbuild-restore" { Invoke-MsBuildRestoreStep $Step $name }
             "write-file"      { Invoke-WriteFileStep $Step $name }
+            "check-variable"  { Invoke-CheckVariableStep $Step $name }
             "verify-hashes"   { Invoke-VerifyHashesStep $Step $name }
             "dotnet-build"    { Invoke-DotnetBuildStep $Step $name }
             default           { throw "Unknown step type '$type' in setup.json." }
@@ -1164,6 +1223,16 @@ function Start-Runner($Launch) {
             Set-Outcome "lesson-runner" "warning" "$file isn't built yet, so the runner wasn't started."
         }
     }
+    if ((Get-Prop $Launch "kind" "") -eq "command") {
+        # A long-running command, such as npm run tauri dev. It runs in the background, and its output goes to the log
+        # folder, so the setup doesn't wait for it.
+        $exe = Get-Prop $Launch "exe" $null
+        $logDir = Split-Path -Parent $script:LogFile
+        Start-Process -FilePath $exe -ArgumentList @(Get-Prop $Launch "args" @()) -WorkingDirectory $folder -WindowStyle Hidden `
+            -RedirectStandardOutput (Join-Path $logDir "lesson-runner-out.log") `
+            -RedirectStandardError (Join-Path $logDir "lesson-runner-err.log")
+        Write-LogOnly "Started $exe in $folder."
+    }
     if ((Get-Prop $Launch "kind" "") -eq "electron") {
         $exe = Join-Path $folder "node_modules\electron\dist\electron.exe"
         # npm hoists node_modules to the workspace root when the runner is a workspace, so check the repository root too.
@@ -1171,7 +1240,7 @@ function Start-Runner($Launch) {
         if (Test-Path -LiteralPath $exe) {
             # The runner's output goes to files. Without this, Electron writes its messages into this console and holds it.
             $logDir = Split-Path -Parent $script:LogFile
-            Start-Process -FilePath $exe -ArgumentList "." -WorkingDirectory $folder `
+            Start-Process -FilePath $exe -ArgumentList (Get-Prop $Launch "main" ".") -WorkingDirectory $folder `
                 -RedirectStandardOutput (Join-Path $logDir "lesson-runner-out.log") `
                 -RedirectStandardError (Join-Path $logDir "lesson-runner-err.log")
             Write-LogOnly "Started the lesson runner from $folder."
@@ -1243,10 +1312,10 @@ function Invoke-Bootstrap {
 # ---------------------------------------------------------------------------------------------------------------------
 
 $KnownInstalls = @("git", "powershell7", "node", "python", "dotnet", "jdk", "maven", "msys2", "rust", "visualStudio", "buildTools", "vcRuntime", "vscode", "notepadPlusPlus")
-$KnownStepTypes = @("npm", "npm-run", "python-venv", "command", "copy", "msbuild-restore", "write-file", "dotnet-build", "download", "verify-hashes")
+$KnownStepTypes = @("npm", "npm-run", "python-venv", "command", "copy", "msbuild-restore", "write-file", "dotnet-build", "download", "verify-hashes", "check-variable")
 $KnownRootSettings = @("schemaVersion", "name", "folder", "repoUrl", "branch", "baseDirectory", "runTests", "installs", "steps", "launch")
 $KnownInstallSettings = @("install", "pinned", "sideBySide", "orNewer", "winget", "override", "root", "url", "workloads", "packages", "extensions")
-$KnownStepSettings = @("name", "type", "folder", "enabled", "requires", "runTests", "command", "script", "path", "requirements", "exe", "args", "check", "source", "dest", "backup", "solution", "content", "contentFrom", "projects", "elevated", "url", "extract", "pathPrepend", "ifMissing", "manifest")
+$KnownStepSettings = @("name", "type", "folder", "enabled", "requires", "runTests", "command", "script", "path", "requirements", "exe", "args", "check", "source", "dest", "backup", "solution", "content", "contentFrom", "projects", "elevated", "url", "extract", "pathPrepend", "ifMissing", "manifest", "variable", "message")
 
 function Test-IsText($Value) { return ($Value -is [string]) }
 function Test-IsFlag($Value) { return ($Value -is [bool]) }
@@ -1266,6 +1335,7 @@ function Get-RequiredStepSettings([string]$Type) {
         "copy"            { return @("source", "dest") }
         "msbuild-restore" { return @("solution") }
         "write-file"      { return @("path") }
+        "check-variable"  { return @("variable") }
         "download"        { return @("url", "path") }
         "verify-hashes"   { return @("manifest") }
         default           { return @() }
@@ -1445,7 +1515,8 @@ function Get-SchemaProblems($Config) {
                 [void]$problems.Add("launch.ide 'visualstudio' needs 'solution', the .sln path in the repository.")
             }
             $kind = Get-Prop $launch "kind" "none"
-            if (@("none", "electron", "exe") -notcontains $kind) { [void]$problems.Add("launch.kind must be 'none', 'electron', or 'exe'.") }
+            if (@("none", "electron", "exe", "command") -notcontains $kind) { [void]$problems.Add("launch.kind must be 'none', 'electron', 'exe', or 'command'.") }
+            if ($kind -eq "command" -and -not (Get-Prop $launch "exe" $null)) { [void]$problems.Add("launch.kind 'command' needs 'exe', the program to run.") }
             if ($kind -eq "exe" -and -not (Test-IsText (Get-Prop $launch "file" $null))) {
                 [void]$problems.Add("launch.kind 'exe' needs 'file', the built program's path in the repository.")
             }
