@@ -3,7 +3,7 @@
   "name": "Working With Java",
   "folder": "training-java",
   "repoUrl": "https://github.com/databankimx/training-java.git",
-  "branch": "dev",
+  "branch": "main",
   "baseDirectory": "C:\\Development\\training",
   "runTests": false,
   "installs": {
