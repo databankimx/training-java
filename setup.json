@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 2,
+  "name": "Working With Java",
+  "folder": "training-java",
+  "repoUrl": "https://github.com/databankimx/training-java.git",
+  "branch": "main",
+  "baseDirectory": "C:\\Development\\training",
+  "runTests": false,
+  "installs": {
+    "git": { "install": true, "winget": "Git.Git" },
+    "powershell7": { "install": true, "pinned": "7", "winget": "Microsoft.PowerShell" },
+    "jdk": { "install": true, "pinned": "25", "winget": "EclipseAdoptium.Temurin.25.JDK" },
+    "maven": {
+      "install": true,
+      "pinned": "3.10.0",
+      "root": "C:\\Tools",
+      "url": "https://repo1.maven.org/maven2/org/apache/maven/apache-maven/3.10.0/apache-maven-3.10.0-bin.zip"
+    },
+    "vcRuntime": { "install": true },
+    "vscode": {
+      "install": true,
+      "winget": "Microsoft.VisualStudioCode",
+      "extensions": [ "redhat.java", "vscjava.vscode-maven", "vscjava.vscode-java-pack" ]
+    },
+    "notepadPlusPlus": { "install": true, "winget": "Notepad++.Notepad++" },
+    "buildTools": { "install": false }
+  },
+  "steps": [
+    {
+      "name": "Record the JDK folder for the runner",
+      "type": "command",
+      "folder": "lesson-runner",
+      "exe": "powershell.exe",
+      "args": [ "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "$jdk = Get-ChildItem -LiteralPath 'C:\\Program Files\\Eclipse Adoptium' -Directory -Filter 'jdk-25*' | Sort-Object Name -Descending | Select-Object -First 1; if (-not $jdk) { Write-Error 'No JDK 25 folder was found under Eclipse Adoptium.'; exit 1 }; Set-Content -LiteralPath 'jdk.path' -Value $jdk.FullName -Encoding ASCII" ],
+      "requires": [ "jdk" ]
+    },
+    {
+      "name": "Compile the runner",
+      "type": "command",
+      "folder": "lesson-runner",
+      "exe": "C:\\Tools\\apache-maven-3.10.0\\bin\\mvn.cmd",
+      "args": [ "-q", "compile" ],
+      "requires": [ "jdk", "maven" ]
+    },
+    {
+      "name": "Clear the runner's old libraries",
+      "type": "command",
+      "folder": "lesson-runner",
+      "exe": "powershell.exe",
+      "args": [ "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "if (Test-Path -LiteralPath 'dist') { try { Remove-Item -LiteralPath 'dist' -Recurse -Force -ErrorAction Stop } catch { Write-Error 'Could not clear lesson-runner\\dist, because a file in it is in use. Close any Lesson Runner window, then run the script again.'; exit 1 } }" ],
+      "requires": [ "jdk" ]
+    },
+    {
+      "name": "Copy the runner's libraries",
+      "type": "command",
+      "folder": "lesson-runner",
+      "exe": "C:\\Tools\\apache-maven-3.10.0\\bin\\mvn.cmd",
+      "args": [ "-q", "dependency:copy-dependencies", "-DoutputDirectory=dist\\lib", "-DincludeScope=runtime" ],
+      "requires": [ "jdk", "maven" ]
+    },
+    {
+      "name": "Fetch the JCEF natives",
+      "type": "command",
+      "folder": "lesson-runner",
+      "check": "..\\resources\\vendor\\jcef\\natives\\jcef.dll",
+      "exe": "java",
+      "args": [ "--enable-native-access=ALL-UNNAMED", "-cp", "target\\classes;dist\\lib\\*", "com.databankimx.training.runner.Main", "--fetch-natives" ],
+      "requires": [ "jdk" ]
+    },
+    {
+      "name": "Verify the natives",
+      "type": "verify-hashes",
+      "manifest": "resources\\vendor\\jcef\\natives\\natives.sha256",
+      "requires": [ "jdk" ]
+    },
+    {
+      "name": "Package the runner",
+      "type": "command",
+      "folder": "lesson-runner",
+      "exe": "C:\\Tools\\apache-maven-3.10.0\\bin\\mvn.cmd",
+      "args": [ "-q", "package" ],
+      "requires": [ "jdk", "maven" ]
+    }
+  ],
+  "launch": {
+    "ide": "vscode",
+    "kind": "exe",
+    "file": "lesson-runner\\run.bat",
+    "folder": "lesson-runner"
+  }
+}
